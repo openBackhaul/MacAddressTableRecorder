@@ -46,7 +46,7 @@ paths:
                   type: string
                   pattern: '^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$'
                   description: >
-                    'BEST Release of application that shall be target of the handover process
+                    'xyz Release of application that shall be target of the handover process
                     find or update [/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-http-c-0010/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
                 new-application-address:
                   type: string
