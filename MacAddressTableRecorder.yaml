@@ -1,6 +1,6 @@
 ﻿openapi: 3.0.0
 info:
-  title: ApplicationName
+  title: MacAddressTableRecorder
   version: 0.0.2
 
 servers:
