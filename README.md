@@ -27,7 +27,7 @@
 - to be provided
 
 ### Test Cases (Postman Export) and DATAfile
-- [MacAddressTableRecorder+data](./MacAddressTableRecorder+data.json)
+- to be provided
 
 ### Publication
 - No official publication planned
