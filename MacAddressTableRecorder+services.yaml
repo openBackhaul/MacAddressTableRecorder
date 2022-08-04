@@ -28,6 +28,9 @@ servers:
       individual:
         - service-name: /v1/bequeath-your-data-and-die
           uuid: op-s-1000
+        - service-name: /v1/configure-MAC-polling-intervall #the polling intervall for the MACADDRESSTABLE shall be configurable by an operator
+          uuid: matr-1-0-0-op-s-1001
+
     service:
       basic:
         - service-name: /v1/inform-about-application
