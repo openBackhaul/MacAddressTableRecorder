@@ -1,7 +1,7 @@
 profile-instances:
 
   - profile-name: 'ActionProfile'
-    uuid: '*-action-p-1000' ## TODO: Replace "*" by ApplicationID and ReleaseNumber
+    uuid: 'matr-1-0-0-action-p-1000'
     capability:
       operation-name: '/v1/start-application-in-generic-representation'
       label: 'Inform about Application'
@@ -10,7 +10,7 @@ profile-instances:
       request: 'https://[/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-tcp-s-0000/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-address/ipv-4-address]:[/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-tcp-s-0000/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-port][/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-op-s-2002/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-capability/operation-name]'
 
   - profile-name: 'ActionProfile'
-    uuid: '*-action-p-1001' ## TODO: Replace "*" by ApplicationID and ReleaseNumber
+    uuid: 'matr-1-0-0-action-p-1001'
     capability:
       operation-name: '/v1/inform-about-application-in-generic-representation'
       label: 'Release History'
@@ -19,7 +19,7 @@ profile-instances:
       request: 'https://[/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-tcp-s-0000/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-address/ipv-4-address]:[/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-tcp-s-0000/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-port][/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-op-s-2004/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-capability/operation-name]'
 
   - profile-name: 'ActionProfile'
-    uuid: '*-action-p-1002' ## TODO: Replace "*" by ApplicationID and ReleaseNumber
+    uuid: 'matr-1-0-0-action-p-1002'
     capability:
       operation-name: '/v1/inform-about-application-in-generic-representation'
       label: 'API Documentation'
@@ -28,9 +28,9 @@ profile-instances:
       request: 'https://[/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-tcp-s-0000/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-address/ipv-4-address]:[/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-tcp-s-0000/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-port]/docs'
 
   - profile-name: 'ActionProfile'
-    uuid: '*-action-p-10??' ## TODO: Replace "*" by ApplicationID and ReleaseNumber and ?? by SequenceNumber
+    uuid: 'matr-1-0-0-action-p-1003'
     capability:
-      operation-name: ## TODO: Add generic representation operation that shall result in a new button and potentially new input fields
+      operation-name: /v1/configure-MAC-polling-intervall
       label: ## TODO: Add label of the new button
       input-value-list:
         - field-name: ## TODO: Potentially add label of a field for providing input to the request that gets called by pushing the button
@@ -42,6 +42,16 @@ profile-instances:
 
   ## TODO: Potentially add further instances of ActionProfile
 
+
+  - profile-name: 'IntegerProfile'
+    uuid: 'matr-1-0-0-integer-p-001' 
+    capability:
+      integer-name: 'update-period'
+      unit: 'hour'
+      minimum: 1
+      maximum: 48
+    configuration:
+      integer-value: 6
 
   - profile-name: 'IntegerProfile'
     uuid: '*-integer-p-10??' ## TODO: Replace "*" by ApplicationID and ReleaseNumber and ?? by SequenceNumber
