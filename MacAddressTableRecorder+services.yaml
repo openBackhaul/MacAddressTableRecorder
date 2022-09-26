@@ -4,64 +4,67 @@ servers:
     own-oam:
       basic:
         - service-name: /v1/register-yourself
-          uuid: op-s-0000
+          uuid: matr-1-0-0-op-s-bm-000
         - service-name: /v1/embed-yourself
-          uuid: op-s-0001
+          uuid: matr-1-0-0-op-s-bm-001
         - service-name: /v1/redirect-service-request-information
-          uuid: op-s-0002
+          uuid: matr-1-0-0-op-s-bm-002
         - service-name: /v1/redirect-oam-request-information
-          uuid: op-s-0003
+          uuid: matr-1-0-0-op-s-bm-003
         - service-name: /v1/end-subscription
-          uuid: op-s-0004
+          uuid: matr-1-0-0-op-s-bm-004
         - service-name: /v1/inquire-oam-request-approvals
-          uuid: op-s-0005
+          uuid: matr-1-0-0-op-s-bm-005
         - service-name: /v1/update-client
-          uuid: op-s-0007
+          uuid: matr-1-0-0-op-s-bm-007
         - service-name: /v1/list-ltps-and-fcs
-          uuid: op-s-0008
+          uuid: matr-1-0-0-op-s-bm-008
         - service-name: /v1/redirect-topology-change-information
-          uuid: op-s-0009
+          uuid: matr-1-0-0-op-s-bm-009
         - service-name: /v1/update-operation-key
-          uuid: op-s-0010
+          uuid: matr-1-0-0-op-s-bm-010
         - service-name: /v1/update-operation-client
-          uuid: op-s-0011
+          uuid: matr-1-0-0-op-s-bm-011
       individual:
         - service-name: /v1/bequeath-your-data-and-die
-          uuid: op-s-1000
- 
-
+          uuid: matr-1-0-0-op-s-im-000
     service:
       basic:
         - service-name: /v1/inform-about-application
-          uuid: op-s-2001
+          uuid: matr-1-0-0-op-s-bs-001
         - service-name: /v1/inform-about-application-in-generic-representation
-          uuid: op-s-2002
+          uuid: matr-1-0-0-op-s-bs-002
         - service-name: /v1/inform-about-release-history
-          uuid: op-s-2003
+          uuid: matr-1-0-0-op-s-bs-003
         - service-name: /v1/inform-about-release-history-in-generic-representation
-          uuid: op-s-2004
+          uuid: matr-1-0-0-op-s-bs-004
       individual:
         - service-name: /v1/start-application-in-generic-representation
-          uuid: op-s-3000
-        
+          uuid: matr-1-0-0-op-s-is-000
+        ##provide mactable for all devices: device/interface/VLAN/mac-address
+        - service-name: /v1/provide-mac-table-of-all-devices
+          uuid: matr-1-0-0-op-s-is-001
+        ##provide current mactable of one device: device/interface/VLAN/mac-address   
         - service-name: /v1/provide-mac-table-of-device
-          uuid: matr-1-0-0-op-s-3000
-        ##provide mactable: device/interface/VLAN/mac-address (Question: one device per request or several)
+          uuid: matr-1-0-0-op-s-is-002
+        ##usecase: MAC of RAN NE is known. Service provides hints for routing through network 
         - service-name: /v1/provide-trace-of-mac-address
-          uuid: matr-1-0-0-op-s-3001
-        ##usecase: MAC of RAN NE is known. Service provides hints for routing through network
-        - service-name: /v1/provide-connected-devices
-          uuid: matr-1-0-0-op-s-3002
+          uuid: matr-1-0-0-op-s-is-003
         ##usecase: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.
+        - service-name: /v1/provide-connected-devices
+          uuid: matr-1-0-0-op-s-is-004
+
+
+
 
   http-server:
     own-application-name: MacAddressTableRecorder
     own-release-number: 1.0.0
-    uuid: http-s-0000
-  tpc-server:
-    own-ip-address: 10.118.125.157
-    own-tcp-port: 2004
-    uuid: tcp-s-0000
+    uuid: matr-1-0-0-http-s-bm-000
+  tcp-server:
+    own-ip-address: 1.1.4.5
+    own-tcp-port: 4005
+    uuid: matr-1-0-0-tcp-s-bm-000
 
 
 
@@ -70,16 +73,16 @@ clients:
   - http-client:
       application-name: OldRelease
       release-number: 1.0.0
-      uuid: http-c-0000
+      uuid: matr-1-0-0-http-c-bm-or-1-0-0-000
     tcp-client:
-      ip-address: 10.118.125.157
-      tcp-port: 2004
-      uuid: tcp-c-0000
+      ip-address: 1.1.4.5
+      tcp-port: 4005
+      uuid: matr-1-0-0-tcp-c-bm-or-1-0-0-000
     operation-clients:
       own-oam:
         basic:
           - service-name: /v1/bequeath-your-data-and-die
-            uuid: op-c-0000
+            uuid: matr-1-0-0-op-c-bm-or-1-0-0-000
         individual:
       service:
         basic:
@@ -88,15 +91,17 @@ clients:
   - http-client:
       application-name: NewRelease
       release-number: 1.0.0
-      uuid: http-c-0010
+      uuid: matr-1-0-0-http-c-bm-nr-1-0-0-000
     tcp-client:
-      ip-address: 10.118.125.157
-      tcp-port: 2004
-      uuid: tcp-c-0010
+      ip-address: 1.1.4.5
+      tcp-port: 4005
+      uuid: matr-1-0-0-tcp-c-bm-nr-1-0-0-000
     operation-clients:
       own-oam:
         basic:
         individual:
+        - service-name: /v1/provide-mac-table-of-all-devices  #internal database for macaddresses is transferred from old to new release
+          uuid: matr-1-0-0-op-s-is-001
       service:
         basic:
         individual:
@@ -104,22 +109,22 @@ clients:
   - http-client:
       application-name: RegistryOffice
       release-number: 1.0.0
-      uuid: http-c-0020
+      uuid: matr-1-0-0-http-c-bm-ro-1-0-0-000
     tcp-client:
       ip-address: 10.118.125.157
       tcp-port: 1000
-      uuid: tcp-c-0020
+      uuid: matr-1-0-0-tcp-c-bm-ro-1-0-0-000
     operation-clients:
       own-oam:
         basic:
           - service-name: /v1/register-application
-            uuid: op-c-0020
+            uuid: matr-1-0-0-op-c-bm-ro-1-0-0-000
           - service-name: /v1/relay-server-replacement
-            uuid: op-c-0021
+            uuid: matr-1-0-0-op-c-bm-ro-1-0-0-001
           - service-name: /v1/deregister-application
-            uuid: op-c-0022
+            uuid: matr-1-0-0-op-c-bm-ro-1-0-0-002
           - service-name: /v1/relay-operation-update
-            uuid: op-c-0023
+            uuid: matr-1-0-0-op-c-bm-ro-1-0-0-003
         individual:
       service:
         basic:
@@ -128,11 +133,11 @@ clients:
   - http-client:
       application-name: TypeApprovalRegister
       release-number: 1.0.0
-      uuid: http-c-2030
+      uuid: matr-1-0-0-http-c-is-tar-1-0-0-000
     tcp-client:
       ip-address: 10.118.125.157
       tcp-port: 1001
-      uuid: tcp-c-2030
+      uuid: matr-1-0-0-tcp-c-is-tar-1-0-0-000
     operation-clients:
       own-oam:
         basic:
@@ -144,34 +149,35 @@ clients:
   - http-client:
       application-name: ExecutionAndTraceLog
       release-number: 1.0.0
-      uuid: http-c-0040
+      uuid: matr-1-0-0-http-c-bm-eatl-1-0-0-000
     tcp-client:
       ip-address: 10.118.125.157
       tcp-port: 1002
-      uuid: tcp-c-0040
+      uuid: matr-1-0-0-tcp-c-bm-eatl-1-0-0-000
     operation-clients:
       own-oam:
         basic:
           - service-name: /v1/record-service-request
-            uuid: op-c-0040
+            uuid: matr-1-0-0-op-c-bm-eatl-1-0-0-000
         individual:
       service:
         basic:
         individual:
 
+
   - http-client:
       application-name: OamLog
       release-number: 1.0.0
-      uuid: http-c-0050
+      uuid: matr-1-0-0-http-c-bm-ol-1-0-0-000
     tcp-client:
       ip-address: 10.118.125.157
       tcp-port: 1003
-      uuid: tcp-c-0050
+      uuid: matr-1-0-0-tcp-c-bm-ol-1-0-0-000
     operation-clients:
       own-oam:
         basic:
           - service-name: /v1/record-oam-request
-            uuid: op-c-0050
+            uuid: matr-1-0-0-op-c-bm-ol-1-0-0-000
         individual:
       service:
         basic:
@@ -180,16 +186,16 @@ clients:
   - http-client:
       application-name: AdministratorAdministration
       release-number: 1.0.0
-      uuid: http-c-0060
+      uuid: matr-1-0-0-http-c-bm-aa-1-0-0-000
     tcp-client:
       ip-address: 10.118.125.157
       tcp-port: 1004
-      uuid: tcp-c-0060
+      uuid: matr-1-0-0-tcp-c-bm-aa-1-0-0-000
     operation-clients:
       own-oam:
         basic:
           - service-name: /v1/approve-oam-request
-            uuid: op-c-0060
+            uuid: matr-1-0-0-op-c-bm-aa-1-0-0-000
         individual:
       service:
         basic:
@@ -198,26 +204,26 @@ clients:
   - http-client:
       application-name: ApplicationLayerTopology
       release-number: 1.0.0
-      uuid: http-c-0070
+      uuid: matr-1-0-0-http-c-bm-alt-1-0-0-000
     tcp-client:
       ip-address: 10.118.125.157
       tcp-port: 1005
-      uuid: tcp-c-0070
+      uuid: matr-1-0-0-tcp-c-bm-alt-1-0-0-000
     operation-clients:
       own-oam:
         basic:
           - service-name: /v1/update-all-ltps-and-fcs
-            uuid: op-c-0070
+            uuid: matr-1-0-0-op-c-bm-alt-1-0-0-000
           - service-name: /v1/update-ltp
-            uuid: op-c-0071
+            uuid: matr-1-0-0-op-c-bm-alt-1-0-0-001
           - service-name: /v1/delete-ltp-and-dependents
-            uuid: op-c-0072
+            uuid: matr-1-0-0-op-c-bm-alt-1-0-0-002
           - service-name: /v1/update-fc
-            uuid: op-c-0073
+            uuid: matr-1-0-0-op-c-bm-alt-1-0-0-003
           - service-name: /v1/update-fc-port
-            uuid: op-c-0074
+            uuid: matr-1-0-0-op-c-bm-alt-1-0-0-004
           - service-name: /v1/delete-fc-port
-            uuid: op-c-0075
+            uuid: matr-1-0-0-op-c-bm-alt-1-0-0-005
         individual:
       service:
         basic:
@@ -226,11 +232,11 @@ clients:
   - http-client:
       application-name: OperationKeyManagement
       release-number: 1.0.0
-      uuid: http-c-2080
+      uuid: matr-1-0-0-http-c-is-okm-1-0-0-000
     tcp-client:
       ip-address: 10.118.125.157
       tcp-port: 1006
-      uuid: tcp-c-2080
+      uuid: matr-1-0-0-tcp-c-is-okm-1-0-0-000
     operation-clients:
       own-oam:
         basic:
@@ -238,3 +244,21 @@ clients:
       service:
         basic:
         individual:
+
+  - http-client:
+      application-name: MicroWaveDeviceInventory
+      release-number: 1.0.0
+      uuid: mwdi-1-0-0-http-s-00000
+    tcp-client:
+      ip-address: 10.118.125.157
+      tcp-port: 2003
+      uuid: mwdi-1-0-0-tcp-s-00000
+    operation-clients:
+      own-oam:
+        basic:
+        individual:
+      service:
+        basic:
+        individual:
+          - service-name: /v1/provide-list-of-mwdi-mount-names
+            uuid: mwdi-1-0-0-op-s-300001
