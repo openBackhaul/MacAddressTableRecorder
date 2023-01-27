@@ -86,7 +86,7 @@ clients:
       uuid: matr-1-0-0-tcp-c-es-1-0-0-000
     elasticsearch-client:
       uuid: matr-1-0-0-es-c-es-1-0-0-000
-      index-alias: ## TODO: Add IndexAlias
+      index-alias: matr-database
 
   - http-client:
       application-name: OldRelease
@@ -120,7 +120,7 @@ clients:
       own-oam:
         basic:
         individual:
-        - service-name: /v1/provide-mac-table-of-all-devices  #internal database for macaddresses is transferred from old to new release
+        - service-name: /v1/provide-mac-table-of-all-devices  ##TODO internal database for macaddresses is transferred from old to new release is not needed??
           uuid: matr-1-0-0-op-c-im-matr-1-0-0-001
       service:
         basic:
