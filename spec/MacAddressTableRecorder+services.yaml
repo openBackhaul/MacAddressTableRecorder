@@ -52,7 +52,7 @@ servers:
         ##provide current mactable of one device from SDN controller: device/macAddressCur/interface/VLAN/mac-address
         - service-name: /v1/update-mac-table-of-device
           uuid: matr-1-0-0-op-s-is-002
-        ##usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database) 
+        ##usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database)
         - service-name: /v1/provide-trace-of-mac-address
           uuid: matr-1-0-0-op-s-is-003
         ##usecase: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.(from database)
@@ -123,8 +123,8 @@ clients:
       own-oam:
         basic:
         individual:
-        - service-name:
-          uuid:
+          - service-name:
+            uuid:
       service:
         basic:
         individual:

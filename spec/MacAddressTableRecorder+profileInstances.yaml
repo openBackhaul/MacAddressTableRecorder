@@ -108,7 +108,7 @@ profile-instances:
     configuration:
       value-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-list=0/changes'
 
-## period of time for updating the complete MAC data in the network again 
+## period of time for updating the complete MAC data in the network again
   - profile-name: 'IntegerProfile'
     uuid: 'matr-1-0-0-integer-p-000'
     capability:
@@ -124,8 +124,9 @@ profile-instances:
     uuid: 'matr-1-0-0-integer-p-001'
     capability:
       integer-name: 'concurrent-rpc'
-      unit: 
+      unit:
       minimum: 1
       maximum: 1000
     configuration:
       integer-value: 10
+      

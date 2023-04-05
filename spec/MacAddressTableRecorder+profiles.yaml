@@ -42,10 +42,11 @@ profiles:
 
   - profile-name: ActionProfile
     uuid: action-p-0020
-    operation-name: 
-    label: 
-    request: 
+    operation-name:
+    label:
+    request:
     input-value-list:
       - field-name:
         unit:
     display-in-new-browser-window: false
+    
