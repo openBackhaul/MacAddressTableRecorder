@@ -120,8 +120,8 @@ clients:
       own-oam:
         basic:
         individual:
-        - service-name: /v1/provide-mac-table-of-all-devices  ##TODO internal database for macaddresses is transferred from old to new release is not needed??
-          uuid: matr-1-0-0-op-c-im-matr-1-0-0-001
+        - service-name:
+          uuid:
       service:
         basic:
         individual:
@@ -271,9 +271,8 @@ clients:
         basic:
         individual:
 
-## TODO mwdi client to be adopted
   - http-client:
-      application-name: MicroWaveDeviceInventory
+      application-name: /v1/provideCompleteMwdiDeviceList/{mount-name}
       release-number: 1.0.0
       uuid: matr-1-0-0-http-c-mwdi-1-0-0-000
     tcp-client:
@@ -288,4 +287,3 @@ clients:
       service:
         basic:
         individual:
-          ## TODO: Add Clients specific to this application
