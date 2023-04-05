@@ -1129,7 +1129,7 @@ paths:
                   description: 'Request recorded'
                   headers:
                     x-correlator:
-                      schema: 
+                      schema:
                         type: string
                         example: '550e8400-e29b-11d4-a716-446655440000'
                       description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
@@ -1234,7 +1234,7 @@ paths:
           description: 'Information about OaM requests will be send to the new target'
           headers:
             x-correlator:
-              schema: 
+              schema:
                 type: string
                 example: '550e8400-e29b-11d4-a716-446655440000'
               description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
@@ -1303,7 +1303,7 @@ paths:
                         application-name:
                           type: string
                           description: >
-                            'Own application name 
+                            'Own application name
                             from [/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-http-s-0000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/application-name]'
                         release-number:
                           type: string
@@ -1342,7 +1342,7 @@ paths:
                   description: 'OaM request recorded'
                   headers:
                     x-correlator:
-                      schema: 
+                      schema:
                         type: string
                         example: '550e8400-e29b-11d4-a716-446655440000'
                       description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
@@ -1430,7 +1430,7 @@ paths:
           description: 'Stopped sending notifications of a specific subscription'
           headers:
             x-correlator:
-              schema: 
+              schema:
                 type: string
                 example: '550e8400-e29b-11d4-a716-446655440000'
               description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
@@ -1537,7 +1537,7 @@ paths:
           description: 'Informed about where to inquire for approval of OaM requests'
           headers:
             x-correlator:
-              schema: 
+              schema:
                 type: string
                 example: '550e8400-e29b-11d4-a716-446655440000'
               description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
@@ -1611,7 +1611,7 @@ paths:
                             from [/core-model-1-4:control-construct/logical-termination-point=*-0-0-1-http-s-0000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-number]'
                         Authorization:
                           type: string
-                          description: > 
+                          description: >
                             'Authorization code of the administrator addressing the OaM request to this application from [parameters::Authorization]'
                         method:
                           type: string
@@ -1639,7 +1639,7 @@ paths:
                       schema:
                         type: object
                         required:
-                        - oam-request-is-approved
+                          - oam-request-is-approved
                         properties:
                           oam-request-is-approved:
                             type: boolean
@@ -1664,7 +1664,7 @@ paths:
                             reason-of-objection: 'AUTHORIZATION_CODE_UNKNOWN'
                   headers:
                     x-correlator:
-                      schema: 
+                      schema:
                         type: string
                         example: '550e8400-e29b-11d4-a716-446655440000'
                       description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
@@ -1770,7 +1770,7 @@ paths:
           description: 'Will update connection information'
           headers:
             x-correlator:
-              schema: 
+              schema:
                 type: string
                 example: '550e8400-e29b-11d4-a716-446655440000'
               description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
