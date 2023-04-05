@@ -43,18 +43,21 @@ servers:
         - operation-name: /docs
           uuid: matr-1-0-0-op-s-bs-005
       individual:
-        ##provide mactable for all devices: device/interface/VLAN/mac-address
+        ##provide mactable for all devices from database: device/macAddressCur/interface/VLAN/mac-address
         - service-name: /v1/provide-mac-table-of-all-devices
           uuid: matr-1-0-0-op-s-is-000
-        ##provide current mactable of one device: device/interface/VLAN/mac-address   
-        - service-name: /v1/update-mac-table-of-device
+        ##provide mactable for one devices from database: device/macAddressCur/interface/VLAN/mac-address
+        - service-name: /v1/provide-mac-table-of-one-device
           uuid: matr-1-0-0-op-s-is-001
-        ##usecase: MAC of RAN NE is known. Service provides hints for routing through network 
-        - service-name: /v1/provide-trace-of-mac-address
+        ##provide current mactable of one device from SDN controller: device/macAddressCur/interface/VLAN/mac-address
+        - service-name: /v1/update-mac-table-of-device
           uuid: matr-1-0-0-op-s-is-002
-        ##usecase: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.
-        - service-name: /v1/provide-connected-devices
+        ##usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database) 
+        - service-name: /v1/provide-trace-of-mac-address
           uuid: matr-1-0-0-op-s-is-003
+        ##usecase: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.(from database)
+        - service-name: /v1/provide-connected-devices
+          uuid: matr-1-0-0-op-s-is-004
 
   http-server:
     own-application-name: MacAddressTableRecorder
@@ -272,7 +275,7 @@ clients:
         individual:
 
   - http-client:
-      application-name: /v1/provideCompleteMwdiDeviceList/{mount-name}
+      application-name: MicroWaveDeviceInventory
       release-number: 1.0.0
       uuid: matr-1-0-0-http-c-mwdi-1-0-0-000
     tcp-client:
@@ -287,3 +290,5 @@ clients:
       service:
         basic:
         individual:
+          - operation-name: /v1/provide-device-list  #todo richtigen Namen für MWDI Service einfügen
+            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
