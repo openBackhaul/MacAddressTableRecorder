@@ -7,7 +7,7 @@ Delete this link at the end of the specification process:
 The MacAddressTableRecorder is part of the HighPerformanceNetworkInterface.
 
 ### Description
-The MacAddressTableRecordeSr addresses the microwave links of Telefonica Deutschland's live network in a round robin fashion and retrieves the contents of their MAC address tables. The received content is stored in an internal database and can be made available to other applications. On request the MacAddressTableRecorder also provides current content of the MAC address tables for a limited number of devices.
+The MacAddressTableRecorder addresses the microwave links of Telefonica Germany's live network in a round robin fashion and retrieves the contents of their MAC address tables. The received content is stored in an internal database and can be made available to other applications. On request the MacAddressTableRecorder also provides current content of the MAC address tables for a limited number of devices.
 
 ### Relevance
 The MacAddressTableRecorder provides forwarding information for all microwave devices of Telefonica Germany's live network.  
