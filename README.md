@@ -20,7 +20,6 @@ This information is necessary to retrieve live network information about the phy
 
 ### Dependencies
 - [MicroWaveDeviceInventory](https://github.com/openBackhaul/MicroWaveDeviceInventory)
-- [Sequence-Id](https://github.com/openBackhaul/equipment/issues/25)
 
 ### Comments
 This application will be specified during [training for ApplicationOwners](https://gist.github.com/openBackhaul/5aabdbc90257b83b9fe7fc4da059d3cd).
