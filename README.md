@@ -7,25 +7,19 @@ Delete this link at the end of the specification process:
 The MacAddressTableRecorder is part of the HighPerformanceNetworkInterface.
 
 ### Description
-_Copy from Roadmap:_  
-The MacAddressTableRecorder is continuously going through the devices of the MicroWaveDeviceInventory and addresses the RPC for uploading the content of the MAC address table. Received content is stored in an internal database. The MacAddressTableRecorder shall continuously operate in the background like a sanitation function.  
-
-_Original Text:_  
-- This application provides cached MAC address table content
-- The MacAddressTableRecorder is continuously going through the devices of the MicroWaveDeviceInventory and addresses the RPC for uploading the content of the MAC address table
-- Received content is stored in an internal database
-- The MacAddressTableRecorder shall continuously operate in the background like a sanitation function
-- It is a precondition for other applications assessing MAC address information
+The MacAddressTableRecorder addresses the microwave links of Telefonica Germany's live network in a round robin fashion and retrieves the contents of their MAC address tables. The received content is stored in an internal database and can be made available to other applications. On request the MacAddressTableRecorder also provides current content of the MAC address tables for a limited number of devices.
 
 ### Relevance
-The MacAddressTableRecorder holds a fraction of the inventory of the live network at Telefonica Germany.  
-As such, it is more close to be a component of the controller than of the application layer.
-
+The MacAddressTableRecorder provides forwarding information for all microwave devices of Telefonica Germany's live network.  
+This information is necessary to retrieve live network information about the physical connection of network devices.
 
 ### Resources
 - [Specification](./spec/)
 - [TestSuite](./testing/)
 - [Implementation](./server/)
+
+### Dependencies
+- [MicroWaveDeviceInventory](https://github.com/openBackhaul/MicroWaveDeviceInventory)
 
 ### Comments
 This application will be specified during [training for ApplicationOwners](https://gist.github.com/openBackhaul/5aabdbc90257b83b9fe7fc4da059d3cd).
