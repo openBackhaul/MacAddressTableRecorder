@@ -43,13 +43,13 @@ servers:
         - operation-name: /docs
           uuid: matr-1-0-0-op-s-bs-005
       individual:
-        ##provide mactable for all devices from database: device/macAddressCur/interface/VLAN/mac-address
+        ##provide mactable for all devices from database: mount-name/macAddressCur/egress-ltp/vlan-id/mac-addresses/timestampofRPC
         - operation-name: /v1/provide-mac-table-of-all-devices
           uuid: matr-1-0-0-op-s-is-000
-        ##provide mactable for one devices from database: device/macAddressCur/interface/VLAN/mac-address
+        ##provide mactable for one device from database: mount-name/macAddressCur/egress-ltp/vlan-id/mac-addresses/timestampofRPC
         - operation-name: /v1/provide-mac-table-of-one-device
           uuid: matr-1-0-0-op-s-is-001
-        ##provide current mactable of one device from SDN controller: device/macAddressCur/interface/VLAN/mac-address
+        ##provide current mactable of one device from SDN controller: mount-name/macAddressCur/egress-ltp/vlan-id/mac-addresses/timestampofRPC
         - operation-name: /v1/update-mac-table-of-device
           uuid: matr-1-0-0-op-s-is-002
         ##usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database)
