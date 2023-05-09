@@ -108,25 +108,35 @@ profile-instances:
     configuration:
       value-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-list=0/changes'
 
-## period of time for updating the complete MAC data in the network again
+  ## number of concurrent rpc (to retrieve the MAC table of several network elements at once)
   - profile-name: 'IntegerProfile'
     uuid: 'matr-1-0-0-integer-p-000'
-    capability:
-      integer-name: 'update-period'
-      unit: 'hour'
-      minimum: 1
-      maximum: 48
-    configuration:
-      integer-value: 24
-
-## number of concurrent rpc (to retrieve the MAC table of several network elements at once)
-  - profile-name: 'IntegerProfile'
-    uuid: 'matr-1-0-0-integer-p-001'
     capability:
       integer-name: 'concurrent-rpc'
       unit:
       minimum: 1
       maximum: 1000
     configuration:
+      integer-value: 1
+
+  ## response timeout for each rpc
+  - profile-name: 'IntegerProfile'
+    uuid: 'matr-1-0-0-integer-p-001'
+    capability:
+      integer-name: 'response-timeout-rpc'
+      unit: 'second'
+      minimum: 1
+      maximum: 2000
+    configuration:
       integer-value: 10
-      
+
+  ## number of retries for each rpc, retry is done after all other rpc's have been sent.
+  - profile-name: 'IntegerProfile'
+    uuid: 'matr-1-0-0-integer-p-002'
+    capability:
+      integer-name: 'retry-rpc'
+      unit:
+      minimum: 0
+      maximum: 10
+    configuration:
+      integer-value: 1
