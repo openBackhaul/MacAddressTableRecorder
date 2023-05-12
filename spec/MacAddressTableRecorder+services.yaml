@@ -43,21 +43,21 @@ servers:
         - operation-name: /docs
           uuid: matr-1-0-0-op-s-bs-005
       individual:
-        ##provide mactable for all devices from database: mount-name/macAddressCur/egress-ltp/vlan-id/mac-addresses/timestampofRPC
+        ##provide mactable for all devices from database: mount-name/macAddressCur/egress-ltp/ltp-name/vlan-id/mac-addresses/timestampofRPC
         - operation-name: /v1/provide-mac-table-of-all-devices
           uuid: matr-1-0-0-op-s-is-000
-        ##provide mactable for one device from database: mount-name/macAddressCur/egress-ltp/vlan-id/mac-addresses/timestampofRPC
+        ##provide mactable for one device from database: mount-name/macAddressCur/egress-ltp/ltp-name/vlan-id/mac-addresses/timestampofRPC
         - operation-name: /v1/provide-mac-table-of-one-device
           uuid: matr-1-0-0-op-s-is-001
-        ##provide current mactable of one device from SDN controller: mount-name/macAddressCur/egress-ltp/vlan-id/mac-addresses/timestampofRPC
+        ##provide current mactable of one device from SDN controller: mount-name/macAddressCur/egress-ltp/ltp-name/vlan-id/mac-addresses/timestampofRPC
         - operation-name: /v1/update-mac-table-of-device
           uuid: matr-1-0-0-op-s-is-002
         ##usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database)
         - operation-name: /v1/provide-trace-of-mac-address
           uuid: matr-1-0-0-op-s-is-003
-        ##usecase: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.(from database)
-        - operation-name: /v1/provide-connected-devices
-          uuid: matr-1-0-0-op-s-is-004
+        ##usecase for next release: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.(from database)
+        ##- operation-name: /v1/provide-connected-devices
+        ##  uuid: matr-1-0-0-op-s-is-004
 
   http-server:
     own-application-name: MacAddressTableRecorder
