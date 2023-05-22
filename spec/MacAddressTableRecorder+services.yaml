@@ -47,13 +47,13 @@ servers:
         - operation-name: /v1/provide-mac-table-of-all-devices
           uuid: matr-1-0-0-op-s-is-000
         ##provide mactable for one device from database: mount-name/macAddressCur/egress-ltp/ltp-name/vlan-id/mac-addresses/timestampofRPC
-        - operation-name: /v1/provide-mac-table-of-one-device
+        - operation-name: /v1/provide-mac-table-of-specific-device
           uuid: matr-1-0-0-op-s-is-001
         ##provide current mactable of one device from SDN controller: mount-name/macAddressCur/egress-ltp/ltp-name/vlan-id/mac-addresses/timestampofRPC
-        - operation-name: /v1/update-mac-table-of-device
+        - operation-name: /v1/read-current-mac-table-from-device
           uuid: matr-1-0-0-op-s-is-002
         ##usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database)
-        - operation-name: /v1/provide-trace-of-mac-address
+        - operation-name: /v1/provide-list-of-mac-address-egress-interfaces
           uuid: matr-1-0-0-op-s-is-003
         ##usecase for next release: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.(from database)
         ##- operation-name: /v1/provide-connected-devices
@@ -89,7 +89,7 @@ clients:
       uuid: matr-1-0-0-tcp-c-es-1-0-0-000
     elasticsearch-client:
       uuid: matr-1-0-0-es-c-es-1-0-0-000
-      index-alias: matr-database
+      index-alias: 6
 
   - http-client:
       application-name: OldRelease
@@ -290,3 +290,22 @@ clients:
         individual:
           - operation-name: /?fields=node(node-id)
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
+
+  - http-client:
+      application-name: OpenDaylight
+      release-number: 4.0.2     
+      uuid: matr-1-0-0-http-c-c-4.0.2-000
+    tcp-client:
+      remote-protocol: http
+      ip-address: 1.1.1.1
+      tcp-port: 1001
+      uuid: matr-1-0-0-tcp-c-c-4.0.2-000
+    operation-clients:
+      own-oam:
+        basic:
+        individual:
+      service:
+        basic:
+        individual:
+          - operation-name: /rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
+            uuid: matr-1-0-0-op-c-is-c-4.0.2-000
