@@ -43,13 +43,13 @@ servers:
         - operation-name: /docs
           uuid: matr-1-0-0-op-s-bs-005
       individual:
-        ##provide mactable for all devices from database: mount-name/macAddressCur/egress-ltp/ltp-name/vlan-id/mac-addresses/timestampofRPC
+        ##provide mactable for all devices from database: mount-name/macAddressCur/egress-ltp/original-ltp-name/vlan-id/mac-addresses/timestampofRPC
         - operation-name: /v1/provide-mac-table-of-all-devices
           uuid: matr-1-0-0-op-s-is-000
-        ##provide mactable for one device from database: mount-name/macAddressCur/egress-ltp/ltp-name/vlan-id/mac-addresses/timestampofRPC
+        ##provide mactable for one device from database: mount-name/macAddressCur/egress-ltp/original-ltp-name/vlan-id/mac-addresses/timestampofRPC
         - operation-name: /v1/provide-mac-table-of-specific-device
           uuid: matr-1-0-0-op-s-is-001
-        ##provide current mactable of one device from SDN controller: mount-name/macAddressCur/egress-ltp/ltp-name/vlan-id/mac-addresses/timestampofRPC
+        ##provide current mactable of one device from SDN controller: mount-name/macAddressCur/egress-ltp/original-ltp-name/vlan-id/mac-addresses/timestampofRPC
         - operation-name: /v1/read-current-mac-table-from-device
           uuid: matr-1-0-0-op-s-is-002
         ##usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database)
@@ -290,6 +290,12 @@ clients:
         individual:
           - operation-name: /?fields=node(node-id)
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
+          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-2-0:ltp-augment-pac/original-ltp-name
+            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-001
+          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)
+            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-002
+          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/forwarding-domain={uuid}/mac-fd-1-0:mac-fd-pac/mac-fd-status/mac-address-cur
+            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-003
 
   - http-client:
       application-name: OpenDaylight
