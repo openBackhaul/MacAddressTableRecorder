@@ -294,12 +294,12 @@ clients:
   - http-client:
       application-name: OpenDaylight
       release-number: 4.0.2     
-      uuid: matr-1-0-0-http-c-c-4.0.2-000
+      uuid: matr-1-0-0-http-c-c-4-0-2-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.1.1
       tcp-port: 1001
-      uuid: matr-1-0-0-tcp-c-c-4.0.2-000
+      uuid: matr-1-0-0-tcp-c-c-4-0-2-000
     operation-clients:
       own-oam:
         basic:
@@ -308,4 +308,4 @@ clients:
         basic:
         individual:
           - operation-name: /rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
-            uuid: matr-1-0-0-op-c-is-c-4.0.2-000
+            uuid: matr-1-0-0-op-c-is-c-4-0-2-000
