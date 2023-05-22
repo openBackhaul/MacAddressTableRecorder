@@ -290,7 +290,7 @@ clients:
         individual:
           - operation-name: /?fields=node(node-id)
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
-          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-2-0:ltp-augment-pac/original-ltp-name
+          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac/original-ltp-name
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-001
           - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-002
