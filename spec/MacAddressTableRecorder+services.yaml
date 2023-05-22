@@ -290,11 +290,11 @@ clients:
         individual:
           - operation-name: /?fields=node(node-id)
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
-          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac/original-ltp-name
+          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?fields=original-ltp-name
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-001
           - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-002
-          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/forwarding-domain={uuid}/mac-fd-1-0:mac-fd-pac/mac-fd-status/mac-address-cur
+          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/forwarding-domain={uuid}/mac-fd-1-0:mac-fd-pac/mac-fd-status?fields=mac-address-cur
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-003
 
   - http-client:
