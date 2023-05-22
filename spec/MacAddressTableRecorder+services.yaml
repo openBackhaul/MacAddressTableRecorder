@@ -288,5 +288,5 @@ clients:
       service:
         basic:
         individual:
-          - operation-name: /v1/provide-device-list  #todo richtigen Namen für MWDI Service einfügen
+          - operation-name: /?fields=node(node-id)
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
