@@ -27,7 +27,6 @@ profile-instances:
     configuration:
       consequent-operation-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-op-s-bs-005/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-capability/operation-name'
 
-
   - profile-name: 'GenericResponseProfile'
     uuid: 'matr-1-0-0-response-p-000'
     capability:
@@ -115,9 +114,9 @@ profile-instances:
       integer-name: 'concurrent-rpc'
       unit:
       minimum: 1
-      maximum: 1000
+      maximum: 4000
     configuration:
-      integer-value: 1
+      integer-value: 100
 
   ## response timeout for each rpc
   - profile-name: 'IntegerProfile'
@@ -125,10 +124,10 @@ profile-instances:
     capability:
       integer-name: 'response-timeout-rpc'
       unit: 'second'
-      minimum: 1
+      minimum: 5
       maximum: 2000
     configuration:
-      integer-value: 10
+      integer-value: 60
 
   ## number of retries for each rpc, retry is done after all other rpc's have been sent.
   - profile-name: 'IntegerProfile'
