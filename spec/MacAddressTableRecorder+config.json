@@ -209,6 +209,21 @@
                   }
                 }
               }
+            },
+            {
+              "uuid": "matr-1-0-0-integer-p-000",
+              "profile-name": "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE",
+              "integer-profile-1-0:integer-profile-pac": {
+                "integer-profile-capability": {
+                  "integer-name": "concurrent-rpc",
+                  "unit":
+                  "minimum": 1,
+                  "maximum": 4000
+                },
+                "integer-profile-configuration": {
+                  "integer-value": 100
+                }
+              }
             }
           ]
         },
@@ -764,7 +779,7 @@
                     "auth": {
                       "api-key": "API key not yet defined."
                     },
-                    "index-alias": "matr-database"
+                    "index-alias": "6"
                   },
                   "elasticsearch-client-interface-status": {
                     "operational-state": "elasticsearch-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED",
