@@ -55,9 +55,13 @@ servers:
         ## usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database)
         - operation-name: /v1/provide-list-of-mac-address-egress-interfaces
           uuid: matr-1-0-0-op-s-is-003
+        ## provide unsorted list of mount names of devices with MAC addresses on trace: mount-name
+        - operation-name: /v1/provide-list-of-network-element-on-path-in-generic-representation
+          uuid: matr-1-0-0-op-s-is-004
         ## usecase for next release: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.(from database)
         ## - operation-name: /v1/provide-connected-devices
-        ##   uuid: matr-1-0-0-op-s-is-004
+        ##   uuid: matr-1-0-0-op-s-is-005
+
 
   http-server:
     own-application-name: MacAddressTableRecorder
