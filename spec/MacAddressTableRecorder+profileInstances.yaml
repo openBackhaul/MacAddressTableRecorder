@@ -27,6 +27,17 @@ profile-instances:
     configuration:
       consequent-operation-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-op-s-bs-005/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-capability/operation-name'
 
+  - profile-name: 'ActionProfile'
+    uuid: 'matr-1-0-0-action-p-003'
+    capability:
+      operation-name: '/v1/start-application-in-generic-representation'
+      label: 'List network elements on path to target network element'
+      input-value-list:
+        - field-name: 'Target MAC address'
+      display-in-new-browser-window: false
+    configuration:
+      consequent-operation-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-op-s-is-004/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-capability/operation-name'
+
   - profile-name: 'GenericResponseProfile'
     uuid: 'matr-1-0-0-response-p-000'
     capability:
@@ -106,6 +117,16 @@ profile-instances:
       datatype: string
     configuration:
       value-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-list=0/changes'
+
+  - profile-name: 'GenericResponseProfile'
+    uuid: 'matr-1-0-0-response-p-008'
+    capability:
+      operation-name: '/v1/provide-list-of-network-elements-on-path-in-generic-representation'
+      static-field-name: 'listOfNetworkElementsOnPath'
+      description: 'Calculated mount names of devices on path towards MAC address, values concatenated and separated by hyphen'
+      datatype: 'string'
+    configuration:
+      value-reference: ''
 
   ## number of concurrent rpc (to retrieve the MAC table of several network elements at once)
   - profile-name: 'IntegerProfile'
