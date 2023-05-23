@@ -85,14 +85,12 @@ forwardings:
         uuid: matr-1-0-0-op-s-bs-005
       - server-name: /v1/provide-mac-table-of-all-devices
         uuid: matr-1-0-0-op-s-is-000
-      - server-name: /v1/provide-mac-table-of-one-device
+      - server-name: /v1/provide-mac-table-of-specific-device
         uuid: matr-1-0-0-op-s-is-001
-      - server-name: /v1/update-mac-table-of-device
+      - server-name: /v1/read-current-mac-table-from-device
         uuid: matr-1-0-0-op-s-is-002
-      - server-name: /v1/provide-trace-of-mac-address
+      - server-name: /v1/provide-list-of-mac-address-egress-interfaces
         uuid: matr-1-0-0-op-s-is-003
-      - server-name: /v1/provide-connected-devices
-        uuid: matr-1-0-0-op-s-is-004
     consequent-requests:
       - client-name: ExecutionAndTraceLog://v1/record-service-request
         uuid: matr-1-0-0-op-c-bs-eatl-2-0-1-000
