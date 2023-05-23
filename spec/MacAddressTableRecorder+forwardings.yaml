@@ -395,7 +395,7 @@ forwardings:
         uuid: matr-1-0-0-http-c-es-1-0-0-000
 
   - forwarding-name: 
-    uuid: matr-1-0-0-op-fc-is-00
+    uuid: matr-1-0-0-op-fc-is-01
     forwarding-type: InvariantProcessSnippet
     management-requests:
       operation-client-update:
@@ -403,12 +403,14 @@ forwardings:
       fc-port-deletion:
       operation-client-deletion:
     initiating-requests:
+      - server-name: /v1/provide-mac-table-of-specific-device
+        uuid: matr-1-0-0-op-s-is-001
     consequent-requests:
-      - client-name: MicroWaveDeviceInventory://
-        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-00
+      - client-name: ElasticSearch
+        uuid: matr-1-0-0-http-c-es-1-0-0-000
 
   - forwarding-name: 
-    uuid: matr-1-0-0-op-fc-is-00
+    uuid: matr-1-0-0-op-fc-is-02
     forwarding-type: InvariantProcessSnippet
     management-requests:
       operation-client-update:
@@ -416,7 +418,10 @@ forwardings:
       fc-port-deletion:
       operation-client-deletion:
     initiating-requests:
+      - server-name: /v1/read-current-mac-table-from-device
+        uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
-      - client-name: MicroWaveDeviceInventory://
-        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-00
+      - client-name: OpenDaylight
+        uuid: matr-1-0-0-http-c-c-4-0-2-000
+        
   ## TODO: Potential INDIVIDUAL Forwardings to be added
