@@ -11,7 +11,7 @@ The MacAddressTableRecorder addresses the microwave links of Telefonica Germany'
 
 ### Relevance
 The MacAddressTableRecorder provides forwarding information for all microwave devices of Telefonica Germany's live network.  
-This information is necessary to retrieve live network information about the physical connection of network devices.
+This information is necessary to calculate topology information about the physical connections in the network.
 
 ### Resources
 - [Specification](./spec/)

@@ -43,21 +43,25 @@ servers:
         - operation-name: /docs
           uuid: matr-1-0-0-op-s-bs-005
       individual:
-        ##provide mactable for all devices from database: device/macAddressCur/interface/VLAN/mac-address
-        - service-name: /v1/provide-mac-table-of-all-devices
+        ## provide mactable for all devices from database: mount-name/macAddressCur/egress-ltp/original-ltp-name/vlan-id/mac-addresses/timestampofRPC
+        - operation-name: /v1/provide-mac-table-of-all-devices
           uuid: matr-1-0-0-op-s-is-000
-        ##provide mactable for one devices from database: device/macAddressCur/interface/VLAN/mac-address
-        - service-name: /v1/provide-mac-table-of-one-device
+        ## provide mactable for one device from database: mount-name/macAddressCur/egress-ltp/original-ltp-name/vlan-id/mac-addresses/timestampofRPC
+        - operation-name: /v1/provide-mac-table-of-specific-device
           uuid: matr-1-0-0-op-s-is-001
-        ##provide current mactable of one device from SDN controller: device/macAddressCur/interface/VLAN/mac-address
-        - service-name: /v1/update-mac-table-of-device
+        ## provide current mactable of one device from SDN controller: mount-name/macAddressCur/egress-ltp/original-ltp-name/vlan-id/mac-addresses/timestampofRPC
+        - operation-name: /v1/read-current-mac-table-from-device
           uuid: matr-1-0-0-op-s-is-002
-        ##usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database)
-        - service-name: /v1/provide-trace-of-mac-address
+        ## usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database)
+        - operation-name: /v1/provide-list-of-mac-address-egress-interfaces
           uuid: matr-1-0-0-op-s-is-003
-        ##usecase: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.(from database)
-        - service-name: /v1/provide-connected-devices
+        ## provide unsorted list of mount names of devices with MAC addresses on trace: mount-name
+        - operation-name: /v1/provide-list-of-network-elements-on-path-in-generic-representation
           uuid: matr-1-0-0-op-s-is-004
+        ## usecase for next release: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.(from database)
+        ## - operation-name: /v1/provide-connected-devices
+        ##   uuid: matr-1-0-0-op-s-is-005
+
 
   http-server:
     own-application-name: MacAddressTableRecorder
@@ -89,7 +93,7 @@ clients:
       uuid: matr-1-0-0-tcp-c-es-1-0-0-000
     elasticsearch-client:
       uuid: matr-1-0-0-es-c-es-1-0-0-000
-      index-alias: matr-database
+      index-alias: 6
 
   - http-client:
       application-name: OldRelease
@@ -123,32 +127,30 @@ clients:
       own-oam:
         basic:
         individual:
-          - service-name:
-            uuid:
       service:
         basic:
         individual:
 
   - http-client:
       application-name: RegistryOffice
-      release-number: 2.0.0
-      uuid: matr-1-0-0-http-c-ro-2-0-0-000
+      release-number: 2.0.1
+      uuid: matr-1-0-0-http-c-ro-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.8
       tcp-port: 3008
-      uuid: matr-1-0-0-tcp-c-ro-2-0-0-000
+      uuid: matr-1-0-0-tcp-c-ro-2-0-1-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/register-application
-            uuid: matr-1-0-0-op-c-bm-ro-2-0-0-000
+            uuid: matr-1-0-0-op-c-bm-ro-2-0-1-000
           - operation-name: /v1/relay-server-replacement
-            uuid: matr-1-0-0-op-c-bm-ro-2-0-0-001
+            uuid: matr-1-0-0-op-c-bm-ro-2-0-1-001
           - operation-name: /v1/deregister-application
-            uuid: matr-1-0-0-op-c-bm-ro-2-0-0-002
+            uuid: matr-1-0-0-op-c-bm-ro-2-0-1-002
           - operation-name: /v1/relay-operation-update
-            uuid: matr-1-0-0-op-c-bm-ro-2-0-0-003
+            uuid: matr-1-0-0-op-c-bm-ro-2-0-1-003
         individual:
       service:
         basic:
@@ -156,13 +158,13 @@ clients:
 
   - http-client:
       application-name: TypeApprovalRegister
-      release-number: 2.0.0
-      uuid: matr-1-0-0-http-c-tar-2-0-0-000
+      release-number: 2.0.1
+      uuid: matr-1-0-0-http-c-tar-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.9
       tcp-port: 3009
-      uuid: matr-1-0-0-tcp-c-tar-2-0-0-000
+      uuid: matr-1-0-0-tcp-c-tar-2-0-1-000
     operation-clients:
       own-oam:
         basic:
@@ -173,18 +175,18 @@ clients:
 
   - http-client:
       application-name: ExecutionAndTraceLog
-      release-number: 2.0.0
-      uuid: matr-1-0-0-http-c-eatl-2-0-0-000
+      release-number: 2.0.1
+      uuid: matr-1-0-0-http-c-eatl-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.10
       tcp-port: 3010
-      uuid: matr-1-0-0-tcp-c-eatl-2-0-0-000
+      uuid: matr-1-0-0-tcp-c-eatl-2-0-1-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/record-service-request
-            uuid: matr-1-0-0-op-c-bs-eatl-2-0-0-000
+            uuid: matr-1-0-0-op-c-bs-eatl-2-0-1-000
         individual:
       service:
         basic:
@@ -192,18 +194,18 @@ clients:
 
   - http-client:
       application-name: OamLog
-      release-number: 2.0.0
-      uuid: matr-1-0-0-http-c-ol-2-0-0-000
+      release-number: 2.0.1
+      uuid: matr-1-0-0-http-c-ol-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.11
       tcp-port: 3011
-      uuid: matr-1-0-0-tcp-c-ol-2-0-0-000
+      uuid: matr-1-0-0-tcp-c-ol-2-0-1-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/record-oam-request
-            uuid: matr-1-0-0-op-c-bs-ol-2-0-0-000
+            uuid: matr-1-0-0-op-c-bs-ol-2-0-1-000
         individual:
       service:
         basic:
@@ -211,18 +213,18 @@ clients:
 
   - http-client:
       application-name: AdministratorAdministration
-      release-number: 2.0.0
-      uuid: matr-1-0-0-http-c-aa-2-0-0-000
+      release-number: 2.0.1
+      uuid: matr-1-0-0-http-c-aa-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.12
       tcp-port: 3012
-      uuid: matr-1-0-0-tcp-c-aa-2-0-0-000
+      uuid: matr-1-0-0-tcp-c-aa-2-0-1-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/approve-oam-request
-            uuid: matr-1-0-0-op-c-bs-aa-2-0-0-000
+            uuid: matr-1-0-0-op-c-bs-aa-2-0-1-000
         individual:
       service:
         basic:
@@ -230,28 +232,28 @@ clients:
 
   - http-client:
       application-name: ApplicationLayerTopology
-      release-number: 2.0.0
-      uuid: matr-1-0-0-http-c-alt-2-0-0-000
+      release-number: 2.0.1
+      uuid: matr-1-0-0-http-c-alt-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.13
       tcp-port: 3013
-      uuid: matr-1-0-0-tcp-c-alt-2-0-0-000
+      uuid: matr-1-0-0-tcp-c-alt-2-0-1-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/update-all-ltps-and-fcs
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-0-000
+            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-000
           - operation-name: /v1/update-ltp
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-0-001
+            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-001
           - operation-name: /v1/delete-ltp-and-dependents
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-0-002
+            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-002
           - operation-name: /v1/update-fc
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-0-003
+            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-003
           - operation-name: /v1/update-fc-port
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-0-004
+            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-004
           - operation-name: /v1/delete-fc-port
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-0-005
+            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-005
         individual:
       service:
         basic:
@@ -259,13 +261,13 @@ clients:
 
   - http-client:
       application-name: OperationKeyManagement
-      release-number: 2.0.0
-      uuid: matr-1-0-0-http-c-okm-2-0-0-000
+      release-number: 2.0.1
+      uuid: matr-1-0-0-http-c-okm-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.14
       tcp-port: 3014
-      uuid: matr-1-0-0-tcp-c-okm-2-0-0-000
+      uuid: matr-1-0-0-tcp-c-okm-2-0-1-000
     operation-clients:
       own-oam:
         basic:
@@ -290,5 +292,30 @@ clients:
       service:
         basic:
         individual:
-          - operation-name: /v1/provide-device-list  #todo richtigen Namen für MWDI Service einfügen
+          - operation-name: /?fields=node(node-id)
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
+          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?fields=original-ltp-name
+            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-001
+          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)
+            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-002
+          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/forwarding-domain={uuid}/mac-fd-1-0:mac-fd-pac/mac-fd-status?fields=mac-address-cur
+            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-003
+
+  - http-client:
+      application-name: OpenDaylight
+      release-number: 4.0.2
+      uuid: matr-1-0-0-http-c-c-4-0-2-000
+    tcp-client:
+      remote-protocol: http
+      ip-address: 1.1.1.1
+      tcp-port: 1001
+      uuid: matr-1-0-0-tcp-c-c-4-0-2-000
+    operation-clients:
+      own-oam:
+        basic:
+        individual:
+      service:
+        basic:
+        individual:
+          - operation-name: /rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
+            uuid: matr-1-0-0-op-c-is-c-4-0-2-000
