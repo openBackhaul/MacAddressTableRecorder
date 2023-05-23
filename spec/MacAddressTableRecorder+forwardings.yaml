@@ -91,6 +91,8 @@ forwardings:
         uuid: matr-1-0-0-op-s-is-002
       - server-name: /v1/provide-list-of-mac-address-egress-interfaces
         uuid: matr-1-0-0-op-s-is-003
+      - server-name: /v1/provide-list-of-network-elements-on-path-in-generic-representation
+        uuid: matr-1-0-0-op-s-is-004
     consequent-requests:
       - client-name: ExecutionAndTraceLog://v1/record-service-request
         uuid: matr-1-0-0-op-c-bs-eatl-2-0-1-000
@@ -128,14 +130,6 @@ forwardings:
     consequent-requests:
       - client-name: AdministratorAdministration://v1/approve-oam-request
         uuid: matr-1-0-0-op-c-bs-aa-2-0-1-000
-
-## TODO: Potentially add Forwardings for configuring INDIVIDUAL subscriptions on NewRelease
-
-## TODO: Add Forwardings for transferring data to NewRelease
-
-## TODO: Potentially add Forwardings for creating INDIVIDUAL subscriptions to NewRelease
-
-## TODO: Potentially add Forwardings for ending INDIVIDUAL subscriptions to OldRelease
 
   - forwarding-name: PromptForBequeathingDataCausesRequestForBroadcastingInfoAboutServerReplacement
     uuid: matr-1-0-0-op-fc-bm-105
@@ -225,7 +219,6 @@ forwardings:
         uuid: matr-1-0-0-op-s-bm-011
       - server-name: /v1/bequeath-your-data-and-die
         uuid: matr-1-0-0-op-s-im-000
-      ## TODO: All INDIVIDUAL service requests, which are updating an LTP, to be complemented
     consequent-requests:
       - client-name: ApplicationLayerTopology://v1/update-ltp
         uuid: matr-1-0-0-op-c-bm-alt-2-0-1-001
@@ -243,7 +236,6 @@ forwardings:
       fc-port-deletion:
       operation-client-deletion:
     initiating-requests:
-      ## TODO: All INDIVIDUAL service requests, which are deleting an LTP, to be complemented
     consequent-requests:
       - client-name: ApplicationLayerTopology://v1/delete-ltp-and-dependents
         uuid: matr-1-0-0-op-c-bm-alt-2-0-1-002
@@ -261,7 +253,6 @@ forwardings:
       fc-port-deletion:
       operation-client-deletion:
     initiating-requests:
-      ## TODO: All INDIVIDUAL service requests, which are updating an FC, to be complemented
     consequent-requests:
       - client-name: ApplicationLayerTopology://v1/update-fc
         uuid: matr-1-0-0-op-c-bm-alt-2-0-1-003
@@ -279,7 +270,6 @@ forwardings:
       fc-port-deletion:
       operation-client-deletion:
     initiating-requests:
-      ## TODO: All INDIVIDUAL service requests, which are updating an FC-Port, to be complemented
     consequent-requests:
       - client-name: ApplicationLayerTopology://v1/update-fc-port
         uuid: matr-1-0-0-op-c-bm-alt-2-0-1-004
@@ -299,7 +289,6 @@ forwardings:
     initiating-requests:
       - server-name: /v1/end-subscription
         uuid: matr-1-0-0-op-s-bm-004
-      ## TODO: All INDIVIDUAL service requests, which are deleting an FC-Port, to be complemented
     consequent-requests:
       - client-name: ApplicationLayerTopology://v1/delete-fc-port
         uuid: matr-1-0-0-op-c-bm-alt-2-0-1-005
@@ -389,4 +378,45 @@ forwardings:
       - client-name: ApplicationLayerTopology://v1/delete-fc-port
         uuid: matr-1-0-0-op-c-bm-alt-2-0-1-005
 
+
+  - forwarding-name: 
+    uuid: matr-1-0-0-op-fc-is-00
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/provide-mac-table-of-all-devices
+        uuid: matr-1-0-0-op-s-is-000
+    consequent-requests:
+      - client-name: ElasticSearch
+        uuid: matr-1-0-0-http-c-es-1-0-0-000
+
+  - forwarding-name: 
+    uuid: matr-1-0-0-op-fc-is-00
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+    consequent-requests:
+      - client-name: MicroWaveDeviceInventory://
+        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-00
+
+  - forwarding-name: 
+    uuid: matr-1-0-0-op-fc-is-00
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+    consequent-requests:
+      - client-name: MicroWaveDeviceInventory://
+        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-00
   ## TODO: Potential INDIVIDUAL Forwardings to be added
