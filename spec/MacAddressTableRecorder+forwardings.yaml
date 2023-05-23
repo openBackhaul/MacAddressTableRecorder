@@ -379,8 +379,8 @@ forwardings:
         uuid: matr-1-0-0-op-c-bm-alt-2-0-1-005
 
 
-  - forwarding-name: 
-    uuid: matr-1-0-0-op-fc-is-00
+  - forwarding-name: PromptsForProvidingMacTablesCauseReadingFromElasticSearch
+    uuid: matr-1-0-0-op-fc-is-000
     forwarding-type: InvariantProcessSnippet
     management-requests:
       operation-client-update:
@@ -390,27 +390,18 @@ forwardings:
     initiating-requests:
       - server-name: /v1/provide-mac-table-of-all-devices
         uuid: matr-1-0-0-op-s-is-000
-    consequent-requests:
-      - client-name: ElasticSearch
-        uuid: matr-1-0-0-http-c-es-1-0-0-000
-
-  - forwarding-name: 
-    uuid: matr-1-0-0-op-fc-is-01
-    forwarding-type: InvariantProcessSnippet
-    management-requests:
-      operation-client-update:
-      fc-port-update:
-      fc-port-deletion:
-      operation-client-deletion:
-    initiating-requests:
       - server-name: /v1/provide-mac-table-of-specific-device
         uuid: matr-1-0-0-op-s-is-001
+      - server-name: /v1/read-current-mac-table-from-device
+        uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
       - client-name: ElasticSearch
-        uuid: matr-1-0-0-http-c-es-1-0-0-000
+        uuid: matr-1-0-0-es-c-es-1-0-0-000
 
-  - forwarding-name: 
-    uuid: matr-1-0-0-op-fc-is-02
+
+
+  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedInCache
+    uuid: matr-1-0-0-op-fc-is-011
     forwarding-type: InvariantProcessSnippet
     management-requests:
       operation-client-update:
@@ -421,7 +412,116 @@ forwardings:
       - server-name: /v1/read-current-mac-table-from-device
         uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
-      - client-name: OpenDaylight
+      - client-name: MicroWaveDeviceInventory://rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)
+        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-002
+
+  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesManagementMacAddressBeingReadFromCache
+    uuid: matr-1-0-0-op-fc-is-012
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/read-current-mac-table-from-device
+        uuid: matr-1-0-0-op-s-is-002
+    consequent-requests:
+      - client-name: MicroWaveDeviceInventory://rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/forwarding-domain={uuid}/mac-fd-1-0:mac-fd-pac/mac-fd-status?fields=mac-address-cur
+        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-003
+
+  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice
+    uuid: matr-1-0-0-op-fc-is-013
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/read-current-mac-table-from-device
+        uuid: matr-1-0-0-op-s-is-002
+    consequent-requests:
+      - client-name: OpenDaylight://rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
         uuid: matr-1-0-0-http-c-c-4-0-2-000
-        
-  ## TODO: Potential INDIVIDUAL Forwardings to be added
+
+  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnCache
+    uuid: matr-1-0-0-op-fc-is-014
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/read-current-mac-table-from-device
+        uuid: matr-1-0-0-op-s-is-002
+    consequent-requests:
+      - client-name: MicroWaveDeviceInventory://rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?fields=original-ltp-name
+        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-003
+
+  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
+    uuid: matr-1-0-0-op-fc-is-015
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/read-current-mac-table-from-device
+        uuid: matr-1-0-0-op-s-is-002
+    consequent-requests:
+      - client-name: ElasticSearch
+        uuid: matr-1-0-0-es-c-es-1-0-0-000
+
+
+
+  - forwarding-name: 
+    uuid: matr-1-0-0-op-fc-is-020
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/provide-list-of-mac-address-egress-interfaces
+        uuid: matr-1-0-0-op-s-is-003
+    consequent-requests:
+      - client-name: 
+        uuid: 
+
+
+
+  - forwarding-name: 
+    uuid: matr-1-0-0-op-fc-is-030
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/provide-list-of-network-elements-on-path-in-generic-representation
+        uuid: matr-1-0-0-op-s-is-003
+    consequent-requests:
+      - client-name: ElasticSearch
+        uuid: atr-1-0-0-es-c-es-1-0-0-000
+
+## TODO: One or several requests for reverse-translating the macAddresses from cached table content into mountNames
+  - forwarding-name: 
+    uuid: matr-1-0-0-op-fc-is-031
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/provide-list-of-network-elements-on-path-in-generic-representation
+        uuid: matr-1-0-0-op-s-is-003
+    consequent-requests:
+      - client-name: MicroWaveDeviceInventory:/
+        uuid: 
+  
