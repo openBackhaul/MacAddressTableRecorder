@@ -1,0 +1,15 @@
+@startuml
+skinparam responseMessageBelowArrow true
+
+"RO" -> "/v1/embed-yourself": {RoIp, RoPort}
+
+"/v1/embed-yourself" -> "RO://v1/list-applications"
+"RO://v1/list-applications" --> "/v1/embed-yourself": {ApplicationName, ReleaseNumber, IpAddress, TcpPort}
+
+"/v1/embed-yourself" -> "MWDI://?fields=node(node-id)"
+"MWDI://?fields=node(node-id)" --> "/v1/embed-yourself": {mount-name-list}
+
+"/v1/embed-yourself" -> "MATR://v1/read-current-mac-table-from-device": {mount-name}
+"MATR://v1/read-current-mac-table-from-device" --> "/v1/embed-yourself": {requestId}
+
+@enduml
