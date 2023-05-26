@@ -400,7 +400,7 @@ forwardings:
 
 
 
-  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedInCache
+  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedInMwdi
     uuid: matr-1-0-0-op-fc-is-011
     forwarding-type: InvariantProcessSnippet
     management-requests:
@@ -415,7 +415,7 @@ forwardings:
       - client-name: MicroWaveDeviceInventory://rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)
         uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-002
 
-  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesManagementMacAddressBeingReadFromCache
+  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesManagementMacAddressBeingReadFromMwdi
     uuid: matr-1-0-0-op-fc-is-012
     forwarding-type: InvariantProcessSnippet
     management-requests:
@@ -445,7 +445,7 @@ forwardings:
       - client-name: OpenDaylight://rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
         uuid: matr-1-0-0-http-c-c-4-0-2-000
 
-  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnCache
+  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi
     uuid: matr-1-0-0-op-fc-is-014
     forwarding-type: InvariantProcessSnippet
     management-requests:
@@ -510,7 +510,7 @@ forwardings:
         uuid: atr-1-0-0-es-c-es-1-0-0-000
 
 ## TODO: One or several requests for reverse-translating the macAddresses from cached table content into mountNames
-  - forwarding-name: 
+  - forwarding-name: PromptsForProvidingNetworkElementsOnPathCauseReadingFromElasticSearch
     uuid: matr-1-0-0-op-fc-is-031
     forwarding-type: InvariantProcessSnippet
     management-requests:
@@ -524,4 +524,5 @@ forwardings:
     consequent-requests:
       - client-name: MicroWaveDeviceInventory:/
         uuid: 
-  
+        
+## TODO: Cyclic operation to be described
