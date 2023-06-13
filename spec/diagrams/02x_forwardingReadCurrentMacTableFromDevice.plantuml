@@ -1,7 +1,7 @@
 @startuml
 skinparam responseMessageBelowArrow true
 
-"external or cyclic operation" -> "/v1/read-current-mac-table-from-device": {mount-name, ownIp, ownPort, responseServiceName}
+"external or cyclic operation" -> "/v1/read-current-mac-table-from-device": {mount-name, ownApplicationName, ownReleaseNumber, ownIp, ownPort, responseServiceName}
 "/v1/read-current-mac-table-from-device" --> "external or cyclic operation": {requestId}
 
 "/v1/read-current-mac-table-from-device" -> "MWDI://...core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)": {mount-name}

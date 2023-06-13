@@ -53,10 +53,10 @@ servers:
         - operation-name: /v1/read-current-mac-table-from-device
           uuid: matr-1-0-0-op-s-is-002
         ## usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database)
-        - operation-name: /v1/provide-list-of-mac-address-egress-interfaces
+        - operation-name: /v1/provide-list-of-network-element-interfaces-on-path
           uuid: matr-1-0-0-op-s-is-003
         ## provide unsorted list of mount names of devices with MAC addresses on trace: mount-name
-        - operation-name: /v1/provide-list-of-network-elements-on-path-in-generic-representation
+        - operation-name: /v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation
           uuid: matr-1-0-0-op-s-is-004
         ## usecase for next release: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.(from database)
         ## - operation-name: /v1/provide-connected-devices
@@ -340,7 +340,7 @@ clients:
             uuid: matr-1-0-0-op-c-is-c-4-0-2-000
 
   - http-client:
-      application-name: RequestorAtReadCurrentMacTableFromDevice  ## from RequestBody
+      application-name: {RequestorAtReadCurrentMacTableFromDevice}  ## from RequestBody
       release-number: *.*.*                                       ## from RequestBody
       uuid: matr-1-0-0-http-c-*-*-*-*-000                      ## from RequestBody and incremental sequence number
     tcp-client:
@@ -355,5 +355,5 @@ clients:
       service:
         basic:
         individual:
-          - operation-name: /v1/accept-mac-table-from-device      ## from RequestBody
+          - operation-name: {/v1/accept-mac-table-from-device}      ## from RequestBody
             uuid: matr-1-0-0-op-c-is-*-*-*-*-000

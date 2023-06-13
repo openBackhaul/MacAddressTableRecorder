@@ -411,7 +411,7 @@ forwardings:
       - client-name: MicroWaveDeviceInventory://?fields=node(node-id)
         uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
 
-  - forwarding-name: CyclicOperationCausesRequestForUpdatingMacTableFromDeviceAtMatr
+  - forwarding-name: CyclicOperationCausesRequestsForUpdatingMacTableFromDeviceAtMatr
     uuid: matr-1-0-0-op-fc-is-002
     forwarding-type: InvariantProcessSnippet
     management-requests:
@@ -425,26 +425,6 @@ forwardings:
     consequent-requests:
       - client-name: MacAddressTableRecorder://v1/read-current-mac-table-from-device
         uuid: matr-1-0-0-op-s-is-002
-
-
-  - forwarding-name: PromptsForProvidingMacTablesCauseReadingFromElasticSearch
-    uuid: matr-1-0-0-op-fc-is-010
-    forwarding-type: InvariantProcessSnippet
-    management-requests:
-      operation-client-update:
-      fc-port-update:
-      fc-port-deletion:
-      operation-client-deletion:
-    initiating-requests:
-      - server-name: /v1/provide-mac-table-of-all-devices
-        uuid: matr-1-0-0-op-s-is-000
-      - server-name: /v1/provide-mac-table-of-specific-device
-        uuid: matr-1-0-0-op-s-is-001
-      - server-name: /v1/read-current-mac-table-from-device
-        uuid: matr-1-0-0-op-s-is-002
-    consequent-requests:
-      - client-name: ElasticSearch
-        uuid: matr-1-0-0-es-c-es-1-0-0-000
 
 
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedInMwdi
@@ -505,7 +485,7 @@ forwardings:
         uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
       - client-name: MicroWaveDeviceInventory://rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?fields=original-ltp-name
-        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-003
+        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-001
 
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     uuid: matr-1-0-0-op-fc-is-024
@@ -538,9 +518,28 @@ forwardings:
       - server-name: /v1/read-current-mac-table-from-device
         uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
-      - client-name: RequestorAtReadCurrentMacTableFromDevice://v1/accept-mac-table-from-device
+      - client-name: {RequestorAtReadCurrentMacTableFromDevice}:/{/v1/accept-mac-table-from-device}
         uuid: matr-1-0-0-op-c-is-*-*-*-*-000
 
+
+  - forwarding-name: PromptsForProvidingMacTablesCausesReadingFromElasticSearch
+    uuid: matr-1-0-0-op-fc-is-010
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/provide-mac-table-of-all-devices
+        uuid: matr-1-0-0-op-s-is-000
+      - server-name: /v1/provide-mac-table-of-specific-device
+        uuid: matr-1-0-0-op-s-is-001
+      - server-name: /v1/read-current-mac-table-from-device
+        uuid: matr-1-0-0-op-s-is-002
+    consequent-requests:
+      - client-name: ElasticSearch
+        uuid: matr-1-0-0-es-c-es-1-0-0-000
 
 ## TODO: Forwarding initiated by /v1/provide-list-of-mac-address-egress-interfaces needs to be elaborated
   - forwarding-name: 

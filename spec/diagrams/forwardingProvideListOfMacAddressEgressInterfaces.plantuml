@@ -1,11 +1,11 @@
 @startuml
 skinparam responseMessageBelowArrow true
 
-"generic representation" -> "/v1/provide-list-of-network-elements-on-path-in-generic-representation": {targetMacAddress}
+"extern" -> "/v1/provide-list-of-network-element-interfaces-on-path": {targetMacAddress}
 
-"/v1/provide-list-of-network-elements-on-path-in-generic-representation" -> "ElasticSearch": {targetMacAddress}
-"ElasticSearch" --> "/v1/provide-list-of-network-elements-on-path-in-generic-representation": {list-of-mount-names-with-an-egressLtpUUid-equal-to-targetMacAddress}
+"/v1/provide-list-of-network-element-interfaces-on-path" -> "ElasticSearch": {targetMacAddress}
+"ElasticSearch" --> "/v1/provide-list-of-network-element-interfaces-on-path": {list-of-mount-names-with-an-egressLtp-that-contains-targetMacAddress}
 
-"/v1/provide-list-of-network-elements-on-path-in-generic-representation" --> "generic representation": {list-of-mount-names-with-an-egressLtpUUid-equal-to-targetMacAddress}
+"/v1/provide-list-of-network-element-interfaces-on-path" --> "extern": {list-of-mount-names-with-an-egressLtp-that-contains-targetMacAddress}
 
 @enduml

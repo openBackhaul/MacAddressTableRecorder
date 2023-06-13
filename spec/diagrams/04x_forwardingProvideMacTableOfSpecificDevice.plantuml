@@ -1,0 +1,11 @@
+@startuml
+skinparam responseMessageBelowArrow true
+
+"external" -> "/v1/provide-mac-table-of-specific-device": {mount-name}
+
+"/v1/provide-mac-table-of-specific-device" -> "ElasticSearch": {mount-name}
+"ElasticSearch" --> "/v1/provide-mac-table-of-specific-device": {list-of(mount-name, macAddressCur, egressLtpUUid, original-ltp-name, vlan-id, mac-addresses, timestampofRPC)}
+
+"/v1/provide-mac-table-of-specific-device" --> "external": {list-of(mount-name, macAddressCur, egressLtpUUid, original-ltp-name, vlan-id, mac-addresses, timestampofRPC)}
+
+@enduml
