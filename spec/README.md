@@ -17,4 +17,4 @@
 - [MacAddressTableRecorder+config](./MacAddressTableRecorder+config.json)
 
 ### Comments
-./.
+- [Some diagrams](./diagrams/README.md) have been prepared (for explanatory purposes only!)

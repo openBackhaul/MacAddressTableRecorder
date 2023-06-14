@@ -53,16 +53,14 @@ servers:
         - operation-name: /v1/read-current-mac-table-from-device
           uuid: matr-1-0-0-op-s-is-002
         ## usecase: MAC of RAN NE is known. Service provides hints for routing through network. (From database)
-        - operation-name: /v1/provide-list-of-mac-address-egress-interfaces
+        - operation-name: /v1/provide-list-of-network-element-interfaces-on-path
           uuid: matr-1-0-0-op-s-is-003
         ## provide unsorted list of mount names of devices with MAC addresses on trace: mount-name
-        - operation-name: /v1/provide-list-of-network-elements-on-path-in-generic-representation
+        - operation-name: /v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation
           uuid: matr-1-0-0-op-s-is-004
         ## usecase for next release: List all devices/interfaces, that have the same mac-address in their mactable as the device sent in the request.(from database)
         ## - operation-name: /v1/provide-connected-devices
         ##   uuid: matr-1-0-0-op-s-is-005
-
-
   http-server:
     own-application-name: MacAddressTableRecorder
     own-release-number: 1.0.0
@@ -155,6 +153,8 @@ clients:
       service:
         basic:
         individual:
+          - operation-name: /v1/list-applications
+            uuid: matr-1-0-0-op-c-is-ro-2-0-1-000
 
   - http-client:
       application-name: TypeApprovalRegister
@@ -302,6 +302,25 @@ clients:
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-003
 
   - http-client:
+      application-name: MacAddressTableRecorder
+      release-number: 1.0.0
+      uuid: matr-1-0-0-http-c-matr-1-0-0-000
+    tcp-client:
+      remote-protocol: http
+      ip-address: 1.1.4.5
+      tcp-port: 4005
+      uuid: matr-1-0-0-tcp-c-matr-1-0-0-000
+    operation-clients:
+      own-oam:
+        basic:
+        individual:
+      service:
+        basic:
+        individual:
+          - operation-name: /v1/read-current-mac-table-from-device
+            uuid: matr-1-0-0-op-c-is-matr-1-0-0-000
+
+  - http-client:
       application-name: OpenDaylight
       release-number: 4.0.2
       uuid: matr-1-0-0-http-c-c-4-0-2-000
@@ -319,3 +338,22 @@ clients:
         individual:
           - operation-name: /rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
             uuid: matr-1-0-0-op-c-is-c-4-0-2-000
+
+  - http-client:
+      application-name: {RequestorAtReadCurrentMacTableFromDevice}  ## from RequestBody
+      release-number: *.*.*                                       ## from RequestBody
+      uuid: matr-1-0-0-http-c-*-*-*-*-000                      ## from RequestBody and incremental sequence number
+    tcp-client:
+      remote-protocol: http
+      ip-address: *.*.*.*                                         ## from RequestBody
+      tcp-port: 0                                                 ## from RequestBody
+      uuid: matr-1-0-0-tcp-c-*-*-*-*-000
+    operation-clients:
+      own-oam:
+        basic:
+        individual:
+      service:
+        basic:
+        individual:
+          - operation-name: {/v1/accept-mac-table-from-device}      ## from RequestBody
+            uuid: matr-1-0-0-op-c-is-*-*-*-*-000
