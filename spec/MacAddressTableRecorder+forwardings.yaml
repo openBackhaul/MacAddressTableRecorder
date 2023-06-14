@@ -518,7 +518,7 @@ forwardings:
       - server-name: /v1/read-current-mac-table-from-device
         uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
-      - client-name: {RequestorAtReadCurrentMacTableFromDevice}:/{/v1/accept-mac-table-from-device}
+      - client-name: {RequestorAtReadCurrentMacTableFromDevice}: / {/v1/accept-mac-table-from-device}
         uuid: matr-1-0-0-op-c-is-*-*-*-*-000
 
 
