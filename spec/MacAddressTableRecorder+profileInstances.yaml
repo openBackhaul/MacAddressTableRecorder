@@ -31,7 +31,7 @@ profile-instances:
     uuid: 'matr-1-0-0-action-p-003'
     capability:
       operation-name: '/v1/start-application-in-generic-representation'
-      label: 'List network elements on path to target network element'
+      label: 'List network element interfaces on path to target network element'
       input-value-list:
         - field-name: 'Target MAC address'
       display-in-new-browser-window: false
@@ -121,9 +121,9 @@ profile-instances:
   - profile-name: 'GenericResponseProfile'
     uuid: 'matr-1-0-0-response-p-008'
     capability:
-      operation-name: '/v1/provide-list-of-network-elements-on-path-in-generic-representation'
-      static-field-name: 'listOfNetworkElementsOnPath'
-      description: 'Calculated mount names of devices on path towards MAC address, values concatenated and separated by hyphen'
+      operation-name: '/v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation'
+      static-field-name: 'listOfNetworkElementInterfacesOnPath'
+      description: 'Calculated mount names and interfaces of devices on path towards MAC address, values concatenated and separated by &'
       datatype: 'string'
     configuration:
       value-reference: ''
