@@ -137,9 +137,6 @@ paths:
         default:
           $ref: '#/components/responses/responseForErroredServiceRequests'
       callbacks:
-
-        # individual callbacks to be added here
-
         PromptForBequeathingDataCausesRequestForBroadcastingInfoAboutServerReplacement:
           url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-ro-2-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-ro-2-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-ro-2-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-ro-2-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-op-c-bm-ro-2-0-1-001/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
             post:
@@ -964,7 +961,7 @@ paths:
                       datatype: 'string'
                   response-value-list:
                     - field-name: 'listOfNetworkElementInterfacesOnPath'
-                      value: '509251234::eth-1-0-3::509251234::EX-1-1::509253333::eth-1-3-3::509253333::EX-1-0'
+                      value: '509251234:eth-1-0-3;509251234:EX-1-1;509253333:eth-1-3-3;509253333:EX-1-0'
                       datatype: 'string'
           headers:
             x-correlator:
@@ -1707,6 +1704,109 @@ paths:
                   $ref: '#/components/responses/responseForErroredServiceRequests'
                 default:
                   $ref: '#/components/responses/responseForErroredServiceRequests'
+        CyclicOperationCausesRequestForListOfApplicationsAtRo:
+          url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-ro-2-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-ro-2-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-ro-2-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-ro-2-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-op-c-is-ro-2-0-1-000/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
+            post:
+              parameters:
+                - $ref: '#/components/parameters/user'
+                - $ref: '#/components/parameters/originator'
+                - $ref: '#/components/parameters/x-correlator'
+                - $ref: '#/components/parameters/trace-indicator'
+                - $ref: '#/components/parameters/customer-journey'
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: object
+                      properties:
+                        required-protocol:
+                          type: string
+                          description: >
+                            'Protocol for which the address shall be provided
+                            from [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-ro-2-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
+                      example:
+                        required-protocol: 'HTTP'
+              responses:
+                '200':
+                  description: 'List of applications provided'
+                  content:
+                    application/json:
+                      schema:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            application-name:
+                              type: string
+                              description: >
+                                'Filter for application-name == MicroWaveDeviceInventory'
+                            release-number:
+                              type: string
+                              description: 'from [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-http-c-*/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
+                            address:
+                              type: string
+                              description: >
+                                'find [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol] == {$request.body#required-protocol}
+                                from [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address
+                                or /core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]'
+                            port:
+                              type: integer
+                              description: >
+                                'find [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol] == {$request.body#required-protocol}
+                                from [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port]'
+                        example:
+                          - application-name: 'TypeApprovalRegister'
+                            release-number: '1.0.0'
+                            address: '1.1.3.2'
+                            port: 3002
+                          - application-name: 'MicroWaveDeviceInventory'
+                            release-number: '1.0.0'
+                            address: '1.1.4.4'
+                            port: 4004
+                  headers:
+                    x-correlator:
+                      schema:
+                        type: string
+                        example: '550e8400-e29b-11d4-a716-446655440000'
+                      description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
+                    exec-time:
+                      schema:
+                        type: integer
+                        example: 1100
+                      description: 'Value written by the service provider, reporting the total elapsed time for the execution, including all the additional processing needed to retrieve the data from the backend service. Expressed in milliseconds'
+                    backend-time:
+                      schema:
+                        type: integer
+                        example: 850
+                      description: 'Value written by the service provider, reporting the elapsed time for data retrieval from the backend (service invocation, database access…). Expressed in milliseconds'
+                    life-cycle-state:
+                      schema:
+                        type: string
+                        enum:
+                          - 'EXPERIMENTAL'
+                          - 'OPERATIONAL'
+                          - 'DEPRECATED'
+                          - 'OBSOLETE'
+                          - 'UNKNOWN'
+                          - 'NOT_YET_DEFINED'
+                        example: 'EXPERIMENTAL'
+                      description: >
+                          'Life cycle state of the consumed service
+                          find in [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-op-s-is-004/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
+                '400':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '401':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '403':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '404':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '500':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                default:
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+
+
   /v1/redirect-service-request-information:
     parameters:
       - $ref: '#/components/parameters/user'
@@ -6431,399 +6531,6 @@ paths:
         default:
           $ref: '#/components/responses/responseForErroredOamRequests'
 
-  /core-model-1-4:control-construct/profile-collection/profile={uuid}/file-profile-1-0:file-profile-pac/file-profile-capability/file-identifier:
-    parameters:
-      - in: path
-        name: uuid
-        required: true
-        schema:
-          type: string
-          pattern: '^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-file-p-([0-9]{3})$'
-          example: 'ro-2-0-1-file-p-000'
-    get:
-      operationId: getFileProfileFileIdentifier
-      summary: 'Returns the identifier of the file'
-      tags:
-        - FileProfile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: 'File identifier provided'
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - file-profile-1-0:file-identifier
-                properties:
-                  file-profile-1-0:file-identifier:
-                    type: string
-                    example: 'applicationData'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-  /core-model-1-4:control-construct/profile-collection/profile={uuid}/file-profile-1-0:file-profile-pac/file-profile-capability/file-description:
-    parameters:
-      - in: path
-        name: uuid
-        required: true
-        schema:
-          type: string
-          pattern: '^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-file-p-([0-9]{3})$'
-          example: 'ro-2-0-1-file-p-000'
-    get:
-      operationId: getFileProfileFileDescription
-      summary: 'Returns the description of the file'
-      tags:
-        - FileProfile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: 'File description provided'
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - file-profile-1-0:file-description
-                properties:
-                  file-profile-1-0:file-description:
-                    type: string
-                    example: 'Holds administrator-names, user-names, authorization codes and allowed-methods.'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-  /core-model-1-4:control-construct/profile-collection/profile={uuid}/file-profile-1-0:file-profile-pac/file-profile-configuration/file-path:
-    parameters:
-      - in: path
-        name: uuid
-        required: true
-        schema:
-          type: string
-          pattern: '^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-file-p-([0-9]{3})$'
-          example: 'ro-2-0-1-file-p-000'
-    get:
-      operationId: getFileProfileFilePath
-      summary: 'Returns the path of the file'
-      tags:
-        - FileProfile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: 'File path provided'
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - file-profile-1-0:file-path
-                properties:
-                  file-profile-1-0:file-path:
-                    type: string
-                    example: '../application-data/application-data.json'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-    put:
-      operationId: putFileProfileFilePath
-      summary: 'Configures path of the file'
-      tags:
-        - FileProfile
-      security:
-        - basicAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - file-profile-1-0:file-path
-              properties:
-                file-profile-1-0:file-path:
-                  type: string
-                  example: '../application-data/application-data.json'
-      responses:
-        '204':
-          description: 'File path configured'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-  /core-model-1-4:control-construct/profile-collection/profile={uuid}/file-profile-1-0:file-profile-pac/file-profile-configuration/user-name:
-    parameters:
-      - in: path
-        name: uuid
-        required: true
-        schema:
-          type: string
-          pattern: '^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-file-p-([0-9]{3})$'
-          example: 'ro-2-0-1-file-p-000'
-    get:
-      operationId: getFileProfileUserName
-      summary: 'Returns the user name for acccessing the file'
-      tags:
-        - FileProfile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: 'User name provided'
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - file-profile-1-0:user-name
-                properties:
-                  file-profile-1-0:user-name:
-                    type: string
-                    example: 'firstname.surname'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-    put:
-      operationId: putFileProfileUserName
-      summary: 'Configures the user name for acccessing the file'
-      tags:
-        - FileProfile
-      security:
-        - basicAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - file-profile-1-0:user-name
-              properties:
-                file-profile-1-0:user-name:
-                  type: string
-                  example: 'firstname.surname'
-      responses:
-        '204':
-          description: 'User name configured'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-  /core-model-1-4:control-construct/profile-collection/profile={uuid}/file-profile-1-0:file-profile-pac/file-profile-configuration/password:
-    parameters:
-      - in: path
-        name: uuid
-        required: true
-        schema:
-          type: string
-          pattern: '^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-file-p-([0-9]{3})$'
-          example: 'ro-2-0-1-file-p-000'
-    get:
-      operationId: getFileProfilePassword
-      summary: 'Returns the password for acccessing the file'
-      tags:
-        - FileProfile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: 'Password provided'
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - file-profile-1-0:password
-                properties:
-                  file-profile-1-0:password:
-                    type: string
-                    example: 'stupid_phrase'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-    put:
-      operationId: putFileProfilePassword
-      summary: 'Configures the password for acccessing the file'
-      tags:
-        - FileProfile
-      security:
-        - basicAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - file-profile-1-0:password
-              properties:
-                file-profile-1-0:password:
-                  type: string
-                  example: 'stupid_phrase'
-      responses:
-        '204':
-          description: 'Password configured'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-  /core-model-1-4:control-construct/profile-collection/profile={uuid}/file-profile-1-0:file-profile-pac/file-profile-configuration/operation:
-    parameters:
-      - in: path
-        name: uuid
-        required: true
-        schema:
-          type: string
-          pattern: '^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-file-p-([0-9]{3})$'
-          example: 'ro-2-0-1-file-p-000'
-    get:
-      operationId: getFileProfileOperation
-      summary: 'Returns the allowed operation on the file'
-      tags:
-        - FileProfile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: 'Operation provided'
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - file-profile-1-0:operation
-                properties:
-                  file-profile-1-0:operation:
-                    type: string
-                    enum:
-                      - 'file-profile-1-0:OPERATION_TYPE_READ_ONLY'
-                      - 'file-profile-1-0:OPERATION_TYPE_READ_WRITE'
-                      - 'file-profile-1-0:OPERATION_TYPE_OFF'
-                      - 'file-profile-1-0:OPERATION_TYPE_NOT_YET_DEFINED'
-                    example: 'file-profile-1-0:OPERATION_TYPE_READ_ONLY'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-    put:
-      operationId: putFileProfileOperation
-      summary: 'Configures the allowed operation on the file'
-      tags:
-        - FileProfile
-      security:
-        - basicAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - file-profile-1-0:operation
-              properties:
-                file-profile-1-0:operation:
-                  type: string
-                  enum:
-                    - 'file-profile-1-0:OPERATION_TYPE_READ_ONLY'
-                    - 'file-profile-1-0:OPERATION_TYPE_READ_WRITE'
-                    - 'file-profile-1-0:OPERATION_TYPE_OFF'
-                    - 'file-profile-1-0:OPERATION_TYPE_NOT_YET_DEFINED'
-                  example: 'file-profile-1-0:OPERATION_TYPE_READ_WRITE'
-      responses:
-        '204':
-          description: 'Operation configured'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-
   /core-model-1-4:control-construct/profile-collection/profile={uuid}/integer-profile-1-0:integer-profile-pac/integer-profile-capability/integer-name:
     parameters:
       - in: path
@@ -7051,224 +6758,6 @@ paths:
       responses:
         '204':
           description: 'Integer value configured'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-
-  /core-model-1-4:control-construct/profile-collection/profile={uuid}/string-profile-1-0:string-profile-pac/string-profile-capability/string-name:
-    parameters:
-      - in: path
-        name: uuid
-        required: true
-        schema:
-          type: string
-          pattern: '^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-string-p-([0-9]{3})$'
-          example: 'ro-2-0-1-string-p-000'
-    get:
-      operationId: getStringProfileStringName
-      summary: 'Returns the name of the String'
-      tags:
-        - StringProfile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: 'String name provided'
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - string-profile-1-0:string-name
-                properties:
-                  string-profile-1-0:string-name:
-                    type: string
-                    example: 'operationMode'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-  /core-model-1-4:control-construct/profile-collection/profile={uuid}/string-profile-1-0:string-profile-pac/string-profile-capability/enumeration:
-    parameters:
-      - in: path
-        name: uuid
-        required: true
-        schema:
-          type: string
-          pattern: '^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-string-p-([0-9]{3})$'
-          example: 'ro-2-0-1-string-p-000'
-    get:
-      operationId: getStringProfileEnumeration
-      summary: 'Returns the enumeration values of the String'
-      tags:
-        - StringProfile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: 'Enumeration values provided'
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - string-profile-1-0:enumeration
-                properties:
-                  string-profile-1-0:enumeration:
-                    type: array
-                    items:
-                      type: string
-                      description: 'Enumeration values of the string'
-                    example: ['string-profile-1-0:STRING_VALUE_TYPE_REACTIVE', 'string-profile-1-0:STRING_VALUE_TYPE_PROTECTION', 'string-profile-1-0:STRING_VALUE_TYPE_OFF']
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-  /core-model-1-4:control-construct/profile-collection/profile={uuid}/string-profile-1-0:string-profile-pac/string-profile-capability/pattern:
-    parameters:
-      - in: path
-        name: uuid
-        required: true
-        schema:
-          type: string
-          pattern: '^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-string-p-([0-9]{3})$'
-          example: 'ro-2-0-1-string-p-000'
-    get:
-      operationId: getStringProfilePattern
-      summary: 'Returns the pattern of the String'
-      tags:
-        - StringProfile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: 'Pattern provided'
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - string-profile-1-0:pattern
-                properties:
-                  string-profile-1-0:pattern:
-                    type: string
-                    example: '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-  /core-model-1-4:control-construct/profile-collection/profile={uuid}/string-profile-1-0:string-profile-pac/string-profile-configuration/string-value:
-    parameters:
-      - in: path
-        name: uuid
-        required: true
-        schema:
-          type: string
-          pattern: '^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-string-p-([0-9]{3})$'
-          example: 'ro-2-0-1-string-p-000'
-    get:
-      operationId: getStringProfileStringValue
-      summary: 'Returns the configured value of the String'
-      tags:
-        - StringProfile
-      security:
-        - basicAuth: []
-      responses:
-        '200':
-          description: 'String value provided'
-          content:
-            application/json:
-              schema:
-                type: object
-                required:
-                  - string-profile-1-0:string-value
-                properties:
-                  string-profile-1-0:string-value:
-                    type: string
-                    example: 'string-profile-1-0:STRING_VALUE_TYPE_OFF'
-        '400':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '401':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '403':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '404':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        '500':
-          $ref: '#/components/responses/responseForErroredOamRequests'
-        default:
-          $ref: '#/components/responses/responseForErroredOamRequests'
-    put:
-      operationId: putStringProfileStringValue
-      summary: 'Configures value of the String'
-      tags:
-        - StringProfile
-      security:
-        - basicAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - string-profile-1-0:string-value
-              properties:
-                string-profile-1-0:string-value:
-                  type: string
-                  example: 'string-profile-1-0:STRING_VALUE_TYPE_OFF'
-      responses:
-        '204':
-          description: 'String configured'
-          headers:
-            x-correlator:
-              schema:
-                type: string
-                example: '550e8400-e29b-11d4-a716-446655440000'
-              description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
-            exec-time:
-              schema:
-                type: integer
-                example: 1100
-              description: 'Value written by the service provider, reporting the total elapsed time for the execution, including all the additional processing needed to retrieve the data from the backend service. Expressed in milliseconds'
-            backend-time:
-              schema:
-                type: integer
-                example: 850
-              description: 'Value written by the service provider, reporting the elapsed time for data retrieval from the backend (service invocation, database access…). Expressed in milliseconds'
         '400':
           $ref: '#/components/responses/responseForErroredOamRequests'
         '401':
