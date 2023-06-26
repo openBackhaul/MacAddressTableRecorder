@@ -1722,8 +1722,8 @@ paths:
                         required-protocol:
                           type: string
                           description: >
-                            'Protocol for which the address shall be provided
-                            from [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-ro-2-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
+                            'Protocol for which the address of the MicroWaveDeviceInventory is needed
+                            from [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
                       example:
                         required-protocol: 'HTTP'
               responses:
@@ -1739,21 +1739,23 @@ paths:
                             application-name:
                               type: string
                               description: >
-                                'Filter for application-name == MicroWaveDeviceInventory'
+                                'Filter for {$response.body#application-name} == MicroWaveDeviceInventory'
                             release-number:
                               type: string
-                              description: 'from [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-http-c-*/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
+                              description: >
+                                'Current release number of MicroWaveDeviceInventory
+                                to [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-http-c-mwdi-1-0-0-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
                             address:
                               type: string
                               description: >
-                                'find [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol] == {$request.body#required-protocol}
-                                from [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address
-                                or /core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]'
+                                'Current address of MicroWaveDeviceInventory
+                                to [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address
+                                or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]'
                             port:
                               type: integer
                               description: >
-                                'find [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol] == {$request.body#required-protocol}
-                                from [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port]'
+                                'Current TCP port of MicroWaveDeviceInventory
+                                to [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port]'
                         example:
                           - application-name: 'TypeApprovalRegister'
                             release-number: '1.0.0'
@@ -1790,9 +1792,7 @@ paths:
                           - 'UNKNOWN'
                           - 'NOT_YET_DEFINED'
                         example: 'EXPERIMENTAL'
-                      description: >
-                          'Life cycle state of the consumed service
-                          find in [/core-model-1-4:control-construct/logical-termination-point=ro-2-0-1-op-s-is-004/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
+                      description: 'Life cycle state of the consumed service'
                 '400':
                   $ref: '#/components/responses/responseForErroredServiceRequests'
                 '401':
@@ -1805,6 +1805,11 @@ paths:
                   $ref: '#/components/responses/responseForErroredServiceRequests'
                 default:
                   $ref: '#/components/responses/responseForErroredServiceRequests'
+        CyclicOperationCausesRequestForListOfDevicesAtMwdi:
+        
+        # Hier geht's weiter
+
+
 
 
   /v1/redirect-service-request-information:
