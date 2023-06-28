@@ -709,8 +709,43 @@ paths:
                     'Mount-name of the device, for which the elastic search content shall be updated with the current MAC table from the device
                     read from http://*:*/rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
                     and update elasticsearch'
+                requestor-protocol:
+                  type: string
+                  description: >
+                    'HTTP or HTTPs protocol for sending the response to the requestor'
+                  enum:
+                    - 'HTTP'
+                    - 'HTTPS'
+                requestor-address:
+                  type: object
+                  properties:
+                    ip-address:
+                      type: object
+                      properties:
+                        ipv-4-address:
+                          type: string
+                          pattern: '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
+                          description: >
+                            'IP address for sending the response to the requestor'
+                    domain-name:
+                      type: string
+                      description: >
+                        'Domain name for sending the response to the requestor'
+                requestor-port:
+                  type: integer
+                  description: >
+                    'TCP port for sending the response to the requestor'
+                requestor-receive-operation:
+                  type: string
+                  description: 'Operation at the requestor for receiving the response'
               example:
                 mount-name: '305251234'
+                requestor-protocol: 'HTTP'
+                requestor-address:
+                  ip-address:
+                    ipv-4-address: '1.1.4.1'
+                requestor-port: 4001
+                requestor-receive-operation: '/v1/receive-requested-mac-address-table'
       responses:
         '200':
           description: 'Current MAC table for specific device provided.'
@@ -1050,7 +1085,75 @@ paths:
                   $ref: '#/components/responses/responseForErroredServiceRequests'
                 default:
                   $ref: '#/components/responses/responseForErroredServiceRequests'
-        # PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi
+        PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi:
+          url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-op-c-is-mwdi-1-0-0-001/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
+            get:
+              parameters:
+                - $ref: '#/components/parameters/user'
+                - $ref: '#/components/parameters/originator'
+                - $ref: '#/components/parameters/x-correlator'
+                - $ref: '#/components/parameters/trace-indicator'
+                - $ref: '#/components/parameters/customer-journey'
+              responses:
+                '200':
+                  description: 'Original-ltp-name read'
+                  content:
+                    application/json:
+                      schema:
+                        type: object
+                        properties:
+                          ltp-augment-1-0:ltp-augment-pac:
+                            type: object
+                            properties:
+                              original-ltp-name:
+                                description: 'Shall automatically be filled with the string containing the logical or physical interface name as it is represented at the vendors own mangement interface, e.g. LAN 1/2/1'
+                                type: string
+                        example:
+                          ltp-augment-1-0:ltp-augment-pac:
+                            original-ltp-name: 'LAN 1/2/1'
+                  headers:
+                    x-correlator:
+                      schema:
+                        type: string
+                        example: '550e8400-e29b-11d4-a716-446655440000'
+                      description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
+                    exec-time:
+                      schema:
+                        type: integer
+                        example: 1100
+                      description: 'Value written by the service provider, reporting the total elapsed time for the execution, including all the additional processing needed to retrieve the data from the backend service. Expressed in milliseconds'
+                    backend-time:
+                      schema:
+                        type: integer
+                        example: 850
+                      description: 'Value written by the service provider, reporting the elapsed time for data retrieval from the backend (service invocation, database access…). Expressed in milliseconds'
+                    life-cycle-state:
+                      schema:
+                        type: string
+                        enum:
+                          - 'EXPERIMENTAL'
+                          - 'OPERATIONAL'
+                          - 'DEPRECATED'
+                          - 'OBSOLETE'
+                          - 'UNKNOWN'
+                          - 'NOT_YET_DEFINED'
+                        example: 'EXPERIMENTAL'
+                      description: 'Life cycle state of the consumed service'
+                '400':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '401':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '403':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '404':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '500':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                default:
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+        # PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch:
+        PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor:
+          url: #[{$request.body#requestor-protocol}]://[{$request.body#requestor-address.ip-address.ipv-4-address} or {$request.body#requestor-address.domain-name}]:[{$request.body#requestor-port}][{$request.body#requestor-receive-operation}]
         # TODO: Hier geht's weiter
 
   /v1/provide-list-of-network-element-interfaces-on-path:
