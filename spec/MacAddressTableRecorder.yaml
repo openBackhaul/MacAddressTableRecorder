@@ -748,65 +748,17 @@ paths:
                 requestor-receive-operation: '/v1/receive-requested-mac-address-table'
       responses:
         '200':
-          description: 'Current MAC table for specific device provided.'
+          description: 'Request for current mac-table received.'
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    mount-name:
-                      type: string
-                      description: >
-                        'Identifier of the device in the controller, identical with NetworkElementID at Telefonica Germany
-                        from elasticsearch'
-                    own-mac-address:
-                      type: string
-                      description: >
-                        'MAC address of the device that holds the MAC address table
-                        from elasticsearch'
-                    egress-ltp-uuid:
-                      type: string
-                      description: >
-                        'UUID of the MacInterface towards the listed remote MAC addresses
-                        from elasticsearch'
-                    original-ltp-name:
-                      type: string
-                      description: >
-                        'Name of the egress interface as it is represented on the Local Craft Terminal provided by the vendor
-                        from elasticsearch'
-                    vlan-id:
-                      type: integer
-                      description: >
-                        'VLAN that connects the listed remote MAC addresses
-                        from elasticsearch'
-                    remote-mac-address:
-                      type: string
-                      description: >
-                        'Remote MAC address that can be reached at the egress interface and inside the VLAN
-                        from elasticsearch'
-                    time-stamp-of-data:
-                      type: string
-                      pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[\+\-]\d{2}:\d{2})$'
-                      description: >
-                        'Date and time when the data has been retrieved from the device
-                        from elasticsearch'
+                type: object
+                properties:
+                  request-id:
+                    type: string
+                    description: 'Identifier of the request for a current mac-table'
                 example:
-                  - mount-name: '305251234'
-                    own-mac-address: '00:00:00:00:00:00'
-                    egress-ltp-uuid: 'mac-inf-1234'
-                    original-ltp-name: 'eth-1-0-3'
-                    vlan-id: 17
-                    remote-mac-address: '01:01:01:01:01:01'
-                    time-stamp-of-data: '2010-11-20T14:00:00+01:00'
-                  - mount-name: '305251234'
-                    own-mac-address: '00:00:00:00:00:00'
-                    egress-ltp-uuid: 'mac-inf-1234'
-                    original-ltp-name: 'eth-1-0-3'
-                    vlan-id: 17
-                    remote-mac-address: 'FF:01:01:01:01:01'
-                    time-stamp-of-data: '2010-11-20T14:00:00+01:00'
+                  request-id: '305251234-101120-1405'
           headers:
             x-correlator:
               schema:
@@ -1154,8 +1106,121 @@ paths:
         # PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch:
         PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor:
           url: #[{$request.body#requestor-protocol}]://[{$request.body#requestor-address.ip-address.ipv-4-address} or {$request.body#requestor-address.domain-name}]:[{$request.body#requestor-port}][{$request.body#requestor-receive-operation}]
-        # TODO: Hier geht's weiter
-
+            post:
+              parameters:
+                - $ref: '#/components/parameters/user'
+                - $ref: '#/components/parameters/originator'
+                - $ref: '#/components/parameters/x-correlator'
+                - $ref: '#/components/parameters/trace-indicator'
+                - $ref: '#/components/parameters/customer-journey'
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          request-id:
+                            type: string
+                            description: >
+                              'Identifier of the request for a current mac-table
+                              from {$response.body#request-id}'
+                          mount-name:
+                            type: string
+                            description: >
+                              'Identifier of the device in the controller, identical with NetworkElementID at Telefonica Germany
+                              from {$request.body#mount-name}'
+                          own-mac-address:
+                            type: string
+                            description: >
+                              'MAC address of the device that holds the MAC address table
+                              from {$PromptForUpdatingMacTableFromDeviceCausesManagementMacAddressBeingReadFromMwdi.response.body#mac-fd-status.mac-address-cur}'
+                          egress-ltp-uuid:
+                            type: string
+                            description: >
+                              'UUID of the MacInterface towards the listed remote MAC addresses
+                              from {$PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice.response.body#mac-table-entry-list.egress-ltp}'
+                          original-ltp-name:
+                            type: string
+                            description: >
+                              'Name of the egress interface as it is represented on the Local Craft Terminal provided by the vendor
+                              from {$PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi.response.body#ltp-augment-1-0:ltp-augment-pac.original-ltp-name}'
+                          vlan-id:
+                            type: integer
+                            description: >
+                              'VLAN that connects the listed remote MAC addresses
+                              from {$PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice.response.body#mac-table-entry-list.vlan-id}'
+                          remote-mac-address:
+                            type: string
+                            description: >
+                              'Remote MAC address that can be reached at the egress interface and inside the VLAN
+                              from {$PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice.response.body#mac-table-entry-list.mac-address}'
+                          time-stamp-of-data:
+                            type: string
+                            pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[\+\-]\d{2}:\d{2})$'
+                            description: >
+                              'Date and time when the data has been retrieved from the device
+                              from elasticsearch'
+                      example:
+                        - mount-name: '305251234'
+                          own-mac-address: '00:00:00:00:00:00'
+                          egress-ltp-uuid: 'mac-inf-1234'
+                          original-ltp-name: 'eth-1-0-3'
+                          vlan-id: 17
+                          remote-mac-address: '01:01:01:01:01:01'
+                          time-stamp-of-data: '2010-11-20T14:00:00+01:00'
+                        - mount-name: '305251234'
+                          own-mac-address: '00:00:00:00:00:00'
+                          egress-ltp-uuid: 'mac-inf-1234'
+                          original-ltp-name: 'eth-1-0-3'
+                          vlan-id: 17
+                          remote-mac-address: 'FF:01:01:01:01:01'
+                          time-stamp-of-data: '2010-11-20T14:00:00+01:00'
+              responses:
+                '204':
+                  description: 'Mac-table has been received.'
+                  headers:
+                    x-correlator:
+                      schema:
+                        type: string
+                        example: '550e8400-e29b-11d4-a716-446655440000'
+                      description: 'UUID for the service execution flow that allows to correlate requests and responses. Its value must be identical at the response compared with its corresponding request'
+                    exec-time:
+                      schema:
+                        type: integer
+                        example: 1100
+                      description: 'Value written by the service provider, reporting the total elapsed time for the execution, including all the additional processing needed to retrieve the data from the backend service. Expressed in milliseconds'
+                    backend-time:
+                      schema:
+                        type: integer
+                        example: 850
+                      description: 'Value written by the service provider, reporting the elapsed time for data retrieval from the backend (service invocation, database access…). Expressed in milliseconds'
+                    life-cycle-state:
+                      schema:
+                        type: string
+                        enum:
+                          - 'EXPERIMENTAL'
+                          - 'OPERATIONAL'
+                          - 'DEPRECATED'
+                          - 'OBSOLETE'
+                          - 'UNKNOWN'
+                          - 'NOT_YET_DEFINED'
+                        example: 'EXPERIMENTAL'
+                      description: 'Life cycle state of the consumed service'
+                '400':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '401':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '403':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '404':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                '500':
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                default:
+                  $ref: '#/components/responses/responseForErroredServiceRequests'
+                  
   /v1/provide-list-of-network-element-interfaces-on-path:
     parameters:
       - $ref: '#/components/parameters/user'
