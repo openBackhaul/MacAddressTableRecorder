@@ -123,7 +123,7 @@ profile-instances:
     capability:
       operation-name: '/v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation'
       static-field-name: 'listOfNetworkElementInterfacesOnPath'
-      description: 'Calculated mount names and interfaces of devices on path towards MAC address, values concatenated and separated by ::'
+      description: 'Calculated mount names and interfaces of devices on path towards MAC address'
       datatype: 'string'
     configuration:
       value-reference: ''
