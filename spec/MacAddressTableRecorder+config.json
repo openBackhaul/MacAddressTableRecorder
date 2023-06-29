@@ -59,6 +59,25 @@
               }
             },
             {
+              "uuid": "matr-1-0-0-action-p-003",
+              "profile-name": "action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE",
+              "action-profile-1-0:action-profile-pac": {
+                "action-profile-capability": {
+                  "operation-name": "/v1/start-application-in-generic-representation",
+                  "label": "List network element interfaces on path to target network element",
+                  "input-value-list": [
+                    {
+                      "field-name": "Target MAC address"
+                    }
+                  ],
+                  "display-in-new-browser-window": false
+                },
+                "action-profile-configuration": {
+                  "consequent-operation-reference": "/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-op-s-is-004/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-capability/operation-name"
+                }
+              }
+            },
+            {
               "uuid": "matr-1-0-0-response-p-000",
               "profile-name": "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE",
               "response-profile-1-0:response-profile-pac": {
@@ -211,17 +230,64 @@
               }
             },
             {
+              "uuid": "matr-1-0-0-response-p-008",
+              "profile-name": "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE",
+              "response-profile-1-0:response-profile-pac": {
+                "response-profile-capability": {
+                  "operation-name": "/v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation",
+                  "field-name": {
+                    "static-field-name": "listOfNetworkElementInterfacesOnPath"
+                  },
+                  "description": "Calculated mount names and interfaces of devices on path towards MAC address",
+                  "datatype": "string"
+                },
+                "response-profile-configuration": {
+                  "value": {
+                    "value-reference": ""
+                  }
+                }
+              }
+            },
+            {
               "uuid": "matr-1-0-0-integer-p-000",
               "profile-name": "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE",
               "integer-profile-1-0:integer-profile-pac": {
                 "integer-profile-capability": {
                   "integer-name": "concurrent-rpc",
-                  "unit":
                   "minimum": 1,
                   "maximum": 4000
                 },
                 "integer-profile-configuration": {
                   "integer-value": 100
+                }
+              }
+            },
+            {
+              "uuid": "matr-1-0-0-integer-p-001",
+              "profile-name": "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE",
+              "integer-profile-1-0:integer-profile-pac": {
+                "integer-profile-capability": {
+                  "integer-name": "response-timeout-rpc",
+                  "unit": "second",
+                  "minimum": 5,
+                  "maximum": 2000
+                },
+                "integer-profile-configuration": {
+                  "integer-value": 60
+                }
+              }
+            },
+            {
+              "uuid": "matr-1-0-0-integer-p-002",
+              "profile-name": "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE",
+              "integer-profile-1-0:integer-profile-pac": {
+                "integer-profile-capability": {
+                  "integer-name": "retry-rpc",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "integer-profile-configuration": {
+                  "integer-value": 1
                 }
               }
             }
@@ -661,6 +727,36 @@
             ]
           },
           {
+            "uuid": "matr-1-0-0-op-s-is-000",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SOURCE",
+            "client-ltp": [
+            ],
+            "server-ltp": [
+              "matr-1-0-0-http-s-000"
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "operation-server-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
+                "operation-server-interface-1-0:operation-server-interface-pac": {
+                  "operation-server-interface-capability": {
+                    "operation-name": "/v1/provide-mac-table-of-all-devices"
+                  },
+                  "operation-server-interface-configuration": {
+                    "life-cycle-state": "operation-server-interface-1-0:LIFE_CYCLE_STATE_TYPE_EXPERIMENTAL",
+                    "operation-key": "n.a."
+                  }
+                }
+              }
+            ]
+          },
+
+
+
+
+
+
+          {
             "uuid": "matr-1-0-0-http-s-000",
             "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SOURCE",
             "client-ltp": [
@@ -681,7 +777,8 @@
               "matr-1-0-0-op-s-bs-002",
               "matr-1-0-0-op-s-bs-003",
               "matr-1-0-0-op-s-bs-004",
-              "matr-1-0-0-op-s-bs-005"
+              "matr-1-0-0-op-s-bs-005",
+              "matr-1-0-0-op-s-is-000"
             ],
             "server-ltp": [
               "matr-1-0-0-tcp-s-000",
