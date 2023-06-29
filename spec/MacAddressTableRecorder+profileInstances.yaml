@@ -133,7 +133,6 @@ profile-instances:
     uuid: 'matr-1-0-0-integer-p-000'
     capability:
       integer-name: 'concurrent-rpc'
-      unit:
       minimum: 1
       maximum: 4000
     configuration:
