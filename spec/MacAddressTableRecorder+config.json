@@ -2477,6 +2477,36 @@
                     "logical-termination-point": "matr-1-0-0-op-c-bm-alt-2-0-1-005"
                   }
                 ]
+              },
+              {
+                "uuid": "matr-1-0-0-op-fc-is-000",
+                "name": [
+                  {
+                    "value-name": "ForwardingKind",
+                    "value": "core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET"
+                  },
+                  {
+                    "value-name": "ForwardingName",
+                    "value": "CyclicOperationCausesRequestForListOfApplicationsAtRo"
+                  }
+                ],
+                "fc-port": [
+                  {
+                    "local-id": "000",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT",
+                    "logical-termination-point": "matr-1-0-0-op-s-bm-001"
+                  },
+                  {
+                    "local-id": "100",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
+                    "logical-termination-point": "matr-1-0-0-op-s-bm-001"
+                  },
+                  {
+                    "local-id": "200",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
+                    "logical-termination-point": "matr-1-0-0-op-c-is-ro-2-0-1-000"
+                  }
+                ]
               }
             ]
           }
