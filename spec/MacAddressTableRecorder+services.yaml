@@ -340,12 +340,12 @@ clients:
             uuid: matr-1-0-0-op-c-is-c-4-0-2-000
 
   - http-client:
-      application-name: {RequestorAtReadCurrentMacTableFromDevice}  ## from RequestBody
-      release-number: *.*.*                                       ## from RequestBody
+      application-name: {RequestorAtReadCurrentMacTableFromDevice from RequestBody}
+      release-number: {from RequestBody}
       uuid: matr-1-0-0-http-c-*-*-*-*-000                      ## from RequestBody and incremental sequence number
     tcp-client:
       remote-protocol: http
-      ip-address: *.*.*.*                                         ## from RequestBody
+      ip-address: {from RequestBody}
       tcp-port: 0                                                 ## from RequestBody
       uuid: matr-1-0-0-tcp-c-*-*-*-*-000
     operation-clients:
@@ -355,5 +355,5 @@ clients:
       service:
         basic:
         individual:
-          - operation-name: {/v1/accept-mac-table-from-device}      ## from RequestBody
+          - operation-name: {from RequestBody, e.g. /v1/accept-mac-table-from-device}
             uuid: matr-1-0-0-op-c-is-*-*-*-*-000

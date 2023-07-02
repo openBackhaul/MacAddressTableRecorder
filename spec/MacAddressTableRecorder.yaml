@@ -838,11 +838,11 @@ paths:
                           control-construct:
                             - forwarding-domain:
                                 uuid: 'mac-fd-1234'
-                                layer-protocol-name: 
+                                layer-protocol-name:
                                   - 'LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER'
                             - forwarding-domain:
                                 uuid: 'vlan-fd-5678'
-                                layer-protocol-name: 
+                                layer-protocol-name:
                                   - 'LAYER_PROTOCOL_NAME_TYPE_VLAN_LAYER'
                   headers:
                     x-correlator:
@@ -1220,7 +1220,7 @@ paths:
                   $ref: '#/components/responses/responseForErroredServiceRequests'
                 default:
                   $ref: '#/components/responses/responseForErroredServiceRequests'
-                  
+
   /v1/provide-list-of-network-element-interfaces-on-path:
     parameters:
       - $ref: '#/components/parameters/user'
