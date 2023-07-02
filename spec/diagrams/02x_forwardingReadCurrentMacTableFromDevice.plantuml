@@ -1,0 +1,26 @@
+@startuml
+skinparam responseMessageBelowArrow true
+
+"external or cyclic operation" -> "/v1/read-current-mac-table-from-device": {mount-name, ownApplicationName, ownReleaseNumber, ownIp, ownPort, responseServiceName}
+"/v1/read-current-mac-table-from-device" --> "external or cyclic operation": {requestId}
+
+"/v1/read-current-mac-table-from-device" -> "MWDI://...core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)": {mount-name}
+"MWDI://...core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)" --> "/v1/read-current-mac-table-from-device": {fdUuid, layer-protocol-name}
+
+"/v1/read-current-mac-table-from-device" -> "MWDI://...mac-fd-status?fields=mac-address-cur": {mount-name, fdUuid}
+"MWDI://...mac-fd-status?fields=mac-address-cur" --> "/v1/read-current-mac-table-from-device": {macAddressCur}
+
+"/v1/read-current-mac-table-from-device" -> "ODL://...mac-fd-1-0:provide-learned-mac-addresses": {mount-name, fdUuid}
+"ODL://...mac-fd-1-0:provide-learned-mac-addresses" --> "/v1/read-current-mac-table-from-device": {egressLtpUUid, vlan-id, mac-addresses}
+
+"/v1/read-current-mac-table-from-device" -> "MWDI://...ltp-augment-pac?fields=original-ltp-name": {mount-name, egressLtpUUid}
+"MWDI://...ltp-augment-pac?fields=original-ltp-name" --> "/v1/read-current-mac-table-from-device": {original-ltp-name}
+
+"/v1/read-current-mac-table-from-device" -> "ElasticSearch": {mount-name, macAddressCur, egressLtpUUid, original-ltp-name, vlan-id, mac-addresses, timestampofRPC}
+
+"/v1/read-current-mac-table-from-device" -> "ElasticSearch": {mount-name}
+"ElasticSearch" --> "/v1/read-current-mac-table-from-device": {mount-name, macAddressCur, egressLtpUUid, original-ltp-name, vlan-id, mac-addresses, timestampofRPC}
+
+"/v1/read-current-mac-table-from-device" -> "external or cyclic operation": {requestId, mount-name, macAddressCur, egressLtpUUid, original-ltp-name, vlan-id, mac-addresses, timestampofRPC}
+
+@enduml
