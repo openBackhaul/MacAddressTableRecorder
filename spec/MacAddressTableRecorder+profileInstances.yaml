@@ -31,9 +31,9 @@ profile-instances:
     uuid: 'matr-1-0-0-action-p-003'
     capability:
       operation-name: '/v1/start-application-in-generic-representation'
-      label: 'List network element interfaces on path to target network element'
+      label: 'List network element interfaces on path to target MAC address'
       input-value-list:
-        - field-name: 'Target MAC address'
+        - field-name: 'TargetMacAddress'
       display-in-new-browser-window: false
     configuration:
       consequent-operation-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-op-s-is-004/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-capability/operation-name'
@@ -123,37 +123,34 @@ profile-instances:
     capability:
       operation-name: '/v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation'
       static-field-name: 'listOfNetworkElementInterfacesOnPath'
-      description: 'Calculated mount names and interfaces of devices on path towards MAC address'
+      description: 'Calculated mount names and interfaces of devices on the path to the MAC address. Mount names and interfaces are separated by colons. Value pairs are are separated by semicolons.'
       datatype: 'string'
     configuration:
-      value-reference: ''
+      value-reference: 'from ElasticSearch'
 
-  ## number of concurrent rpc (to retrieve the MAC table of several network elements at once)
   - profile-name: 'IntegerProfile'
     uuid: 'matr-1-0-0-integer-p-000'
     capability:
-      integer-name: 'concurrent-rpc'
+      integer-name: 'Number of concurrent RPCs (MAC tables of several network elements get retrieved in parallel)'
       minimum: 1
       maximum: 4000
     configuration:
       integer-value: 100
 
-  ## response timeout for each rpc
   - profile-name: 'IntegerProfile'
     uuid: 'matr-1-0-0-integer-p-001'
     capability:
-      integer-name: 'response-timeout-rpc'
+      integer-name: 'Timeout for receiving the response of the RPC'
       unit: 'second'
       minimum: 5
       maximum: 2000
     configuration:
       integer-value: 60
 
-  ## number of retries for each rpc, retry is done after all other rpc's have been sent.
   - profile-name: 'IntegerProfile'
     uuid: 'matr-1-0-0-integer-p-002'
     capability:
-      integer-name: 'retry-rpc'
+      integer-name: 'Maximum number of retries for executing an RPC'
       unit:
       minimum: 0
       maximum: 10

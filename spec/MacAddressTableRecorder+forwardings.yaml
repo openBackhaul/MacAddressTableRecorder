@@ -34,6 +34,55 @@ forwardings:
       - client-name: OldRelease://v1/bequeath-your-data-and-die
         uuid: matr-1-0-0-op-c-bm-or-1-0-0-000
 
+
+  - forwarding-name: EmbeddingCausesRequestForListOfApplicationsAtRo
+    uuid: matr-1-0-0-op-fc-is-000
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+        - server-name: /v1/embed-yourself
+          uuid: matr-1-0-0-op-s-bm-001
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/embed-yourself
+        uuid: matr-1-0-0-op-s-bm-001
+    consequent-requests:
+      - client-name: RegistryOffice://v1/list-applications
+        uuid: matr-1-0-0-op-c-is-ro-2-0-1-000
+
+  - forwarding-name: EmbeddingCausesRequestForListOfDevicesAtMwdi
+    uuid: matr-1-0-0-op-fc-is-001
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/embed-yourself
+        uuid: matr-1-0-0-op-s-bm-001
+    consequent-requests:
+      - client-name: MicroWaveDeviceInventory://?fields=node(node-id)
+        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
+
+  - forwarding-name: EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr
+    uuid: matr-1-0-0-op-fc-is-002
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+      fc-port-update:
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/embed-yourself
+        uuid: matr-1-0-0-op-s-bm-001
+    consequent-requests:
+      - client-name: MacAddressTableRecorder://v1/read-current-mac-table-from-device
+        uuid: matr-1-0-0-op-c-is-matr-1-0-0-000
+
+
   - forwarding-name: ServiceRequestCausesLoggingRequest
     uuid: matr-1-0-0-op-fc-bm-002
     forwarding-type: InvariantProcessSnippet
@@ -379,54 +428,6 @@ forwardings:
         uuid: matr-1-0-0-op-c-bm-alt-2-0-1-005
 
 
-  - forwarding-name: CyclicOperationCausesRequestForListOfApplicationsAtRo
-    uuid: matr-1-0-0-op-fc-is-000
-    forwarding-type: InvariantProcessSnippet
-    management-requests:
-      operation-client-update:
-        - server-name: /v1/embed-yourself
-          uuid: matr-1-0-0-op-s-bm-001
-      fc-port-update:
-      fc-port-deletion:
-      operation-client-deletion:
-    initiating-requests:
-      - server-name: /v1/embed-yourself
-        uuid: matr-1-0-0-op-s-bm-001
-    consequent-requests:
-      - client-name: RegistryOffice://v1/list-applications
-        uuid: matr-1-0-0-op-c-is-ro-2-0-1-000
-
-  - forwarding-name: CyclicOperationCausesRequestForListOfDevicesAtMwdi
-    uuid: matr-1-0-0-op-fc-is-001
-    forwarding-type: InvariantProcessSnippet
-    management-requests:
-      operation-client-update:
-      fc-port-update:
-      fc-port-deletion:
-      operation-client-deletion:
-    initiating-requests:
-      - server-name: /v1/embed-yourself
-        uuid: matr-1-0-0-op-s-bm-001
-    consequent-requests:
-      - client-name: MicroWaveDeviceInventory://?fields=node(node-id)
-        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
-
-  - forwarding-name: CyclicOperationCausesRequestsForUpdatingMacTableFromDeviceAtMatr
-    uuid: matr-1-0-0-op-fc-is-002
-    forwarding-type: InvariantProcessSnippet
-    management-requests:
-      operation-client-update:
-      fc-port-update:
-      fc-port-deletion:
-      operation-client-deletion:
-    initiating-requests:
-      - server-name: /v1/embed-yourself
-        uuid: matr-1-0-0-op-s-bm-001
-    consequent-requests:
-      - client-name: MacAddressTableRecorder://v1/read-current-mac-table-from-device
-        uuid: matr-1-0-0-op-s-is-002
-
-
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedInMwdi
     uuid: matr-1-0-0-op-fc-is-020
     forwarding-type: InvariantProcessSnippet
@@ -470,7 +471,7 @@ forwardings:
         uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
       - client-name: OpenDaylight://rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
-        uuid: matr-1-0-0-http-c-c-4-0-2-000
+        uuid: matr-1-0-0-http-c-odl-4-0-2-000
 
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi
     uuid: matr-1-0-0-op-fc-is-023
@@ -504,23 +505,18 @@ forwardings:
 
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor
     uuid: matr-1-0-0-op-fc-is-025
-    forwarding-type: ProcessSnippet
+    forwarding-type: InvariantProcessSnippet
     management-requests:
       operation-client-update:
-        - server-name: /v1/read-current-mac-table-from-device
-          uuid: matr-1-0-0-op-s-is-002
       fc-port-update:
-        - server-name: /v1/read-current-mac-table-from-device
-          uuid: matr-1-0-0-op-s-is-002
       fc-port-deletion:
       operation-client-deletion:
     initiating-requests:
       - server-name: /v1/read-current-mac-table-from-device
         uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
-      - client-name: {RequestorAtReadCurrentMacTableFromDevice and /v1/accept-mac-table-from-device}
-        uuid: matr-1-0-0-op-c-is-*-*-*-*-000
-
+      - client-name: request.body#requestor-receive-operation
+        uuid: n.a.
 
   - forwarding-name: PromptForProvidingAllMacTablesCausesReadingFromElasticSearch
     uuid: matr-1-0-0-op-fc-is-030
@@ -537,7 +533,6 @@ forwardings:
       - client-name: ElasticSearch
         uuid: matr-1-0-0-es-c-es-1-0-0-000
 
-
   - forwarding-name: PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch
     uuid: matr-1-0-0-op-fc-is-040
     forwarding-type: InvariantProcessSnippet
@@ -553,7 +548,6 @@ forwardings:
       - client-name: ElasticSearch
         uuid: matr-1-0-0-es-c-es-1-0-0-000
 
-
   - forwarding-name: RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch
     uuid: matr-1-0-0-op-fc-is-050
     forwarding-type: InvariantProcessSnippet
@@ -568,7 +562,6 @@ forwardings:
     consequent-requests:
       - client-name: ElasticSearch
         uuid: matr-1-0-0-es-c-es-1-0-0-000
-
 
   - forwarding-name: RequestForListOfNetworkElementInterfacesOnPathInGenericRepresentationCausesReadingFromElasticSearch
     uuid: matr-1-0-0-op-fc-is-060

@@ -1,12 +1,5 @@
-[
-  {
-    "typeOfTesting": "Acceptance",
-    "dummyUrl": "ping.openBackhaul.com",
-    "application": {
-      "serverUrl": "https://125bf8ff-8193-4784-802a-b33bc1ec7879.mock.pstmn.io",
-      "userName": " *** your name *** ",
-      "authorizationCode": " *** your key *** ",
-      "core-model-1-4:control-construct": {
+{
+  "core-model-1-4:control-construct": {
         "uuid": "matr-1-0-0",
         "profile-collection": {
           "profile": [
@@ -67,7 +60,7 @@
                   "label": "List network element interfaces on path to target network element",
                   "input-value-list": [
                     {
-                      "field-name": "Target MAC address"
+                      "field-name": "TargetMacAddress"
                     }
                   ],
                   "display-in-new-browser-window": false
@@ -238,12 +231,12 @@
                   "field-name": {
                     "static-field-name": "listOfNetworkElementInterfacesOnPath"
                   },
-                  "description": "Calculated mount names and interfaces of devices on path towards MAC address",
+                  "description": "Calculated mount names and interfaces of devices on the path to the MAC address. Mount names and interfaces are separated by colons. Value pairs are are separated by semicolons.",
                   "datatype": "string"
                 },
                 "response-profile-configuration": {
                   "value": {
-                    "value-reference": ""
+                    "value-reference": "from ElasticSearch"
                   }
                 }
               }
@@ -253,7 +246,7 @@
               "profile-name": "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE",
               "integer-profile-1-0:integer-profile-pac": {
                 "integer-profile-capability": {
-                  "integer-name": "concurrent-rpc",
+                  "integer-name": "Number of concurrent RPCs (MAC tables of several network elements get retrieved in parallel)",
                   "minimum": 1,
                   "maximum": 4000
                 },
@@ -267,7 +260,7 @@
               "profile-name": "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE",
               "integer-profile-1-0:integer-profile-pac": {
                 "integer-profile-capability": {
-                  "integer-name": "response-timeout-rpc",
+                  "integer-name": "Timeout for receiving the response of the RPC",
                   "unit": "second",
                   "minimum": 5,
                   "maximum": 2000
@@ -282,7 +275,7 @@
               "profile-name": "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE",
               "integer-profile-1-0:integer-profile-pac": {
                 "integer-profile-capability": {
-                  "integer-name": "retry-rpc",
+                  "integer-name": "Maximum number of retries for executing an RPC",
                   "minimum": 0,
                   "maximum": 10
                 },
@@ -744,7 +737,7 @@
                   },
                   "operation-server-interface-configuration": {
                     "life-cycle-state": "operation-server-interface-1-0:LIFE_CYCLE_STATE_TYPE_EXPERIMENTAL",
-                    "operation-key": "n.a."
+                    "operation-key": "Operation key not yet provided."
                   }
                 }
               }
@@ -768,7 +761,7 @@
                   },
                   "operation-server-interface-configuration": {
                     "life-cycle-state": "operation-server-interface-1-0:LIFE_CYCLE_STATE_TYPE_EXPERIMENTAL",
-                    "operation-key": "n.a."
+                    "operation-key": "Operation key not yet provided."
                   }
                 }
               }
@@ -792,7 +785,7 @@
                   },
                   "operation-server-interface-configuration": {
                     "life-cycle-state": "operation-server-interface-1-0:LIFE_CYCLE_STATE_TYPE_EXPERIMENTAL",
-                    "operation-key": "n.a."
+                    "operation-key": "Operation key not yet provided."
                   }
                 }
               }
@@ -816,7 +809,7 @@
                   },
                   "operation-server-interface-configuration": {
                     "life-cycle-state": "operation-server-interface-1-0:LIFE_CYCLE_STATE_TYPE_EXPERIMENTAL",
-                    "operation-key": "n.a."
+                    "operation-key": "Operation key not yet provided."
                   }
                 }
               }
@@ -886,15 +879,15 @@
                   "http-server-interface-capability": {
                     "application-name": "MacAddressTableRecorder",
                     "release-number": "1.0.0",
-                    "application-purpose": "Stores mac address table content and provides it to other applications",
-                    "data-update-period": " >>> http-server-interface-1-0:DATA_UPDATE_PERIOD_TYPE_REAL_TIME",
+                    "application-purpose": "Retrieves and stores MAC address table contents and provides it to other applications",
+                    "data-update-period": "http-server-interface-1-0:DATA_UPDATE_PERIOD_TYPE_24H_PERIOD",
                     "owner-name": "Markus Kurzka",
                     "owner-email-address": "Markus.Kurzka@telefonica.com",
                     "release-list": [
                       {
                         "local-id": "0",
                         "release-number": "1.0.0",
-                        "release-date": " >>> #TODO <<< ",
+                        "release-date": "01.07.2023",
                         "changes": "Initial version"
                       }
                     ]
@@ -1069,7 +1062,7 @@
                 "http-client-interface-1-0:http-client-interface-pac": {
                   "http-client-interface-configuration": {
                     "application-name": "OldRelease",
-                    "release-number": " >>> ReleaseNumber of the existing release <<< "
+                    "release-number": "1.0.0"
                   }
                 }
               }
@@ -1092,10 +1085,10 @@
                     "remote-protocol": "tcp-client-interface-1-0:PROTOCOL_TYPE_HTTP",
                     "remote-address": {
                       "ip-address": {
-                        "ipv-4-address": " >>> IpAddress and Port (below) of the existing release <<< "
+                        "ipv-4-address": "1.1.4.5"
                       }
                     },
-                    "remote-port": 1000
+                    "remote-port": 4005
                   }
                 }
               }
@@ -1116,7 +1109,7 @@
                 "http-client-interface-1-0:http-client-interface-pac": {
                   "http-client-interface-configuration": {
                     "application-name": "NewRelease",
-                    "release-number": " >>> ReleaseNumber of the new release <<< "
+                    "release-number": "1.0.0"
                   }
                 }
               }
@@ -1139,10 +1132,10 @@
                     "remote-protocol": "tcp-client-interface-1-0:PROTOCOL_TYPE_HTTP",
                     "remote-address": {
                       "ip-address": {
-                        "ipv-4-address": " >>> IpAddress and Port (below) of the new release <<< "
+                        "ipv-4-address": "1.1.4.5"
                       }
                     },
-                    "remote-port": 7000
+                    "remote-port": 4005
                   }
                 }
               }
@@ -1249,13 +1242,40 @@
             ]
           },
           {
+            "uuid": "matr-1-0-0-op-c-is-ro-2-0-1-000",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+            ],
+            "server-ltp": [
+              "matr-1-0-0-http-c-ro-2-0-1-000"
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
+                "operation-client-interface-1-0:operation-client-interface-pac": {
+                  "operation-client-interface-configuration": {
+                    "operation-name": "/v1/list-applications",
+                    "operation-key": "Operation key not yet provided."
+                  },
+                  "operation-client-interface-status": {
+                    "operational-state": "operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED",
+                    "life-cycle-state": "operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED"
+                  }
+                }
+              }
+            ]
+          },
+
+          {
             "uuid": "matr-1-0-0-http-c-ro-2-0-1-000",
             "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
             "client-ltp": [
               "matr-1-0-0-op-c-bm-ro-2-0-1-000",
               "matr-1-0-0-op-c-bm-ro-2-0-1-001",
               "matr-1-0-0-op-c-bm-ro-2-0-1-002",
-              "matr-1-0-0-op-c-bm-ro-2-0-1-003"
+              "matr-1-0-0-op-c-bm-ro-2-0-1-003",
+              "matr-1-0-0-op-c-is-ro-2-0-1-000"
             ],
             "server-ltp": [
               "matr-1-0-0-tcp-c-ro-2-0-1-000"
@@ -1817,12 +1837,116 @@
             ]
           },
           {
-            "uuid": "matr-1-0-0-http-c-cc-1-0-0-000",
+            "uuid": "matr-1-0-0-op-c-is-mwdi-1-0-0-000",
             "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
             "client-ltp": [
             ],
             "server-ltp": [
-              "matr-1-0-0-tcp-c-cc-1-0-0-000"
+              "matr-1-0-0-http-c-mwdi-1-0-0-000"
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
+                "operation-client-interface-1-0:operation-client-interface-pac": {
+                  "operation-client-interface-configuration": {
+                    "operation-name": "/?fields=node(node-id)",
+                    "operation-key": "Operation key not yet provided."
+                  },
+                  "operation-client-interface-status": {
+                    "operational-state": "operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED",
+                    "life-cycle-state": "operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "uuid": "matr-1-0-0-op-c-is-mwdi-1-0-0-001",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+            ],
+            "server-ltp": [
+              "matr-1-0-0-http-c-mwdi-1-0-0-000"
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
+                "operation-client-interface-1-0:operation-client-interface-pac": {
+                  "operation-client-interface-configuration": {
+                    "operation-name": "/rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?fields=original-ltp-name",
+                    "operation-key": "Operation key not yet provided."
+                  },
+                  "operation-client-interface-status": {
+                    "operational-state": "operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED",
+                    "life-cycle-state": "operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "uuid": "matr-1-0-0-op-c-is-mwdi-1-0-0-002",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+            ],
+            "server-ltp": [
+              "matr-1-0-0-http-c-mwdi-1-0-0-000"
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
+                "operation-client-interface-1-0:operation-client-interface-pac": {
+                  "operation-client-interface-configuration": {
+                    "operation-name": "/rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)",
+                    "operation-key": "Operation key not yet provided."
+                  },
+                  "operation-client-interface-status": {
+                    "operational-state": "operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED",
+                    "life-cycle-state": "operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "uuid": "matr-1-0-0-op-c-is-mwdi-1-0-0-003",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+            ],
+            "server-ltp": [
+              "matr-1-0-0-http-c-mwdi-1-0-0-000"
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
+                "operation-client-interface-1-0:operation-client-interface-pac": {
+                  "operation-client-interface-configuration": {
+                    "operation-name": "/rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/forwarding-domain={uuid}/mac-fd-1-0:mac-fd-pac/mac-fd-status?fields=mac-address-cur",
+                    "operation-key": "Operation key not yet provided."
+                  },
+                  "operation-client-interface-status": {
+                    "operational-state": "operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED",
+                    "life-cycle-state": "operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "uuid": "matr-1-0-0-http-c-mwdi-1-0-0-000",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+              "matr-1-0-0-op-c-is-mwdi-1-0-0-000",
+              "matr-1-0-0-op-c-is-mwdi-1-0-0-001",
+              "matr-1-0-0-op-c-is-mwdi-1-0-0-002",
+              "matr-1-0-0-op-c-is-mwdi-1-0-0-003"
+            ],
+            "server-ltp": [
+              "matr-1-0-0-tcp-c-mwdi-1-0-0-000"
             ],
             "layer-protocol": [
               {
@@ -1830,7 +1954,7 @@
                 "layer-protocol-name": "http-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_HTTP_LAYER",
                 "http-client-interface-1-0:http-client-interface-pac": {
                   "http-client-interface-configuration": {
-                    "application-name": "CurrentController",
+                    "application-name": "MicroWaveDeviceInventory",
                     "release-number": "1.0.0"
                   }
                 }
@@ -1838,10 +1962,10 @@
             ]
           },
           {
-            "uuid": "matr-1-0-0-tcp-c-cc-1-0-0-000",
+            "uuid": "matr-1-0-0-tcp-c-mwdi-1-0-0-000",
             "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
             "client-ltp": [
-              "matr-1-0-0-http-c-cc-1-0-0-000"
+              "matr-1-0-0-http-c-mwdi-1-0-0-000"
             ],
             "server-ltp": [
             ],
@@ -1854,10 +1978,156 @@
                     "remote-protocol": "tcp-client-interface-1-0:PROTOCOL_TYPE_HTTP",
                     "remote-address": {
                       "ip-address": {
-                        "ipv-4-address": "1.1.4.1"
+                        "ipv-4-address": "1.1.4.4"
                       }
                     },
-                    "remote-port": 4001
+                    "remote-port": 4004
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "uuid": "matr-1-0-0-op-c-is-matr-1-0-0-000",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+            ],
+            "server-ltp": [
+              "matr-1-0-0-http-c-is-matr-1-0-0-000"
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
+                "operation-client-interface-1-0:operation-client-interface-pac": {
+                  "operation-client-interface-configuration": {
+                    "operation-name": "/v1/read-current-mac-table-from-device",
+                    "operation-key": "Operation key not yet provided."
+                  },
+                  "operation-client-interface-status": {
+                    "operational-state": "operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED",
+                    "life-cycle-state": "operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "uuid": "matr-1-0-0-http-c-is-matr-1-0-0-000",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+              "matr-1-0-0-op-c-is-matr-1-0-0-000"
+            ],
+            "server-ltp": [
+              "matr-1-0-0-tcp-c-is-matr-1-0-0-000"
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "http-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_HTTP_LAYER",
+                "http-client-interface-1-0:http-client-interface-pac": {
+                  "http-client-interface-configuration": {
+                    "application-name": "MacAddressTableRecorder",
+                    "release-number": "1.0.0"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "uuid": "matr-1-0-0-tcp-c-is-matr-1-0-0-000",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+              "matr-1-0-0-http-c-is-matr-1-0-0-000"
+            ],
+            "server-ltp": [
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "tcp-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_TCP_LAYER",
+                "tcp-client-interface-1-0:tcp-client-interface-pac": {
+                  "tcp-client-interface-configuration": {
+                    "remote-protocol": "tcp-client-interface-1-0:PROTOCOL_TYPE_HTTP",
+                    "remote-address": {
+                      "ip-address": {
+                        "ipv-4-address": "1.1.4.5"
+                      }
+                    },
+                    "remote-port": 4005
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "uuid": "matr-1-0-0-op-c-is-odl-4-0-2-000",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+            ],
+            "server-ltp": [
+              "matr-1-0-0-http-c-is-odl-4-0-2-000"
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
+                "operation-client-interface-1-0:operation-client-interface-pac": {
+                  "operation-client-interface-configuration": {
+                    "operation-name": "/rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses",
+                    "operation-key": "Operation key not yet provided."
+                  },
+                  "operation-client-interface-status": {
+                    "operational-state": "operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED",
+                    "life-cycle-state": "operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "uuid": "matr-1-0-0-http-c-is-odl-4-0-2-000",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+              "matr-1-0-0-op-c-is-odl-4-0-2-000"
+            ],
+            "server-ltp": [
+              "matr-1-0-0-tcp-c-is-odl-4-0-2-000"
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "http-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_HTTP_LAYER",
+                "http-client-interface-1-0:http-client-interface-pac": {
+                  "http-client-interface-configuration": {
+                    "application-name": "OpenDaylight",
+                    "release-number": "4.0.2"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "uuid": "matr-1-0-0-tcp-c-is-odl-4-0-2-000",
+            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
+            "client-ltp": [
+              "matr-1-0-0-http-c-is-odl-4-0-2-000"
+            ],
+            "server-ltp": [
+            ],
+            "layer-protocol": [
+              {
+                "local-id": "0",
+                "layer-protocol-name": "tcp-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_TCP_LAYER",
+                "tcp-client-interface-1-0:tcp-client-interface-pac": {
+                  "tcp-client-interface-configuration": {
+                    "remote-protocol": "tcp-client-interface-1-0:PROTOCOL_TYPE_HTTP",
+                    "remote-address": {
+                      "ip-address": {
+                        "ipv-4-address": "1.1.1.1"
+                      }
+                    },
+                    "remote-port": 1001
                   }
                 }
               }
@@ -1920,6 +2190,86 @@
                     "local-id": "200",
                     "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
                     "logical-termination-point": "matr-1-0-0-op-c-bm-or-1-0-0-000"
+                  }
+                ]
+              },
+              {
+                "uuid": "matr-1-0-0-op-fc-is-000",
+                "name": [
+                  {
+                    "value-name": "ForwardingKind",
+                    "value": "core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET"
+                  },
+                  {
+                    "value-name": "ForwardingName",
+                    "value": "EmbeddingCausesRequestForListOfApplicationsAtRo"
+                  }
+                ],
+                "fc-port": [
+                  {
+                    "local-id": "000",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT",
+                    "logical-termination-point": "matr-1-0-0-op-s-bm-001"
+                  },
+                  {
+                    "local-id": "100",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
+                    "logical-termination-point": "matr-1-0-0-op-s-bm-001"
+                  },
+                  {
+                    "local-id": "200",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
+                    "logical-termination-point": "matr-1-0-0-op-c-is-ro-2-0-1-000"
+                  }
+                ]
+              },
+              {
+                "uuid": "matr-1-0-0-op-fc-is-001",
+                "name": [
+                  {
+                    "value-name": "ForwardingKind",
+                    "value": "core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET"
+                  },
+                  {
+                    "value-name": "ForwardingName",
+                    "value": "EmbeddingCausesRequestForListOfDevicesAtMwdi"
+                  }
+                ],
+                "fc-port": [
+                  {
+                    "local-id": "100",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
+                    "logical-termination-point": "matr-1-0-0-op-s-bm-001"
+                  },
+                  {
+                    "local-id": "200",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
+                    "logical-termination-point": "matr-1-0-0-op-c-is-mwdi-1-0-0-000"
+                  }
+                ]
+              },
+              {
+                "uuid": "matr-1-0-0-op-fc-is-002",
+                "name": [
+                  {
+                    "value-name": "ForwardingKind",
+                    "value": "core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET"
+                  },
+                  {
+                    "value-name": "ForwardingName",
+                    "value": "EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr"
+                  }
+                ],
+                "fc-port": [
+                  {
+                    "local-id": "100",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
+                    "logical-termination-point": "matr-1-0-0-op-s-bm-001"
+                  },
+                  {
+                    "local-id": "200",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
+                    "logical-termination-point": "matr-1-0-0-op-c-is-matr-1-0-0-000"
                   }
                 ]
               },
@@ -2030,6 +2380,31 @@
                     "local-id": "117",
                     "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
                     "logical-termination-point": "matr-1-0-0-op-s-bs-005"
+                  },
+                  {
+                    "local-id": "118",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
+                    "logical-termination-point": "matr-1-0-0-op-s-is-000"
+                  },
+                  {
+                    "local-id": "119",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
+                    "logical-termination-point": "matr-1-0-0-op-s-is-001"
+                  },
+                  {
+                    "local-id": "120",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
+                    "logical-termination-point": "matr-1-0-0-op-s-is-002"
+                  },
+                  {
+                    "local-id": "121",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
+                    "logical-termination-point": "matr-1-0-0-op-s-is-003"
+                  },
+                  {
+                    "local-id": "122",
+                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
+                    "logical-termination-point": "matr-1-0-0-op-s-is-004"
                   },
                   {
                     "local-id": "200",
@@ -2479,86 +2854,6 @@
                 ]
               },
               {
-                "uuid": "matr-1-0-0-op-fc-is-000",
-                "name": [
-                  {
-                    "value-name": "ForwardingKind",
-                    "value": "core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET"
-                  },
-                  {
-                    "value-name": "ForwardingName",
-                    "value": "CyclicOperationCausesRequestForListOfApplicationsAtRo"
-                  }
-                ],
-                "fc-port": [
-                  {
-                    "local-id": "000",
-                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT",
-                    "logical-termination-point": "matr-1-0-0-op-s-bm-001"
-                  },
-                  {
-                    "local-id": "100",
-                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
-                    "logical-termination-point": "matr-1-0-0-op-s-bm-001"
-                  },
-                  {
-                    "local-id": "200",
-                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
-                    "logical-termination-point": "matr-1-0-0-op-c-is-ro-2-0-1-000"
-                  }
-                ]
-              },
-              {
-                "uuid": "matr-1-0-0-op-fc-is-001",
-                "name": [
-                  {
-                    "value-name": "ForwardingKind",
-                    "value": "core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET"
-                  },
-                  {
-                    "value-name": "ForwardingName",
-                    "value": "CyclicOperationCausesRequestForListOfDevicesAtMwdi"
-                  }
-                ],
-                "fc-port": [
-                  {
-                    "local-id": "100",
-                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
-                    "logical-termination-point": "matr-1-0-0-op-s-bm-001"
-                  },
-                  {
-                    "local-id": "200",
-                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
-                    "logical-termination-point": "matr-1-0-0-op-c-is-mwdi-1-0-0-000"
-                  }
-                ]
-              },
-              {
-                "uuid": "matr-1-0-0-op-fc-is-002",
-                "name": [
-                  {
-                    "value-name": "ForwardingKind",
-                    "value": "core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET"
-                  },
-                  {
-                    "value-name": "ForwardingName",
-                    "value": "CyclicOperationCausesRequestsForUpdatingMacTableFromDeviceAtMatr"
-                  }
-                ],
-                "fc-port": [
-                  {
-                    "local-id": "100",
-                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
-                    "logical-termination-point": "matr-1-0-0-op-s-bm-001"
-                  },
-                  {
-                    "local-id": "200",
-                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
-                    "logical-termination-point": "matr-1-0-0-op-s-is-002"
-                  }
-                ]
-              },
-              {
                 "uuid": "matr-1-0-0-op-fc-is-020",
                 "name": [
                   {
@@ -2629,7 +2924,7 @@
                   {
                     "local-id": "200",
                     "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
-                    "logical-termination-point": "matr-1-0-0-http-c-c-4-0-2-000"
+                    "logical-termination-point": "matr-1-0-0-http-c-odl-4-0-2-000"
                   }
                 ]
               },
@@ -2688,7 +2983,7 @@
                 "name": [
                   {
                     "value-name": "ForwardingKind",
-                    "value": "core-model-1-4:FORWARDING_KIND_TYPE_PROCESS_SNIPPET"
+                    "value": "core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET"
                   },
                   {
                     "value-name": "ForwardingName",
@@ -2697,11 +2992,6 @@
                 ],
                 "fc-port": [
                   {
-                    "local-id": "000",
-                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT",
-                    "logical-termination-point": "matr-1-0-0-op-s-is-002"
-                  },
-                  {
                     "local-id": "100",
                     "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
                     "logical-termination-point": "matr-1-0-0-op-s-is-002"
@@ -2709,7 +2999,7 @@
                   {
                     "local-id": "201",
                     "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
-                    "logical-termination-point": "matr-1-0-0-op-c-is-*-*-*-*-000"
+                    "logical-termination-point": "n.a."
                   }
                 ]
               },
@@ -2816,7 +3106,5 @@
             ]
           }
         ]
-      }
-    }
   }
-]
+}
