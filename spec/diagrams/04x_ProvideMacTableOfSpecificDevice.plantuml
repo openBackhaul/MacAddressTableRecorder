@@ -1,0 +1,16 @@
+@startuml 04x_ProvideMacTableOfSpecificDevice
+skinparam responseMessageBelowArrow true
+
+title Provide MAC Table of Specific Device
+
+participant "MATR://v1/provide-mac-table-of-specific-device"
+participant "ElasticSearch"
+
+[-> "MATR://v1/provide-mac-table-of-specific-device": {mount-name} (apiKeyAuth)
+
+"MATR://v1/provide-mac-table-of-specific-device" -> "ElasticSearch": {mount-name}
+"ElasticSearch" --> "MATR://v1/provide-mac-table-of-specific-device": {list-of(MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc)}
+
+[<--"MATR://v1/provide-mac-table-of-specific-device": {list-of(MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc)}
+
+@enduml

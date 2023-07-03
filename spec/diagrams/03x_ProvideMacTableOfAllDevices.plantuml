@@ -1,0 +1,16 @@
+@startuml 03x_ProvideMacTableOfAllDevices
+skinparam responseMessageBelowArrow true
+
+title Provide Mac Table of All Devices
+
+participant "MATR://v1/provide-mac-table-of-all-devices"
+participant "ElasticSearch"
+
+[-> "MATR://v1/provide-mac-table-of-all-devices": (apiKeyAuth)
+
+"MATR://v1/provide-mac-table-of-all-devices" -> "ElasticSearch"
+"ElasticSearch" --> "MATR://v1/provide-mac-table-of-all-devices": {list-of(MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc)}
+
+[<--"MATR://v1/provide-mac-table-of-all-devices": {list-of(MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc)}
+
+@enduml

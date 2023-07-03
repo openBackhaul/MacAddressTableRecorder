@@ -1,0 +1,16 @@
+@startuml 05x_ProvideListOfNetworkElementInterfacesOnPath
+skinparam responseMessageBelowArrow true
+
+title Provide List of Network Element Interfaces on Path
+
+participant "MATR://v1/provide-list-of-network-element-interfaces-on-path"
+participant "ElasticSearch"
+
+[-> "MATR://v1/provide-list-of-network-element-interfaces-on-path": {targetMacAddress} (apiKeyAuth)
+
+"MATR://v1/provide-list-of-network-element-interfaces-on-path" -> "ElasticSearch": {targetMacAddress}
+"ElasticSearch" --> "MATR://v1/provide-list-of-network-element-interfaces-on-path": {list-of(MountNameWithAnEgressLtpThatContainsTargetMacAddress, originalLtpName)}
+
+[<-- "MATR://v1/provide-list-of-network-element-interfaces-on-path": {list-of(MountNameWithAnEgressLtpThatContainsTargetMacAddress, originalLtpName)}
+
+@enduml

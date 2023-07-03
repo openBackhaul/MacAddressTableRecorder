@@ -1,0 +1,16 @@
+@startuml 06x_ProvideListOfNetworkElementInterfacesOnPathInGeneric
+skinparam responseMessageBelowArrow true
+
+title Provide List of Network Element Interfaces on Path in Generic Representation
+
+participant "MATR://start-application-in-generic-representation"
+participant "MATR://v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation"
+
+"MATR://start-application-in-generic-representation" -> "MATR://v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation": {targetMacAddress} (no security)
+
+"MATR://v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation" -> "ElasticSearch": {targetMacAddress}
+"ElasticSearch" --> "MATR://v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation": {list-of(MountNameWithAnEgressLtpThatContainsTargetMacAddress, originalLtpName)}
+
+"MATR://v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation" --> "MATR://start-application-in-generic-representation": {list-of(MountNameWithAnEgressLtpThatContainsTargetMacAddress, originalLtpName)}
+
+@enduml
