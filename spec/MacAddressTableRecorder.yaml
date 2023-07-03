@@ -1480,7 +1480,7 @@ paths:
             schema:
               type: object
               required:
-               - input-value-list
+                - input-value-list
               properties:
                 input-value-list:
                   type: array
