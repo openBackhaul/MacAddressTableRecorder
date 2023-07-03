@@ -1,0 +1,25 @@
+@startuml 00x_Embedding
+skinparam responseMessageBelowArrow true
+
+title Embedding
+
+participant RO
+participant "MATR://v1/embed-yourself"
+participant "RO://v1/list-applications"
+participant "MWDI://?fields=node(node-id)"
+participant "MATR://v1/read-current-mac-table-from-device"
+
+"RO" -> "MATR://v1/embed-yourself": {RO_IpAddress, RO_TcpPort} (apiKeyAuth)
+
+activate "MATR://v1/embed-yourself"
+"MATR://v1/embed-yourself" -> "RO://v1/list-applications": (apiKeyAuth)
+"RO://v1/list-applications" --> "MATR://v1/embed-yourself": {MWDI_IpAddress, MWDI_TcpPort}
+
+"MATR://v1/embed-yourself" -> "MWDI://?fields=node(node-id)": (apiKeyAuth)
+"MWDI://?fields=node(node-id)" --> "MATR://v1/embed-yourself": {List of all reachable MountNames}
+
+"MATR://v1/embed-yourself" -> "MATR://v1/read-current-mac-table-from-device": {mount-name} (apiKeyAuth)
+"MATR://v1/read-current-mac-table-from-device" --> "MATR://v1/embed-yourself": {requestId}
+deactivate "MATR://v1/embed-yourself"
+
+@enduml
