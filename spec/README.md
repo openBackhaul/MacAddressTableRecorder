@@ -53,4 +53,4 @@ To facilitate consumption from within GenericRepresentation the /v1/provide-list
 - [MacAddressTableRecorder+config](./MacAddressTableRecorder+config.json)
 
 ### Comments
-- [Some diagrams](./diagrams/README.md) have been prepared (for explanatory purposes only!)
+- ./.
