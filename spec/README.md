@@ -27,7 +27,7 @@ Filtering should preferably be done on the database side.
 ![ProvideMacTableOfAllDevices](./diagrams/03x_ProvideMacTableOfAllDevices.png)  
 ![ProvideMacTableOfSpecificDevice](./diagrams/04x_ProvideMacTableOfSpecificDevice.png)  
 
-/v1/provide-mac-table-of-all-devices and /v1/provide-mac-table-of-specific-device are supporting pagination.  
+/v1/provide-mac-table-of-all-devices supports pagination.  
 
 ![ProvideListOfNetworkElementInterfacesOnPath](./diagrams/05x_ProvideListOfNetworkElementInterfacesOnPath.png)  
 ![ProvideListOfNetworkElementInterfacesOnPathInGeneric](./diagrams/06x_ProvideListOfNetworkElementInterfacesOnPathInGeneric.png)  

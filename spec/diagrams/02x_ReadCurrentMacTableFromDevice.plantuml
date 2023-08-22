@@ -1,30 +1,32 @@
 @startuml 02x_ReadCurrentMacTableFromDevice
 skinparam responseMessageBelowArrow true
 
-title ReadCurrentMacTableFromDevice
+title
+PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi
+PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice
+PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi
+PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
+PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor
+end title
 
 participant "MATR://v1/read-current-mac-table-from-device"
-participant "MWDI://...control-construct?fields=forwarding-domain(uuid;layer-protocol-name)"
-participant "MWDI://...mac-fd-status?fields=mac-address-cur"
+participant "MWDI://core-model-1-4:network-control-domain=cache/control-construct={mount-name}?\nfields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))" as MwdiFd
 participant "ODL://...mac-fd-1-0:provide-learned-mac-addresses"
-participant "MWDI://...ltp-augment-pac?fields=original-ltp-name"
+participant "MWDI://core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?\nfields=original-ltp-name" as MwdiLtp
 participant "ElasticSearch"
 
 [-> "MATR://v1/read-current-mac-table-from-device": {MountName, own_IpAddress, own_TcpPort, own_responseServiceName} (apiKeyAuth)
 activate "MATR://v1/read-current-mac-table-from-device"
 [<-- "MATR://v1/read-current-mac-table-from-device": {requestId}
 
-"MATR://v1/read-current-mac-table-from-device" -> "MWDI://...control-construct?fields=forwarding-domain(uuid;layer-protocol-name)": {MountName} (apiKeyAuth)
-"MWDI://...control-construct?fields=forwarding-domain(uuid;layer-protocol-name)" --> "MATR://v1/read-current-mac-table-from-device": {fdUuid, LayerProtocolName}
-
-"MATR://v1/read-current-mac-table-from-device" -> "MWDI://...mac-fd-status?fields=mac-address-cur": {MountName, fdUuidOfMacLayer} (apiKeyAuth)
-"MWDI://...mac-fd-status?fields=mac-address-cur" --> "MATR://v1/read-current-mac-table-from-device": {macAddressCur}
+"MATR://v1/read-current-mac-table-from-device" -> MwdiFd: {MountName} (apiKeyAuth)
+MwdiFd --> "MATR://v1/read-current-mac-table-from-device": {fdUuid, LayerProtocolName} => {fdUuid, LayerProtocolName, macAddressCur}
 
 "MATR://v1/read-current-mac-table-from-device" -> "ODL://...mac-fd-1-0:provide-learned-mac-addresses": {MountName, fdUuidOfMacLayer} (?)
 "ODL://...mac-fd-1-0:provide-learned-mac-addresses" --> "MATR://v1/read-current-mac-table-from-device": {egressLtpUUid, vlanId, macAddresses}
 
-"MATR://v1/read-current-mac-table-from-device" -> "MWDI://...ltp-augment-pac?fields=original-ltp-name": {MountName, egressLtpUUid} (apiKeyAuth)
-"MWDI://...ltp-augment-pac?fields=original-ltp-name" --> "MATR://v1/read-current-mac-table-from-device": {originalLtpName}
+"MATR://v1/read-current-mac-table-from-device" -> MwdiLtp: {MountName, egressLtpUUid} (apiKeyAuth)
+MwdiLtp --> "MATR://v1/read-current-mac-table-from-device": {originalLtpName}
 
 "MATR://v1/read-current-mac-table-from-device" -> "ElasticSearch": {MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc}
 
