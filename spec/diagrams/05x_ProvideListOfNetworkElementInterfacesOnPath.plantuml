@@ -1,7 +1,7 @@
 @startuml 05x_ProvideListOfNetworkElementInterfacesOnPath
 skinparam responseMessageBelowArrow true
 
-title Provide List of Network Element Interfaces on Path
+title RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch
 
 participant "MATR://v1/provide-list-of-network-element-interfaces-on-path"
 participant "ElasticSearch"

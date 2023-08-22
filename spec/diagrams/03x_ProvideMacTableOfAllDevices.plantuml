@@ -1,7 +1,7 @@
 @startuml 03x_ProvideMacTableOfAllDevices
 skinparam responseMessageBelowArrow true
 
-title Provide Mac Table of All Devices
+title PromptForProvidingAllMacTablesCausesReadingFromElasticSearch
 
 participant "MATR://v1/provide-mac-table-of-all-devices"
 participant "ElasticSearch"

@@ -1273,7 +1273,6 @@
               }
             ]
           },
-
           {
             "uuid": "matr-1-0-0-http-c-ro-2-0-1-000",
             "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
@@ -1857,7 +1856,7 @@
                 "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
                 "operation-client-interface-1-0:operation-client-interface-pac": {
                   "operation-client-interface-configuration": {
-                    "operation-name": "/?fields=node(node-id)",
+                    "operation-name": "/v1/provide-list-of-connected-devices",
                     "operation-key": "Operation key not yet provided."
                   },
                   "operation-client-interface-status": {
@@ -1882,7 +1881,7 @@
                 "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
                 "operation-client-interface-1-0:operation-client-interface-pac": {
                   "operation-client-interface-configuration": {
-                    "operation-name": "/rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?fields=original-ltp-name",
+                    "operation-name": "/core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac",
                     "operation-key": "Operation key not yet provided."
                   },
                   "operation-client-interface-status": {
@@ -1907,32 +1906,7 @@
                 "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
                 "operation-client-interface-1-0:operation-client-interface-pac": {
                   "operation-client-interface-configuration": {
-                    "operation-name": "/rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)",
-                    "operation-key": "Operation key not yet provided."
-                  },
-                  "operation-client-interface-status": {
-                    "operational-state": "operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED",
-                    "life-cycle-state": "operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED"
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "uuid": "matr-1-0-0-op-c-is-mwdi-1-0-0-003",
-            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
-            "client-ltp": [
-            ],
-            "server-ltp": [
-              "matr-1-0-0-http-c-mwdi-1-0-0-000"
-            ],
-            "layer-protocol": [
-              {
-                "local-id": "0",
-                "layer-protocol-name": "operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER",
-                "operation-client-interface-1-0:operation-client-interface-pac": {
-                  "operation-client-interface-configuration": {
-                    "operation-name": "/rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/forwarding-domain={uuid}/mac-fd-1-0:mac-fd-pac/mac-fd-status?fields=mac-address-cur",
+                    "operation-name": "/rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))",
                     "operation-key": "Operation key not yet provided."
                   },
                   "operation-client-interface-status": {
@@ -1949,8 +1923,7 @@
             "client-ltp": [
               "matr-1-0-0-op-c-is-mwdi-1-0-0-000",
               "matr-1-0-0-op-c-is-mwdi-1-0-0-001",
-              "matr-1-0-0-op-c-is-mwdi-1-0-0-002",
-              "matr-1-0-0-op-c-is-mwdi-1-0-0-003"
+              "matr-1-0-0-op-c-is-mwdi-1-0-0-002"
             ],
             "server-ltp": [
               "matr-1-0-0-tcp-c-mwdi-1-0-0-000"
@@ -2107,7 +2080,7 @@
                 "layer-protocol-name": "http-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_HTTP_LAYER",
                 "http-client-interface-1-0:http-client-interface-pac": {
                   "http-client-interface-configuration": {
-                    "application-name": "OpenDaylight",
+                    "application-name": "OpenDayLight",
                     "release-number": "4.0.2"
                   }
                 }
@@ -2869,7 +2842,7 @@
                   },
                   {
                     "value-name": "ForwardingName",
-                    "value": "PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedInMwdi"
+                    "value": "PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi"
                   }
                 ],
                 "fc-port": [
@@ -2882,31 +2855,6 @@
                     "local-id": "200",
                     "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
                     "logical-termination-point": "matr-1-0-0-op-c-is-mwdi-1-0-0-002"
-                  }
-                ]
-              },
-              {
-                "uuid": "matr-1-0-0-op-fc-is-021",
-                "name": [
-                  {
-                    "value-name": "ForwardingKind",
-                    "value": "core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET"
-                  },
-                  {
-                    "value-name": "ForwardingName",
-                    "value": "PromptForUpdatingMacTableFromDeviceCausesManagementMacAddressBeingReadFromMwdi"
-                  }
-                ],
-                "fc-port": [
-                  {
-                    "local-id": "100",
-                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_INPUT",
-                    "logical-termination-point": "matr-1-0-0-op-s-is-002"
-                  },
-                  {
-                    "local-id": "200",
-                    "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
-                    "logical-termination-point": "matr-1-0-0-op-c-is-mwdi-1-0-0-003"
                   }
                 ]
               },

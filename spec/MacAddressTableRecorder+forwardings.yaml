@@ -64,7 +64,7 @@ forwardings:
       - server-name: /v1/embed-yourself
         uuid: matr-1-0-0-op-s-bm-001
     consequent-requests:
-      - client-name: MicroWaveDeviceInventory://?fields=node(node-id)
+      - client-name: MicroWaveDeviceInventory://v1/provide-list-of-connected-devices
         uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
 
   - forwarding-name: EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr
@@ -428,7 +428,7 @@ forwardings:
         uuid: matr-1-0-0-op-c-bm-alt-2-0-1-005
 
 
-  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedInMwdi
+  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi
     uuid: matr-1-0-0-op-fc-is-020
     forwarding-type: InvariantProcessSnippet
     management-requests:
@@ -440,23 +440,8 @@ forwardings:
       - server-name: /v1/read-current-mac-table-from-device
         uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
-      - client-name: MicroWaveDeviceInventory://rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)
+      - client-name: MicroWaveDeviceInventory://rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))
         uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-002
-
-  - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesManagementMacAddressBeingReadFromMwdi
-    uuid: matr-1-0-0-op-fc-is-021
-    forwarding-type: InvariantProcessSnippet
-    management-requests:
-      operation-client-update:
-      fc-port-update:
-      fc-port-deletion:
-      operation-client-deletion:
-    initiating-requests:
-      - server-name: /v1/read-current-mac-table-from-device
-        uuid: matr-1-0-0-op-s-is-002
-    consequent-requests:
-      - client-name: MicroWaveDeviceInventory://rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/forwarding-domain={uuid}/mac-fd-1-0:mac-fd-pac/mac-fd-status?fields=mac-address-cur
-        uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-003
 
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice
     uuid: matr-1-0-0-op-fc-is-022
@@ -470,7 +455,7 @@ forwardings:
       - server-name: /v1/read-current-mac-table-from-device
         uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
-      - client-name: OpenDaylight://rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
+      - client-name: OpenDayLight://rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
         uuid: matr-1-0-0-http-c-odl-4-0-2-000
 
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi
@@ -485,7 +470,7 @@ forwardings:
       - server-name: /v1/read-current-mac-table-from-device
         uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
-      - client-name: MicroWaveDeviceInventory://rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?fields=original-ltp-name
+      - client-name: MicroWaveDeviceInventory://core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?fields=original-ltp-name
         uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-001
 
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
