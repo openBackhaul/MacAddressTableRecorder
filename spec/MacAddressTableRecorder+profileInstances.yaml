@@ -131,7 +131,8 @@ profile-instances:
   - profile-name: 'IntegerProfile'
     uuid: 'matr-1-0-0-integer-p-000'
     capability:
-      integer-name: 'Number of concurrent RPCs (MAC tables of several network elements get retrieved in parallel)'
+      integer-name: 'slidingWindowSize'
+      # description: 'Number of concurrent RPCs (MAC tables of several network elements get retrieved in parallel)'
       minimum: 1
       maximum: 4000
     configuration:
@@ -140,7 +141,8 @@ profile-instances:
   - profile-name: 'IntegerProfile'
     uuid: 'matr-1-0-0-integer-p-001'
     capability:
-      integer-name: 'Timeout for receiving the response of the RPC'
+      integer-name: 'responseTimeout'
+      # description: 'Timeout for receiving the response of the RPC'
       unit: 'second'
       minimum: 5
       maximum: 2000
@@ -150,7 +152,8 @@ profile-instances:
   - profile-name: 'IntegerProfile'
     uuid: 'matr-1-0-0-integer-p-002'
     capability:
-      integer-name: 'Maximum number of retries for executing an RPC'
+      integer-name: 'maximumNumberOfRetries'
+      # description: 'Maximum number of retries for executing an RPC'
       unit:
       minimum: 0
       maximum: 10

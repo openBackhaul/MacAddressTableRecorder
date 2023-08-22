@@ -1,7 +1,7 @@
 @startuml 04x_ProvideMacTableOfSpecificDevice
 skinparam responseMessageBelowArrow true
 
-title Provide MAC Table of Specific Device
+title PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch
 
 participant "MATR://v1/provide-mac-table-of-specific-device"
 participant "ElasticSearch"

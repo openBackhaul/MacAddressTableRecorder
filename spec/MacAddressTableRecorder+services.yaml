@@ -284,14 +284,12 @@ clients:
       service:
         basic:
         individual:
-          - operation-name: /?fields=node(node-id)
+          - operation-name: /v1/provide-list-of-connected-devices
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
-          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?fields=original-ltp-name
+          - operation-name: /core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-001
-          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name)
+          - operation-name: /core-model-1-4:network-control-domain=cache/control-construct={mount-name}
             uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-002
-          - operation-name: /rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct/forwarding-domain={uuid}/mac-fd-1-0:mac-fd-pac/mac-fd-status?fields=mac-address-cur
-            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-003
 
   - http-client:
       application-name: MacAddressTableRecorder
@@ -313,7 +311,7 @@ clients:
             uuid: matr-1-0-0-op-c-is-matr-1-0-0-000
 
   - http-client:
-      application-name: OpenDaylight
+      application-name: OpenDayLight
       release-number: 4.0.2
       uuid: matr-1-0-0-http-c-odl-4-0-2-000
     tcp-client:

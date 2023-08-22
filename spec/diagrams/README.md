@@ -1,0 +1,21 @@
+# MacAddressTableRecorder Diagrams
+.  
+.  
+![Embedding](./00x_Embedding.png)  
+.  
+.  
+![UpdatingMacTable](./02x_ReadCurrentMacTableFromDevice.png)  
+.  
+.  
+![PromptForProvidingAllMacTablesCausesReadingFromElasticSearch](./03x_ProvideMacTableOfAllDevices.png)  
+.  
+.  
+![PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch](./04x_ProvideMacTableOfSpecificDevice.png)  
+.  
+.  
+![RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch](./05x_ProvideListOfNetworkElementInterfacesOnPath.png)  
+.  
+.  
+![RequestForListOfNetworkElementInterfacesOnPathInGenericRepresentationCausesReadingFromElasticSearch](./06x_ProvideListOfNetworkElementInterfacesOnPathInGeneric.png)  
+.  
+.  
