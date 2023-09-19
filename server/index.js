@@ -19,7 +19,8 @@ var options = {
 var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
 var app = expressAppConfig.getApp();
 
-global.databasePath = './database/load.json'
+
+global.databasePath ='./database/load.json'
 
 //appCommons.setupExpressApp(app);
 
