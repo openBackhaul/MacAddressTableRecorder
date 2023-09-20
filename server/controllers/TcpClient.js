@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var TcpClient = require('../service/TcpClientService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getTcpClientRemoteAddress = function getTcpClientRemoteAddress (req, res, next, uuid) {
   TcpClient.getTcpClientRemoteAddress(uuid)

@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var TcpServer = require('../service/TcpServerService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getTcpServerDescription = function getTcpServerDescription (req, res, next, uuid) {
   TcpServer.getTcpServerDescription(uuid)

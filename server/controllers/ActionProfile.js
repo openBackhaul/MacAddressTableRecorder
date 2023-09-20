@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var ActionProfile = require('../service/ActionProfileService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getActionProfileConsequentOperationReference = function getActionProfileConsequentOperationReference (req, res, next, uuid) {
   ActionProfile.getActionProfileConsequentOperationReference(uuid)

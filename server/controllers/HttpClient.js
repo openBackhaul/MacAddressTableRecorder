@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var HttpClient = require('../service/HttpClientService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getHttpClientApplicationName = function getHttpClientApplicationName (req, res, next, uuid) {
   HttpClient.getHttpClientApplicationName(uuid)
@@ -11,6 +12,7 @@ module.exports.getHttpClientApplicationName = function getHttpClientApplicationN
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getHttpClientReleaseNumber = function getHttpClientReleaseNumber (req, res, next, uuid) {
@@ -21,6 +23,7 @@ module.exports.getHttpClientReleaseNumber = function getHttpClientReleaseNumber 
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);    
 };
 
 module.exports.putHttpClientApplicationName = function putHttpClientApplicationName (req, res, next, body, uuid) {
@@ -31,6 +34,7 @@ module.exports.putHttpClientApplicationName = function putHttpClientApplicationN
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putHttpClientReleaseNumber = function putHttpClientReleaseNumber (req, res, next, body, uuid) {
@@ -41,4 +45,5 @@ module.exports.putHttpClientReleaseNumber = function putHttpClientReleaseNumber 
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
