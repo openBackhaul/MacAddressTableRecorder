@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var Core = require('../service/CoreService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getControlConstruct = function getControlConstruct (req, res, next) {
   Core.getControlConstruct()

@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var OperationClient = require('../service/OperationClientService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getOperationClientDetailedLoggingIsOn = function getOperationClientDetailedLoggingIsOn (req, res, next, uuid) {
   OperationClient.getOperationClientDetailedLoggingIsOn(uuid)
@@ -11,6 +12,7 @@ module.exports.getOperationClientDetailedLoggingIsOn = function getOperationClie
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getOperationClientLifeCycleState = function getOperationClientLifeCycleState (req, res, next, uuid) {
@@ -21,6 +23,7 @@ module.exports.getOperationClientLifeCycleState = function getOperationClientLif
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getOperationClientOperationKey = function getOperationClientOperationKey (req, res, next, uuid) {
@@ -31,6 +34,7 @@ module.exports.getOperationClientOperationKey = function getOperationClientOpera
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getOperationClientOperationName = function getOperationClientOperationName (req, res, next, uuid) {
@@ -41,6 +45,7 @@ module.exports.getOperationClientOperationName = function getOperationClientOper
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getOperationClientOperationalState = function getOperationClientOperationalState (req, res, next, uuid) {
@@ -51,6 +56,7 @@ module.exports.getOperationClientOperationalState = function getOperationClientO
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putOperationClientDetailedLoggingIsOn = function putOperationClientDetailedLoggingIsOn (req, res, next, body, uuid) {
@@ -61,6 +67,7 @@ module.exports.putOperationClientDetailedLoggingIsOn = function putOperationClie
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putOperationClientOperationKey = function putOperationClientOperationKey (req, res, next, body, uuid) {
@@ -71,6 +78,7 @@ module.exports.putOperationClientOperationKey = function putOperationClientOpera
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putOperationClientOperationName = function putOperationClientOperationName (req, res, next, body, uuid) {
@@ -81,4 +89,5 @@ module.exports.putOperationClientOperationName = function putOperationClientOper
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
