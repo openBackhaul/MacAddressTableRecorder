@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var HttpServer = require('../service/HttpServerService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getHttpServerApplicationName = function getHttpServerApplicationName (req, res, next, uuid) {
   HttpServer.getHttpServerApplicationName(uuid)
@@ -11,6 +12,7 @@ module.exports.getHttpServerApplicationName = function getHttpServerApplicationN
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getHttpServerApplicationPurpose = function getHttpServerApplicationPurpose (req, res, next, uuid) {
@@ -21,6 +23,7 @@ module.exports.getHttpServerApplicationPurpose = function getHttpServerApplicati
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getHttpServerDataUpdatePeriode = function getHttpServerDataUpdatePeriode (req, res, next, uuid) {
@@ -31,6 +34,7 @@ module.exports.getHttpServerDataUpdatePeriode = function getHttpServerDataUpdate
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getHttpServerOwnerEmailAddress = function getHttpServerOwnerEmailAddress (req, res, next, uuid) {
@@ -41,6 +45,7 @@ module.exports.getHttpServerOwnerEmailAddress = function getHttpServerOwnerEmail
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getHttpServerOwnerName = function getHttpServerOwnerName (req, res, next, uuid) {
@@ -51,6 +56,7 @@ module.exports.getHttpServerOwnerName = function getHttpServerOwnerName (req, re
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getHttpServerReleaseList = function getHttpServerReleaseList (req, res, next, uuid) {
@@ -61,6 +67,7 @@ module.exports.getHttpServerReleaseList = function getHttpServerReleaseList (req
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getHttpServerReleaseNumber = function getHttpServerReleaseNumber (req, res, next, uuid) {
@@ -71,4 +78,5 @@ module.exports.getHttpServerReleaseNumber = function getHttpServerReleaseNumber 
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };

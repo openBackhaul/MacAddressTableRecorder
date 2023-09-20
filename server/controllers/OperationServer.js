@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var OperationServer = require('../service/OperationServerService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getOperationServerLifeCycleState = function getOperationServerLifeCycleState (req, res, next, uuid) {
   OperationServer.getOperationServerLifeCycleState(uuid)
@@ -11,6 +12,7 @@ module.exports.getOperationServerLifeCycleState = function getOperationServerLif
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getOperationServerOperationKey = function getOperationServerOperationKey (req, res, next, uuid) {
@@ -21,6 +23,7 @@ module.exports.getOperationServerOperationKey = function getOperationServerOpera
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getOperationServerOperationName = function getOperationServerOperationName (req, res, next, uuid) {
@@ -31,6 +34,7 @@ module.exports.getOperationServerOperationName = function getOperationServerOper
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putOperationServerLifeCycleState = function putOperationServerLifeCycleState (req, res, next, body, uuid) {
@@ -41,6 +45,7 @@ module.exports.putOperationServerLifeCycleState = function putOperationServerLif
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putOperationServerOperationKey = function putOperationServerOperationKey (req, res, next, body, uuid) {
@@ -51,4 +56,5 @@ module.exports.putOperationServerOperationKey = function putOperationServerOpera
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };

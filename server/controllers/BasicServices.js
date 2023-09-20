@@ -25,7 +25,6 @@ module.exports.embedYourself = async function embedYourself(req, res, next, body
       responseCode = sentResp.code;
       responseBodyToDocument = sentResp.body;
     });
-
   ExecutionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument);
 };
 

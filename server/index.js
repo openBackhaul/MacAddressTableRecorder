@@ -6,7 +6,7 @@ var http = require('http');
 var oas3Tools = require('openbackhaul-oas3-tools');
 var serverPort = 8080;
 
-//var appCommons = require('onf-core-model-ap/applicationPattern/commons/AppCommons');
+var appCommons = require('onf-core-model-ap/applicationPattern/commons/AppCommons');
 
 // swaggerRouter configuration
 var options = {
@@ -22,7 +22,7 @@ var app = expressAppConfig.getApp();
 
 global.databasePath ='./database/load.json'
 
-//appCommons.setupExpressApp(app);
+appCommons.setupExpressApp(app);
 
 // Initialize the Swagger middleware
 http.createServer(app).listen(serverPort, function () {

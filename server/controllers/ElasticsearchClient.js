@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var ElasticsearchClient = require('../service/ElasticsearchClientService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getElasticsearchClientApiKey = function getElasticsearchClientApiKey (req, res, next, uuid) {
   ElasticsearchClient.getElasticsearchClientApiKey(uuid)

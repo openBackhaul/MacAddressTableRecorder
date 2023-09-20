@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var GenericResponseProfile = require('../service/GenericResponseProfileService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getGenericResponseProfileDatatype = function getGenericResponseProfileDatatype (req, res, next, uuid) {
   GenericResponseProfile.getGenericResponseProfileDatatype(uuid)
@@ -11,6 +12,7 @@ module.exports.getGenericResponseProfileDatatype = function getGenericResponsePr
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getGenericResponseProfileDescription = function getGenericResponseProfileDescription (req, res, next, uuid) {
@@ -21,6 +23,7 @@ module.exports.getGenericResponseProfileDescription = function getGenericRespons
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getGenericResponseProfileFieldName = function getGenericResponseProfileFieldName (req, res, next, uuid) {
@@ -31,6 +34,7 @@ module.exports.getGenericResponseProfileFieldName = function getGenericResponseP
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getGenericResponseProfileOperationName = function getGenericResponseProfileOperationName (req, res, next, uuid) {
@@ -41,6 +45,7 @@ module.exports.getGenericResponseProfileOperationName = function getGenericRespo
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getGenericResponseProfileValue = function getGenericResponseProfileValue (req, res, next, uuid) {
@@ -51,6 +56,7 @@ module.exports.getGenericResponseProfileValue = function getGenericResponseProfi
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putGenericResponseProfileValue = function putGenericResponseProfileValue (req, res, next, body, uuid) {
@@ -61,4 +67,5 @@ module.exports.putGenericResponseProfileValue = function putGenericResponseProfi
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
