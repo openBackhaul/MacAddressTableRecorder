@@ -1,4 +1,8 @@
 'use strict';
+var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
+//const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
+const ForwardingAutomationService = require('onf-core-model-ap/applicationPattern/onfModel/services/ForwardingConstructAutomationServices');
+const operationClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/OperationClientInterface');
 
 
 /**
@@ -8,15 +12,20 @@
  * returns inline_response_200_43
  **/
 exports.getOperationClientDetailedLoggingIsOn = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "operation-client-interface-1-0:detailed-logging-is-on" : false
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+  return new Promise(async function (resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "operation-client-interface-1-0:detailed-logging-is-on": value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject();
     }
   });
 }
@@ -29,15 +38,20 @@ exports.getOperationClientDetailedLoggingIsOn = function(uuid) {
  * returns inline_response_200_42
  **/
 exports.getOperationClientLifeCycleState = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "operation-client-interface-1-0:life-cycle-state" : "operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+  return new Promise(async function (resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "operation-client-interface-1-0:life-cycle-state": value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject();
     }
   });
 }
@@ -50,15 +64,20 @@ exports.getOperationClientLifeCycleState = function(uuid) {
  * returns inline_response_200_40
  **/
 exports.getOperationClientOperationKey = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "operation-client-interface-1-0:operation-key" : "Operation key not yet provided."
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+  return new Promise(async function (resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "operation-client-interface-1-0:operation-key": value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject();
     }
   });
 }
@@ -71,15 +90,20 @@ exports.getOperationClientOperationKey = function(uuid) {
  * returns inline_response_200_39
  **/
 exports.getOperationClientOperationName = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "operation-client-interface-1-0:operation-name" : "/v1/bequeath-your-data-and-die"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+  return new Promise(async function (resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "operation-client-interface-1-0:operation-name": value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject();
     }
   });
 }
@@ -92,15 +116,20 @@ exports.getOperationClientOperationName = function(uuid) {
  * returns inline_response_200_41
  **/
 exports.getOperationClientOperationalState = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "operation-client-interface-1-0:operational-state" : "operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+  return new Promise(async function (resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "operation-client-interface-1-0:operational-state": value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject();
     }
   });
 }
@@ -114,8 +143,21 @@ exports.getOperationClientOperationalState = function(uuid) {
  * no response value expected for this operation
  **/
 exports.putOperationClientDetailedLoggingIsOn = function(body,uuid) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+  return new Promise(async function (resolve, reject) {
+    try {
+      let isUpdated = await fileOperation.writeToDatabaseAsync(url, body, false);
+      if (isUpdated) {
+        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+          uuid
+        );*/
+        ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
+          forwardingAutomationInputList
+        );
+      }
+      resolve();
+    } catch (error) {
+      reject();
+    }
   });
 }
 
@@ -128,8 +170,21 @@ exports.putOperationClientDetailedLoggingIsOn = function(body,uuid) {
  * no response value expected for this operation
  **/
 exports.putOperationClientOperationKey = function(body,uuid) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+  return new Promise(async function (resolve, reject) {
+    try {
+      let isUpdated = await operationClientInterface.setOperationKeyAsync(uuid, body["operation-client-interface-1-0:operation-key"]);
+      if (isUpdated) {
+        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+          uuid
+        );*/
+        ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
+          forwardingAutomationInputList
+        );
+      }
+      resolve();
+    } catch (error) {
+      reject();
+    }
   });
 }
 
@@ -142,8 +197,21 @@ exports.putOperationClientOperationKey = function(body,uuid) {
  * no response value expected for this operation
  **/
 exports.putOperationClientOperationName = function(body,uuid) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+  return new Promise(async function (resolve, reject) {
+    try {
+      let isUpdated = await operationClientInterface.setOperationNameAsync(uuid, body["operation-client-interface-1-0:operation-name"]);
+      if (isUpdated) {
+        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+          uuid
+        );*/
+        ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
+          forwardingAutomationInputList
+        );
+      }
+      resolve();
+    } catch (error) {
+      reject();
+    }
   });
 }
 
