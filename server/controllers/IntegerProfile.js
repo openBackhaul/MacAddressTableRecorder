@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 var IntegerProfile = require('../service/IntegerProfileService');
+var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
 module.exports.getIntegerProfileIntegerName = function getIntegerProfileIntegerName (req, res, next, uuid) {
   IntegerProfile.getIntegerProfileIntegerName(uuid)
@@ -11,6 +12,7 @@ module.exports.getIntegerProfileIntegerName = function getIntegerProfileIntegerN
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getIntegerProfileIntegerValue = function getIntegerProfileIntegerValue (req, res, next, uuid) {
@@ -21,6 +23,7 @@ module.exports.getIntegerProfileIntegerValue = function getIntegerProfileInteger
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getIntegerProfileMaximum = function getIntegerProfileMaximum (req, res, next, uuid) {
@@ -31,6 +34,7 @@ module.exports.getIntegerProfileMaximum = function getIntegerProfileMaximum (req
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getIntegerProfileMinimum = function getIntegerProfileMinimum (req, res, next, uuid) {
@@ -41,6 +45,7 @@ module.exports.getIntegerProfileMinimum = function getIntegerProfileMinimum (req
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getIntegerProfileUnit = function getIntegerProfileUnit (req, res, next, uuid) {
@@ -51,6 +56,7 @@ module.exports.getIntegerProfileUnit = function getIntegerProfileUnit (req, res,
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putIntegerProfileIntegerValue = function putIntegerProfileIntegerValue (req, res, next, body, uuid) {
@@ -61,4 +67,5 @@ module.exports.putIntegerProfileIntegerValue = function putIntegerProfileInteger
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
