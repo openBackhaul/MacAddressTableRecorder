@@ -12,6 +12,7 @@ module.exports.getTcpServerDescription = function getTcpServerDescription (req, 
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getTcpServerLocalAddress = function getTcpServerLocalAddress (req, res, next, uuid) {
@@ -22,6 +23,7 @@ module.exports.getTcpServerLocalAddress = function getTcpServerLocalAddress (req
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getTcpServerLocalPort = function getTcpServerLocalPort (req, res, next, uuid) {
@@ -32,6 +34,7 @@ module.exports.getTcpServerLocalPort = function getTcpServerLocalPort (req, res,
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getTcpServerLocalProtocol = function getTcpServerLocalProtocol (req, res, next, uuid) {
@@ -42,6 +45,7 @@ module.exports.getTcpServerLocalProtocol = function getTcpServerLocalProtocol (r
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putTcpServerDescription = function putTcpServerDescription (req, res, next, body, uuid) {
@@ -52,6 +56,7 @@ module.exports.putTcpServerDescription = function putTcpServerDescription (req, 
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putTcpServerLocalAddress = function putTcpServerLocalAddress (req, res, next, body, uuid) {
@@ -62,6 +67,7 @@ module.exports.putTcpServerLocalAddress = function putTcpServerLocalAddress (req
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putTcpServerLocalPort = function putTcpServerLocalPort (req, res, next, body, uuid) {
@@ -72,6 +78,7 @@ module.exports.putTcpServerLocalPort = function putTcpServerLocalPort (req, res,
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.putTcpServerLocalProtocol = function putTcpServerLocalProtocol (req, res, next, body, uuid) {
@@ -82,4 +89,5 @@ module.exports.putTcpServerLocalProtocol = function putTcpServerLocalProtocol (r
     .catch(function (response) {
       utils.writeJson(res, response);
     });
+    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
