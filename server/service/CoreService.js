@@ -1,4 +1,7 @@
 'use strict';
+var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
+const { elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
+
 
 
 /**
@@ -6,9 +9,9 @@
  *
  * returns inline_response_200_8
  **/
-exports.getControlConstruct = function() {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
+exports.getControlConstruct = function () {
+  return new Promise(async function (resolve, reject) {
+    /*var examples = {};
     examples['application/json'] = {
   "core-model-1-4:control-construct" : {
     "profile-collection" : {
@@ -111,8 +114,25 @@ exports.getControlConstruct = function() {
     } else {
       resolve();
     }
-  });
-}
+   });  
+ */
+
+      try {
+        var value = await fileOperation.readFromDatabaseAsync("core-model-1-4:control-construct");
+        var response = {};
+        response['application/json'] = {
+          "core-model-1-4:control-construct": await elasticsearchService.updateControlConstructWithServicePolicy(value)
+        };
+        if (Object.keys(response).length > 0) {
+          resolve(response[Object.keys(response)[0]]);
+        } else {
+          resolve();
+        }
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
 
 
 /**
@@ -121,17 +141,33 @@ exports.getControlConstruct = function() {
  * uuid String 
  * returns inline_response_200_9
  **/
-exports.getProfileInstance = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "core-model-1-4:profile" : ""
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.getProfileInstance = function (url) {
+      /*return new Promise(function (resolve, reject) {
+        var examples = {};
+        examples['application/json'] = {
+          "core-model-1-4:profile": ""
+        };
+        if (Object.keys(examples).length > 0) {
+          resolve(examples[Object.keys(examples)[0]]);
+        } else {
+          resolve();
+        }
+      });*/
+      return new Promise(async function(resolve, reject) {
+        try {
+          var value = await fileOperation.readFromDatabaseAsync(url);
+          var response = {};
+          response['application/json'] = {
+            "core-model-1-4:profile" : value
+          };
+          if (Object.keys(response).length > 0) {
+            resolve(response[Object.keys(response)[0]]);
+          } else {
+            resolve();
+          }
+        } catch (error) {
+          reject(error);
+        }
+      });
     }
-  });
-}
 

@@ -4,68 +4,80 @@ var utils = require('../utils/writer.js');
 var IntegerProfile = require('../service/IntegerProfileService');
 var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
-module.exports.getIntegerProfileIntegerName = function getIntegerProfileIntegerName (req, res, next, uuid) {
-  IntegerProfile.getIntegerProfileIntegerName(uuid)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
+module.exports.getIntegerProfileIntegerName = async function getIntegerProfileIntegerName (req, res, next, uuid) {
+    let responseCode = responseCodeEnum.code.OK;
+    await IntegerProfile.getIntegerProfileIntegerName(req.url)
+      .then(function (response) {
+        responseBuilder.buildResponse(res, responseCode, response);
+      })
+      .catch(function (response) {
+        let sentResp = responseBuilder.buildResponse(res, undefined, response);
+        responseCode = sentResp.code;
+      });
     oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
-module.exports.getIntegerProfileIntegerValue = function getIntegerProfileIntegerValue (req, res, next, uuid) {
-  IntegerProfile.getIntegerProfileIntegerValue(uuid)
+module.exports.getIntegerProfileIntegerValue = async function getIntegerProfileIntegerValue (req, res, next, uuid) {
+  let responseCode = responseCodeEnum.code.OK;
+  await IntegerProfile.getIntegerProfileIntegerValue(req.url)
     .then(function (response) {
-      utils.writeJson(res, response);
+      responseBuilder.buildResponse(res, responseCode, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      let sentResp = responseBuilder.buildResponse(res, undefined, response);
+      responseCode = sentResp.code;
     });
-    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
+  oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
-module.exports.getIntegerProfileMaximum = function getIntegerProfileMaximum (req, res, next, uuid) {
-  IntegerProfile.getIntegerProfileMaximum(uuid)
+module.exports.getIntegerProfileMaximum = async function getIntegerProfileMaximum (req, res, next, uuid) {
+  let responseCode = responseCodeEnum.code.OK;
+  await IntegerProfile.getIntegerProfileMaximum(req.url)
     .then(function (response) {
-      utils.writeJson(res, response);
+      responseBuilder.buildResponse(res, responseCode, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      let sentResp = responseBuilder.buildResponse(res, undefined, response);
+      responseCode = sentResp.code;
     });
-    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
+  oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
-module.exports.getIntegerProfileMinimum = function getIntegerProfileMinimum (req, res, next, uuid) {
-  IntegerProfile.getIntegerProfileMinimum(uuid)
+module.exports.getIntegerProfileMinimum = async function getIntegerProfileMinimum (req, res, next, uuid) {
+  let responseCode = responseCodeEnum.code.OK;
+  await IntegerProfile.getIntegerProfileMinimum(req.url)
     .then(function (response) {
-      utils.writeJson(res, response);
+      responseBuilder.buildResponse(res, responseCode, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      let sentResp = responseBuilder.buildResponse(res, undefined, response);
+      responseCode = sentResp.code;
     });
-    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
+  oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
-module.exports.getIntegerProfileUnit = function getIntegerProfileUnit (req, res, next, uuid) {
-  IntegerProfile.getIntegerProfileUnit(uuid)
+module.exports.getIntegerProfileUnit = async function getIntegerProfileUnit (req, res, next, uuid) {
+  let responseCode = responseCodeEnum.code.OK;
+  await IntegerProfile.getIntegerProfileUnit(req.url)
     .then(function (response) {
-      utils.writeJson(res, response);
+      responseBuilder.buildResponse(res, responseCode, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      let sentResp = responseBuilder.buildResponse(res, undefined, response);
+      responseCode = sentResp.code;
     });
-    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
+  oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
-module.exports.putIntegerProfileIntegerValue = function putIntegerProfileIntegerValue (req, res, next, body, uuid) {
-  IntegerProfile.putIntegerProfileIntegerValue(body, uuid)
+module.exports.putIntegerProfileIntegerValue = async function putIntegerProfileIntegerValue (req, res, next, body, uuid) {
+  let responseCode = responseCodeEnum.code.OK;
+  await IntegerProfile.putIntegerProfileIntegerValue(req.url)
     .then(function (response) {
-      utils.writeJson(res, response);
+      responseBuilder.buildResponse(res, responseCode, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      let sentResp = responseBuilder.buildResponse(res, undefined, response);
+      responseCode = sentResp.code;
     });
-    oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
+  oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };

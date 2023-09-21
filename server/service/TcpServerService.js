@@ -1,4 +1,9 @@
 'use strict';
+var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
+//const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
+const ForwardingAutomationService = require('onf-core-model-ap/applicationPattern/onfModel/services/ForwardingConstructAutomationServices');
+const tcpServerInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/TcpServerInterface');
+
 
 
 /**
@@ -7,16 +12,21 @@
  * uuid String 
  * returns inline_response_200_35
  **/
-exports.getTcpServerDescription = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "tcp-server-interface-1-0:description" : "tcp-server-interface-1-0:description"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.getTcpServerDescription = function(url) {
+  return new Promise(async function(resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "tcp-server-interface-1-0:description" : value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject();
     }
   });
 }
@@ -28,18 +38,21 @@ exports.getTcpServerDescription = function(uuid) {
  * uuid String 
  * returns inline_response_200_37
  **/
-exports.getTcpServerLocalAddress = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "tcp-server-interface-1-0:local-address" : {
-    "ipv-4-address" : "1.1.4.1"
-  }
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.getTcpServerLocalAddress = function(url) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "tcp-server-interface-1-0:local-address": value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject();
     }
   });
 }
@@ -51,16 +64,21 @@ exports.getTcpServerLocalAddress = function(uuid) {
  * uuid String 
  * returns inline_response_200_38
  **/
-exports.getTcpServerLocalPort = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "tcp-server-interface-1-0:local-port" : 1000
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.getTcpServerLocalPort = function(url) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "tcp-server-interface-1-0:local-port": value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject();
     }
   });
 }
@@ -72,16 +90,21 @@ exports.getTcpServerLocalPort = function(uuid) {
  * uuid String 
  * returns inline_response_200_36
  **/
-exports.getTcpServerLocalProtocol = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "tcp-server-interface-1-0:local-protocol" : "tcp-server-interface-1-0:PROTOCOL_TYPE_HTTP"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.getTcpServerLocalProtocol = function(url) {
+  return new Promise(async function(resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "tcp-server-interface-1-0:local-protocol" : value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+      } catch (error) {
+        reject();
     }
   });
 }
@@ -94,9 +117,22 @@ exports.getTcpServerLocalProtocol = function(uuid) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putTcpServerDescription = function(body,uuid) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+exports.putTcpServerDescription = function(url, body, uuid) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      let isUpdated = await fileOperation.writeToDatabaseAsync(url, body, false);
+      if (isUpdated) {
+        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+          uuid
+        );*/
+        ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
+          forwardingAutomationInputList
+        );
+      }
+      resolve();
+    } catch (error) {
+      reject();
+    }
   });
 }
 
@@ -109,8 +145,21 @@ exports.putTcpServerDescription = function(body,uuid) {
  * no response value expected for this operation
  **/
 exports.putTcpServerLocalAddress = function(body,uuid) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+  return new Promise(async function (resolve, reject) {
+    try {
+      let isUpdated = await tcpServerInterface.setLocalAddressAsync(uuid, body["tcp-server-interface-1-0:local-address"]);
+      if (isUpdated) {
+        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+          uuid
+        );*/
+        ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
+          forwardingAutomationInputList
+        );
+      }
+      resolve();
+    } catch (error) {
+      reject();
+    }
   });
 }
 
@@ -123,8 +172,21 @@ exports.putTcpServerLocalAddress = function(body,uuid) {
  * no response value expected for this operation
  **/
 exports.putTcpServerLocalPort = function(body,uuid) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+  return new Promise(async function (resolve, reject) {
+    try {
+      let isUpdated = await tcpServerInterface.setLocalPortAsync(uuid, body["tcp-server-interface-1-0:local-port"]);
+      if (isUpdated) {
+        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+          uuid
+        );*/
+        ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
+          forwardingAutomationInputList
+        );
+      }
+      resolve();
+    } catch (error) {
+      reject();
+    }
   });
 }
 
@@ -136,9 +198,22 @@ exports.putTcpServerLocalPort = function(body,uuid) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putTcpServerLocalProtocol = function(body,uuid) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+exports.putTcpServerLocalProtocol = function(url, body,uuid) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      let isUpdated = await fileOperation.writeToDatabaseAsync(url, body, false);
+      if (isUpdated) {
+        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+          uuid
+        );*/
+        ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
+          forwardingAutomationInputList
+        );
+      }
+      resolve();
+    } catch (error) {
+      reject();
+    }
   });
 }
 

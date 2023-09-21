@@ -1,4 +1,8 @@
 'use strict';
+var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
+//const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
+const ForwardingAutomationService = require('onf-core-model-ap/applicationPattern/onfModel/services/ForwardingConstructAutomationServices');
+const httpClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/HttpClientInterface');
 
 
 /**
@@ -7,16 +11,21 @@
  * uuid String 
  * returns inline_response_200_49
  **/
-exports.getHttpClientApplicationName = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "http-client-interface-1-0:application-name" : "OldRelease"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.getHttpClientApplicationName = function (uuid) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "http-client-interface-1-0:application-name": value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject(error);
     }
   });
 }
@@ -28,16 +37,21 @@ exports.getHttpClientApplicationName = function(uuid) {
  * uuid String 
  * returns inline_response_200_50
  **/
-exports.getHttpClientReleaseNumber = function(uuid) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "http-client-interface-1-0:release-number" : "1.0.0"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.getHttpClientReleaseNumber = function (uuid) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      var value = await fileOperation.readFromDatabaseAsync(url);
+      var response = {};
+      response['application/json'] = {
+        "http-client-interface-1-0:release-number": value
+      };
+      if (Object.keys(response).length > 0) {
+        resolve(response[Object.keys(response)[0]]);
+      } else {
+        resolve();
+      }
+    } catch (error) {
+      reject(error);
     }
   });
 }
@@ -50,9 +64,22 @@ exports.getHttpClientReleaseNumber = function(uuid) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putHttpClientApplicationName = function(body,uuid) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+exports.putHttpClientApplicationName = function (body, uuid) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      let isUpdated = await httpClientInterface.setApplicationNameAsync(uuid, body["http-client-interface-1-0:application-name"]);
+      if (isUpdated) {
+        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+          uuid
+        );*/
+        ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
+          forwardingAutomationInputList
+        );
+      }
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
@@ -64,9 +91,22 @@ exports.putHttpClientApplicationName = function(body,uuid) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putHttpClientReleaseNumber = function(body,uuid) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+exports.putHttpClientReleaseNumber = function (body, uuid) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      let isUpdated = await httpClientInterface.setReleaseNumberAsync(uuid, body["http-client-interface-1-0:release-number"]);
+      if (isUpdated) {
+        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+          uuid
+        );*/
+        ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
+          forwardingAutomationInputList
+        );
+      }
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 
