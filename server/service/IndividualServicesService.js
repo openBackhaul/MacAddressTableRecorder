@@ -126,40 +126,10 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = fun
  **/
 exports.provideMacTableOfAllDevices = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [{
-      "mount-name": "305251234",
-      "own-mac-address": "00:00:00:00:00:00",
-      "egress-ltp-uuid": "305251234+mac-inf-1234",
-      "original-ltp-name": "eth-1-0-3",
-      "vlan-id": 17,
-      "remote-mac-address": "01:01:01:01:01:01",
-      "time-stamp-of-data": "2010-11-20T14:00:00+01:00"
-    }, {
-      "mount-name": "30525999",
-      "own-mac-address": "FF:00:11:00:00:00",
-      "egress-ltp-uuid": "305251234+mac-inf-1234",
-      "original-ltp-name": "eth-1-0-3",
-      "vlan-id": 17,
-      "remote-mac-address": "01:01:01:01:01:01",
-      "time-stamp-of-data": "2010-11-20T14:00:00+01:00"
-    }];
-    /*if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }*/
-
 
     let client = await elasticsearchService.getClient(false);
 
-
-    //let indexAlias = await getIndexAliasAsync();
-    /*let res1 = await client.get({
-      index: "6",
-      id: mountName
-    });*/
-
+    //let indexAlias = await getIndexAliasAsync();   
     let res2 = await client.search({
       index: '6', // Sostituisci con il nome del tuo indice
       _source: 'mac-address',
@@ -172,9 +142,6 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
       }
     });
 
-    console.log(res2);
-    let mergedArray = [];
-
     const response = { 'application/json': [] };
 
     const hits = res2.body.hits.hits;
@@ -184,14 +151,6 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
       for (const element of source) {
         response['application/json'].push(element);
       }
-      
-    
-    }
-
-    if (Array.isArray(response['application/json'])) {
-      console.log("myArray è un array.");
-    } else {
-      console.log("myArray non è un array.");
     }
 
     if (Object.keys(response).length > 0) {
@@ -221,51 +180,6 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
  **/
 exports.provideMacTableOfSpecificDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
-    /*var examples = {};
-
-    examples['application/json'] = {
-      "mac-address": [{
-        "mount-name": "305251234",
-        "own-mac-address": "11:11:11:00:00:00",
-        "egress-ltp-uuid": "305251234+mac-inf-1234",
-        "original-ltp-name": "eth-1-0-3",
-        "vlan-id": 17,
-        "remote-mac-address": "01:01:01:01:01:01",
-        "time-stamp-of-data": "2010-11-20T14:00:00+01:00"
-      }, {
-        "mount-name": "305251234",
-        "own-mac-address": "00:00:00:00:00:00",
-        "egress-ltp-uuid": "305251234+mac-inf-1234",
-        "original-ltp-name": "eth-1-0-3",
-        "vlan-id": 17,
-        "remote-mac-address": "FF:01:01:01:01:01",
-        "time-stamp-of-data": "2010-11-20T14:00:00+01:00"
-      }, {
-        "mount-name": "305251234",
-        "own-mac-address": "00:00:00:00:00:00",
-        "egress-ltp-uuid": "305251234+mac-inf-1234",
-        "original-ltp-name": "eth-1-0-3",
-        "vlan-id": 17,
-        "remote-mac-address": "FE:01:01:01:01:01",
-        "time-stamp-of-data": "2010-11-20T14:00:00+01:00"
-      },
-      {
-        "mount-name": "305251236",
-        "own-mac-address": "00:00:00:00:00:00",
-        "egress-ltp-uuid": "305251234+mac-inf-1234",
-        "original-ltp-name": "eth-1-0-3",
-        "vlan-id": 17,
-        "remote-mac-address": "FE:01:01:01:01:01",
-        "time-stamp-of-data": "2010-11-20T14:00:00+01:00"
-      }]
-    };
-
-    if (Object.keys(examples).length > 0) {
-      resolve(examples['application/json']['mac-address']);
-    } else {
-      resolve();
-    }*/
-
     let client = await elasticsearchService.getClient(false);
     let mountName = body['mount-name'];
 
