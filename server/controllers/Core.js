@@ -8,15 +8,14 @@ var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLo
 
 module.exports.getControlConstruct = async function getControlConstruct(req, res, next) {
   let responseCode = responseCodeEnum.code.OK;
-  await Core.getControlConstruct()
-    .then(function (response) {
-      responseBuilder.buildResponse(res, responseCode, response);
-    })
+  await Core.getControlConstruct().then(function (response) {
+      let sentResp = responseBuilder.buildResponse(res, responseCode, response);
+      })
     .catch(function (response) {
       let sentResp = responseBuilder.buildResponse(res, undefined, response);
       responseCode = sentResp.code;
     });
-  oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
+  //oamLogService.recordOamRequest(req.url, req.body, responseCode, req.headers.authorization, req.method);
 };
 
 module.exports.getProfileInstance = async function getProfileInstance(req, res, next, uuid) {
