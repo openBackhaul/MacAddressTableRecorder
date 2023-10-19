@@ -1,6 +1,165 @@
 'use strict';
+const RestClient = require('./rest/client/dispacher')
 
 const { elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
+const onfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
+const onfAttributes = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfAttributes');
+const LogicalTerminationPoint = require('onf-core-model-ap/applicationPattern/onfModel/models/LogicalTerminationPoint');
+const LogicalTerminationPointC = require('./custom/LogicalTerminationPointC');
+const tcpClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/TcpClientInterface');
+const ForwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
+const ForwardingConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingConstruct');
+const FcPort = require('onf-core-model-ap/applicationPattern/onfModel/models/FcPort');
+const httpClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/HttpClientInterface');
+const httpServerInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/HttpServerInterface');
+const controlConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ControlConstruct');
+const LayerProtocol = require('onf-core-model-ap/applicationPattern/onfModel/models/LayerProtocol');
+const eventDispatcher = require('onf-core-model-ap/applicationPattern/rest/client/eventDispatcher');
+const responseBuilder = require('onf-core-model-ap/applicationPattern/rest/server/ResponseBuilder');
+const onfAttributeFormatter = require('onf-core-model-ap/applicationPattern/onfModel/utility/OnfAttributeFormatter');
+const operationClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/OperationClientInterface');
+const RequestHeader = require('onf-core-model-ap/applicationPattern/rest/client/RequestHeader');
+const TcpClient = require('../service/TcpClientService');
+
+
+
+
+async function resolveApplicationNameAndHttpClientLtpUuidFromForwardingName(forwardingName) {
+  const forwardingConstruct = await ForwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
+  if (forwardingConstruct === undefined) {
+    return null;
+  }
+
+  let fcPortOutputDirectionLogicalTerminationPointList = [];
+  const fcPortList = forwardingConstruct[onfAttributes.FORWARDING_CONSTRUCT.FC_PORT];
+  for (const fcPort of fcPortList) {
+    const portDirection = fcPort[onfAttributes.FC_PORT.PORT_DIRECTION];
+    if (FcPort.portDirectionEnum.OUTPUT === portDirection) {
+      fcPortOutputDirectionLogicalTerminationPointList.push(fcPort[onfAttributes.FC_PORT.LOGICAL_TERMINATION_POINT]);
+    }
+  }
+
+  if (fcPortOutputDirectionLogicalTerminationPointList.length !== 1) {
+    return null;
+  }
+
+  const opLtpUuid = fcPortOutputDirectionLogicalTerminationPointList[0];
+  const layerList = await LogicalTerminationPointC.getLayerLtpListAsync(opLtpUuid);
+
+  //const regex = /^http-client-interface-.*?LAYER_PROTOCOL_NAME_TYPE_HTTP_LAYER$/;
+
+  let clientPac;
+  let applicationName;
+  let pacConfiguration;
+  for (const layer of layerList) {
+    let layerProtocolName = layer[onfAttributes.LAYER_PROTOCOL.LAYER_PROTOCOL_NAME];
+    if (LayerProtocol.layerProtocolNameEnum.HTTP_CLIENT === layerProtocolName) {
+      clientPac = layer[onfAttributes.LAYER_PROTOCOL.HTTP_CLIENT_INTERFACE_PAC];
+      pacConfiguration = clientPac[onfAttributes.HTTP_CLIENT.CONFIGURATION];
+      applicationName = pacConfiguration[onfAttributes.HTTP_CLIENT.APPLICATION_NAME];
+    }
+    else if (LayerProtocol.layerProtocolNameEnum.ES_CLIENT === layerProtocolName) {
+      clientPac = layer[onfAttributes.LAYER_PROTOCOL.ES_CLIENT_INTERFACE_PAC];
+      pacConfiguration = clientPac[onfAttributes.ES_CLIENT.CONFIGURATION];
+      applicationName = pacConfiguration[onfAttributes.ES_CLIENT.APPLICATION_NAME];
+    }
+  }
+
+
+  return applicationName === undefined ? {
+    applicationName: null/*,
+    httpClientLtpUuid*/
+  } : {
+    applicationName/*,
+    httpClientLtpUuid*/
+  };
+}
+
+
+async function resolveApplicationNameAndHttpClientLtpUuidFromForwardingName2(forwardingName) {
+  const forwardingConstruct = await ForwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
+  if (forwardingConstruct === undefined) {
+    return null;
+  }
+
+  let fcPortOutputDirectionLogicalTerminationPointList = [];
+  const fcPortList = forwardingConstruct[onfAttributes.FORWARDING_CONSTRUCT.FC_PORT];
+  for (const fcPort of fcPortList) {
+    const portDirection = fcPort[onfAttributes.FC_PORT.PORT_DIRECTION];
+    if (FcPort.portDirectionEnum.OUTPUT === portDirection) {
+      fcPortOutputDirectionLogicalTerminationPointList.push(fcPort[onfAttributes.FC_PORT.LOGICAL_TERMINATION_POINT]);
+    }
+  }
+
+  if (fcPortOutputDirectionLogicalTerminationPointList.length !== 1) {
+    return null;
+  }
+
+  const opLtpUuid = fcPortOutputDirectionLogicalTerminationPointList[0];
+  const httpLtpUuidList = await LogicalTerminationPoint.getServerLtpListAsync(opLtpUuid);
+
+  const httpClientLtpUuid = httpLtpUuidList[0];
+  const applicationName = await httpClientInterface.getApplicationNameAsync(httpClientLtpUuid);
+  return applicationName === undefined ? {
+    applicationName: null,
+    httpClientLtpUuid
+  } : {
+    applicationName,
+    httpClientLtpUuid
+  };
+}
+
+async function resolveOperationNameAndOperationKeyFromForwardingName(forwardingName) {
+  const forwardingConstruct = await ForwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
+  if (forwardingConstruct === undefined) {
+    return null;
+  }
+
+  let fcPortOutputDirectionLogicalTerminationPointList = [];
+  const fcPortList = forwardingConstruct[onfAttributes.FORWARDING_CONSTRUCT.FC_PORT];
+  for (const fcPort of fcPortList) {
+    const portDirection = fcPort[onfAttributes.FC_PORT.PORT_DIRECTION];
+    if (FcPort.portDirectionEnum.OUTPUT === portDirection) {
+      fcPortOutputDirectionLogicalTerminationPointList.push(fcPort[onfAttributes.FC_PORT.LOGICAL_TERMINATION_POINT]);
+    }
+  }
+
+  if (fcPortOutputDirectionLogicalTerminationPointList.length !== 1) {
+    return null;
+  }
+
+  const opLtpUuid = fcPortOutputDirectionLogicalTerminationPointList[0];
+  const logicalTerminationPointLayer = await LogicalTerminationPointC.getLayerLtpListAsync(opLtpUuid);
+
+  let clientPac;
+  let pacConfiguration;
+  let operationName;
+  let operationKey;
+  for (const layer of logicalTerminationPointLayer) {
+    let layerProtocolName = layer[onfAttributes.LAYER_PROTOCOL.LAYER_PROTOCOL_NAME];
+    if (LayerProtocol.layerProtocolNameEnum.OPERATION_CLIENT === layerProtocolName) {
+      clientPac = layer[onfAttributes.LAYER_PROTOCOL.OPERATION_CLIENT_INTERFACE_PAC];
+      pacConfiguration = clientPac[onfAttributes.OPERATION_CLIENT.CONFIGURATION];
+      operationName = pacConfiguration[onfAttributes.OPERATION_CLIENT.OPERATION_NAME];
+      operationKey = pacConfiguration[onfAttributes.OPERATION_CLIENT.OPERATION_KEY];
+    }
+    else if (LayerProtocol.layerProtocolNameEnum.ES_CLIENT == layerProtocolName) {
+      clientPac = layer[onfAttributes.LAYER_PROTOCOL.ES_CLIENT_INTERFACE_PAC];
+      pacConfiguration = clientPac[onfAttributes.ES_CLIENT.CONFIGURATION];
+      operationName = pacConfiguration[onfAttributes.ES_CLIENT.AUTH];
+      operationKey = pacConfiguration[onfAttributes.ES_CLIENT.INDEX_ALIAS];
+    }
+  }
+
+  return operationName === undefined ? {
+    operationName: null,
+    operationKey
+  } : {
+    operationName,
+    operationKey
+  };
+}
+
 
 
 /**
@@ -32,27 +191,44 @@ exports.bequeathYourDataAndDie = function (body, user, originator, xCorrelator, 
  * customerJourney String Holds information supporting customer’s journey to which the execution applies
  * returns List
  **/
-exports.provideListOfNetworkElementInterfacesOnPath = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
-  return new Promise(function (resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [{
-      "target-mac-address": "01:01:01:01:01:01",
-      "mount-name": "305251234",
-      "original-ltp-name": "eth-1-0-3",
-      "vlan-id": 430,
-      "time-stamp-of-data": "2010-11-20T14:00:00+01:00"
-    }, {
-      "target-mac-address": "01:01:01:01:01:01",
-      "mount-name": "305259999",
-      "original-ltp-name": "eth-2-0-3",
-      "vlan-id": 430,
-      "time-stamp-of-data": "2010-11-20T14:30:00+01:00"
-    }];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+exports.provideListOfNetworkElementInterfacesOnPath = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  return new Promise(async function (resolve, reject) {
+    let client = await elasticsearchService.getClient(false);
+    let targetMacAddress = body['target-mac-address'];
+
+    let res2 = await client.search({
+      index: '6',
+      _source: 'targetMacAddress',
+      body: {
+        query: {
+          regexp: {
+            'targetMacAddress.target-mac-address.keyword': 'target-mac-address-'+ targetMacAddress
+          }
+        }
+      }
+    });
+
+    let mergedArray = [];
+
+    const hits = res2.body.hits.hits;
+    for (const hit of hits) {
+      const source = hit._source['targetMacAddress'];
+      mergedArray = mergedArray.concat(source);
+    }
+
+    var response = {};
+    response['application/json'] = {
+      'targetMacAddress': mergedArray
+    };
+
+    if (Object.keys(response).length > 0) {
+      resolve(response['application/json']['targetMacAddress']);
     } else {
       resolve();
     }
+
+
+
   });
 }
 
@@ -160,7 +336,6 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
     }
 
   });
-
 }
 
 
@@ -180,42 +355,165 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
  **/
 exports.provideMacTableOfSpecificDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
-    let client = await elasticsearchService.getClient(false);
-    let mountName = body['mount-name'];
 
-    let res2 = await client.search({
-      index: '6', 
-      _source: 'mac-address',
-      body: {
-        query: {
-          regexp: {
-            'mac-address.mount-name.keyword': 'mac-address-'+ mountName
+    /*
+    // TO FIX
+    //const PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice =
+    //  await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
+
+    // OK  -Elastic Search
+    let PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch =
+      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName2('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
+    let operationNameAndOperationKey =
+      await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
+    let apiKey = operationNameAndOperationKey.operationName[onfAttributes.ES_CLIENT.API_KEY];
+    let index = operationNameAndOperationKey.operationKey;
+
+    let finalUrl =
+      //exports.dispatchEvent = function (url, method, httpRequestBody, Authorization)
+      result = await RestClient.dispatchEvent(finalUrl, 'GET', '', apiKey);
+
+    // OK - Mwdi    - matr-1-0-0-http-c-mwdi-1-0-0-000
+    let applicationNameAndHttpClient =
+      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName2('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
+    operationNameAndOperationKey =
+      await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
+
+    let applicationName = applicationNameAndHttpClient.applicationName;
+    let operationName = operationNameAndOperationKey.operationName;
+    let authorizationCode = operationNameAndOperationKey.operationKey;
+
+    let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    let ltpTcpUuid;
+    for (const ltp of logicalTerminationPointListTCP) {
+      const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
+      if (applicationNameAndHttpClient.httpClientLtpUuid === clientLtp[0]) {
+        ltpTcpUuid = ltp[onfAttributes.GLOBAL_CLASS.UUID];
+      }
+    }
+
+    let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
+    let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
+
+    finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
+    //const result = await RestClient.dispatchEvent(finalUrl, 'GET', '', authorizationCode);
+
+    //OK - Mwdi
+    const PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi =
+      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName2('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
+
+    operationNameAndOperationKey =
+      await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
+
+    applicationName = applicationNameAndHttpClient.applicationName;
+    operationName = operationNameAndOperationKey.operationName;
+
+    logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    ltpTcpUuid;
+    for (const ltp of logicalTerminationPointListTCP) {
+      const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
+      if (applicationNameAndHttpClient.httpClientLtpUuid === clientLtp[0]) {
+        ltpTcpUuid = ltp[onfAttributes.GLOBAL_CLASS.UUID];
+      }
+    }
+
+    remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
+    remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
+
+    finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
+    result = await RestClient.dispatchEvent(finalUrl, 'GET', '', authorizationCode);
+
+
+
+    // TO FIX  
+    /*const PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor =
+      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName2('PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor');
+
+    let applicationName = applicationNameAndHttpClient.applicationName;*/
+
+    /*let operationName = "/rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses";
+
+    let applicationName = "OpenDayLight";
+    let authorizationCode = "Basic c2lhZTpTaUdlbjAx";
+    let userName = exports.decodeAuthorizationCodeAndExtractUserName(authorizationCode);
+    let applicationReleaseNumber = await httpServerInterface.getReleaseNumberAsync();*/
+
+    /*let httpRequestHeader = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(new RequestHeader(userName, applicationName, "", "", "unknown", operationKey));
+
+
+    let request = {
+      method: GET,
+      url: url,
+      headers: httpRequestHeader,
+      data: ""
+    }
+    let response = await RestClient.post(request);
+
+    let forwardingConstructInstance = await ForwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingKindName);
+    let operationClientUuid = (getFcPortOutputLogicalTerminationPointList(forwardingConstructInstance))[0];*/
+
+    //let finalUrl = "http://172.28.127.3:8181/rests/data/network-topology:network-topology/topology=topology-netconf/node=513250009/yang-ext:mount/core-model-1-4:control-construct";
+    //let finalUrl = "http://172.28.127.3:8181/rests/operations/network-topology:network-topology/topology=topology-netconf/node=513250009/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses";
+
+    //const result = await RestClient.dispatchEvent(finalUrl, 'GET', '', authorizationCode);
+
+    
+      let client = await elasticsearchService.getClient(false);
+      let mountName = body['mount-name'];
+
+      let regValue ='mac-address-'+ mountName;
+  
+      let res2 = await client.search({
+        index: '6', 
+        _source: 'mac-address',
+        body: {
+          query: {
+            regexp: {
+              'mac-address.mount-name.keyword': 'mac-address-'+ mountName
+            }
           }
         }
+      });
+
+      let mergedArray = [];
+  
+      const hits = res2.body.hits.hits;
+      for (const hit of hits) {
+        const source = hit._source['mac-address'];
+        mergedArray = mergedArray.concat(source);
       }
-    });
-
-
-    let mergedArray = [];
-
-    const hits = res2.body.hits.hits;
-    for (const hit of hits) {
-      const source = hit._source['mac-address'];
-      mergedArray = mergedArray.concat(source);
-    }
-
-    var response = {};
-    response['application/json'] = {
-      'mac-address': mergedArray
-    };
-
-    if (Object.keys(response).length > 0) {
-      resolve(response['application/json']['mac-address']);
-    } else {
-      resolve();
-    }
+  
+      var response = {};
+      response['application/json'] = {
+        'mac-address': mergedArray
+      };
+  
+      if (Object.keys(response).length > 0) {
+        resolve(response['application/json']['mac-address']);
+      } else {
+        resolve();
+      }
   });
 
+}
+
+/**
+ * @description To decode base64 authorization code from authorization header
+ * @param {String} authorizationCode base64 encoded authorization code
+ * @returns {String|undefined} user name based on the decoded authorization code
+ **/
+exports.decodeAuthorizationCodeAndExtractUserName = function (authorizationCode) {
+  try {
+    let base64EncodedString = authorizationCode.split(" ")[1];
+    let base64BufferObject = Buffer.from(base64EncodedString, "base64");
+    let base64DecodedString = base64BufferObject.toString("utf8");
+    let userName = base64DecodedString.split(":")[0];
+    console.log(`decoded user name: ${userName}`);
+    return userName;
+  } catch (error) {
+    console.error(`Could not decode authorization code "${authorizationCode}". Got ${error}.`);
+    return undefined;
+  }
 }
 
 
@@ -231,8 +529,8 @@ exports.provideMacTableOfSpecificDevice = async function (body, user, originator
  * returns inline_response_200_2
  **/
 exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
-  return new Promise(function (resolve, reject) {
-    var examples = {};
+  return new Promise(async function (resolve, reject) {
+    /*var examples = {};
     examples['application/json'] = {
       "request-id": "305251234-101120-1400"
     };
@@ -240,7 +538,12 @@ exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorre
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
-    }
+    }*/
+    const Authorization = "Basic c2lhZTpTaUdlbjAx";
+    finalUrl = "OpenDayLight://rests/operations/network-topology:network-topology/topology=topology-netconf/node=513250009/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses";
+    const result = await RestClient.dispatchEvent(finalUrl, 'GET', '', Authorization);
+
+
   });
 }
 
