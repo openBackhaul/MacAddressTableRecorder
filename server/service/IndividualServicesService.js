@@ -179,6 +179,17 @@ exports.bequeathYourDataAndDie = function (body, user, originator, xCorrelator, 
   });
 }
 
+function transformData(inputData) {
+  const outputData = {
+    "target-mac-address": `target-mac-address-${inputData["remote-mac-address"]}`,
+    "mount-name": inputData["mount-name"],
+    "original-ltp-name": inputData["original-ltp-name"],
+    "vlan-id": inputData["vlan-id"],
+    "time-stamp-of-data": new Date(inputData["time-stamp-of-data"]).toISOString()
+  };
+
+  return outputData;
+}
 
 /**
  * Provides unsorted list of network element interfaces on path to specific MAC address.
@@ -194,15 +205,16 @@ exports.bequeathYourDataAndDie = function (body, user, originator, xCorrelator, 
 exports.provideListOfNetworkElementInterfacesOnPath = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
     let client = await elasticsearchService.getClient(false);
+
     let targetMacAddress = body['target-mac-address'];
 
     let res2 = await client.search({
       index: '6',
-      _source: 'targetMacAddress',
+      _source: 'mac-address',
       body: {
         query: {
-          regexp: {
-            'targetMacAddress.target-mac-address.keyword': 'target-mac-address-'+ targetMacAddress
+          match: {
+            'mac-address.remote-mac-address.keyword': targetMacAddress
           }
         }
       }
@@ -212,13 +224,18 @@ exports.provideListOfNetworkElementInterfacesOnPath = async function (body, user
 
     const hits = res2.body.hits.hits;
     for (const hit of hits) {
-      const source = hit._source['targetMacAddress'];
+      const source = hit._source['mac-address'];
       mergedArray = mergedArray.concat(source);
     }
 
+    const filteredObjects = mergedArray.filter(obj => obj['remote-mac-address'] === targetMacAddress);
+
+    const transformedArray = filteredObjects.map(obj => transformData(obj));
+
+
     var response = {};
     response['application/json'] = {
-      'targetMacAddress': mergedArray
+      'targetMacAddress': transformedArray
     };
 
     if (Object.keys(response).length > 0) {
@@ -305,14 +322,13 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
 
     let client = await elasticsearchService.getClient(false);
 
-    //let indexAlias = await getIndexAliasAsync();   
     let res2 = await client.search({
       index: '6', // Sostituisci con il nome del tuo indice
       _source: 'mac-address',
       body: {
         query: {
-          regexp: {
-            'mac-address.mount-name.keyword': 'mac-address-.*'
+          match: {
+            'datatype': 'mac-address'
           }
         }
       }
@@ -356,143 +372,28 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
 exports.provideMacTableOfSpecificDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
 
-    /*
-    // TO FIX
-    //const PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice =
-    //  await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
+    let client = await elasticsearchService.getClient(false);
+    let mountName = body['mount-name'];
 
-    // OK  -Elastic Search
-    let PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch =
-      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName2('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
-    let operationNameAndOperationKey =
-      await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
-    let apiKey = operationNameAndOperationKey.operationName[onfAttributes.ES_CLIENT.API_KEY];
-    let index = operationNameAndOperationKey.operationKey;
 
-    let finalUrl =
-      //exports.dispatchEvent = function (url, method, httpRequestBody, Authorization)
-      result = await RestClient.dispatchEvent(finalUrl, 'GET', '', apiKey);
+    let res2 = await client.get({
+      index: '6',
+      id: mountName
+    });
 
-    // OK - Mwdi    - matr-1-0-0-http-c-mwdi-1-0-0-000
-    let applicationNameAndHttpClient =
-      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName2('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
-    operationNameAndOperationKey =
-      await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
 
-    let applicationName = applicationNameAndHttpClient.applicationName;
-    let operationName = operationNameAndOperationKey.operationName;
-    let authorizationCode = operationNameAndOperationKey.operationKey;
+    var source = res2.body._source['mac-address'];
 
-    let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
-    let ltpTcpUuid;
-    for (const ltp of logicalTerminationPointListTCP) {
-      const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
-      if (applicationNameAndHttpClient.httpClientLtpUuid === clientLtp[0]) {
-        ltpTcpUuid = ltp[onfAttributes.GLOBAL_CLASS.UUID];
-      }
+    var response = {};
+    response['application/json'] = {
+      'mac-address': source
+    };
+
+    if (Object.keys(response).length > 0) {
+      resolve(response['application/json']['mac-address']);
+    } else {
+      resolve();
     }
-
-    let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
-    let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
-
-    finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
-    //const result = await RestClient.dispatchEvent(finalUrl, 'GET', '', authorizationCode);
-
-    //OK - Mwdi
-    const PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi =
-      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName2('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
-
-    operationNameAndOperationKey =
-      await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
-
-    applicationName = applicationNameAndHttpClient.applicationName;
-    operationName = operationNameAndOperationKey.operationName;
-
-    logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
-    ltpTcpUuid;
-    for (const ltp of logicalTerminationPointListTCP) {
-      const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
-      if (applicationNameAndHttpClient.httpClientLtpUuid === clientLtp[0]) {
-        ltpTcpUuid = ltp[onfAttributes.GLOBAL_CLASS.UUID];
-      }
-    }
-
-    remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
-    remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
-
-    finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
-    result = await RestClient.dispatchEvent(finalUrl, 'GET', '', authorizationCode);
-
-
-
-    // TO FIX  
-    /*const PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor =
-      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName2('PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor');
-
-    let applicationName = applicationNameAndHttpClient.applicationName;*/
-
-    /*let operationName = "/rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses";
-
-    let applicationName = "OpenDayLight";
-    let authorizationCode = "Basic c2lhZTpTaUdlbjAx";
-    let userName = exports.decodeAuthorizationCodeAndExtractUserName(authorizationCode);
-    let applicationReleaseNumber = await httpServerInterface.getReleaseNumberAsync();*/
-
-    /*let httpRequestHeader = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(new RequestHeader(userName, applicationName, "", "", "unknown", operationKey));
-
-
-    let request = {
-      method: GET,
-      url: url,
-      headers: httpRequestHeader,
-      data: ""
-    }
-    let response = await RestClient.post(request);
-
-    let forwardingConstructInstance = await ForwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingKindName);
-    let operationClientUuid = (getFcPortOutputLogicalTerminationPointList(forwardingConstructInstance))[0];*/
-
-    //let finalUrl = "http://172.28.127.3:8181/rests/data/network-topology:network-topology/topology=topology-netconf/node=513250009/yang-ext:mount/core-model-1-4:control-construct";
-    //let finalUrl = "http://172.28.127.3:8181/rests/operations/network-topology:network-topology/topology=topology-netconf/node=513250009/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses";
-
-    //const result = await RestClient.dispatchEvent(finalUrl, 'GET', '', authorizationCode);
-
-    
-      let client = await elasticsearchService.getClient(false);
-      let mountName = body['mount-name'];
-
-      let regValue ='mac-address-'+ mountName;
-  
-      let res2 = await client.search({
-        index: '6', 
-        _source: 'mac-address',
-        body: {
-          query: {
-            regexp: {
-              'mac-address.mount-name.keyword': 'mac-address-'+ mountName
-            }
-          }
-        }
-      });
-
-      let mergedArray = [];
-  
-      const hits = res2.body.hits.hits;
-      for (const hit of hits) {
-        const source = hit._source['mac-address'];
-        mergedArray = mergedArray.concat(source);
-      }
-  
-      var response = {};
-      response['application/json'] = {
-        'mac-address': mergedArray
-      };
-  
-      if (Object.keys(response).length > 0) {
-        resolve(response['application/json']['mac-address']);
-      } else {
-        resolve();
-      }
   });
 
 }
