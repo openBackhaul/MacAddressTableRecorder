@@ -19,12 +19,11 @@ const responseBuilder = require('onf-core-model-ap/applicationPattern/rest/serve
 const onfAttributeFormatter = require('onf-core-model-ap/applicationPattern/onfModel/utility/OnfAttributeFormatter');
 const operationClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/OperationClientInterface');
 const RequestHeader = require('onf-core-model-ap/applicationPattern/rest/client/RequestHeader');
+const RestRequestBuilder = require('onf-core-model-ap/applicationPattern/rest/client/RequestBuilder');
 const TcpClient = require('../service/TcpClientService');
+const axios = require('axios');
 
-
-
-
-async function resolveApplicationNameAndHttpClientLtpUuidFromForwardingName(forwardingName) {
+async function resolveOperationNameAndOperationKeyFromForwardingName(forwardingName) {
   const forwardingConstruct = await ForwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
   if (forwardingConstruct === undefined) {
     return null;
@@ -44,39 +43,38 @@ async function resolveApplicationNameAndHttpClientLtpUuidFromForwardingName(forw
   }
 
   const opLtpUuid = fcPortOutputDirectionLogicalTerminationPointList[0];
-  const layerList = await LogicalTerminationPointC.getLayerLtpListAsync(opLtpUuid);
-
-  //const regex = /^http-client-interface-.*?LAYER_PROTOCOL_NAME_TYPE_HTTP_LAYER$/;
+  const logicalTerminationPointLayer = await LogicalTerminationPointC.getLayerLtpListAsync(opLtpUuid);
 
   let clientPac;
-  let applicationName;
   let pacConfiguration;
-  for (const layer of layerList) {
+  let operationName;
+  let operationKey;
+  for (const layer of logicalTerminationPointLayer) {
     let layerProtocolName = layer[onfAttributes.LAYER_PROTOCOL.LAYER_PROTOCOL_NAME];
-    if (LayerProtocol.layerProtocolNameEnum.HTTP_CLIENT === layerProtocolName) {
-      clientPac = layer[onfAttributes.LAYER_PROTOCOL.HTTP_CLIENT_INTERFACE_PAC];
-      pacConfiguration = clientPac[onfAttributes.HTTP_CLIENT.CONFIGURATION];
-      applicationName = pacConfiguration[onfAttributes.HTTP_CLIENT.APPLICATION_NAME];
+    if (LayerProtocol.layerProtocolNameEnum.OPERATION_CLIENT === layerProtocolName) {
+      clientPac = layer[onfAttributes.LAYER_PROTOCOL.OPERATION_CLIENT_INTERFACE_PAC];
+      pacConfiguration = clientPac[onfAttributes.OPERATION_CLIENT.CONFIGURATION];
+      operationName = pacConfiguration[onfAttributes.OPERATION_CLIENT.OPERATION_NAME];
+      operationKey = pacConfiguration[onfAttributes.OPERATION_CLIENT.OPERATION_KEY];
     }
-    else if (LayerProtocol.layerProtocolNameEnum.ES_CLIENT === layerProtocolName) {
+    else if (LayerProtocol.layerProtocolNameEnum.ES_CLIENT == layerProtocolName) {
       clientPac = layer[onfAttributes.LAYER_PROTOCOL.ES_CLIENT_INTERFACE_PAC];
       pacConfiguration = clientPac[onfAttributes.ES_CLIENT.CONFIGURATION];
-      applicationName = pacConfiguration[onfAttributes.ES_CLIENT.APPLICATION_NAME];
+      operationName = pacConfiguration[onfAttributes.ES_CLIENT.AUTH];
+      operationKey = pacConfiguration[onfAttributes.ES_CLIENT.INDEX_ALIAS];
     }
   }
 
-
-  return applicationName === undefined ? {
-    applicationName: null/*,
-    httpClientLtpUuid*/
+  return operationName === undefined ? {
+    operationName: null,
+    operationKey
   } : {
-    applicationName/*,
-    httpClientLtpUuid*/
+    operationName,
+    operationKey
   };
 }
 
-
-async function resolveApplicationNameAndHttpClientLtpUuidFromForwardingName2(forwardingName) {
+async function resolveApplicationNameAndHttpClientLtpUuidFromForwardingName(forwardingName) {
   const forwardingConstruct = await ForwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
   if (forwardingConstruct === undefined) {
     return null;
@@ -170,7 +168,7 @@ async function resolveOperationNameAndOperationKeyFromForwardingName(forwardingN
  * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
  * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
  * traceIndicator String Sequence of request numbers along the flow
- * customerJourney String Holds information supporting customer’s journey to which the execution applies
+ * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
  * no response value expected for this operation
  **/
 exports.bequeathYourDataAndDie = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
@@ -179,6 +177,17 @@ exports.bequeathYourDataAndDie = function (body, user, originator, xCorrelator, 
   });
 }
 
+function transformData(inputData) {
+  const outputData = {
+    "target-mac-address": `target-mac-address-${inputData["remote-mac-address"]}`,
+    "mount-name": inputData["mount-name"],
+    "original-ltp-name": inputData["original-ltp-name"],
+    "vlan-id": inputData["vlan-id"],
+    "time-stamp-of-data": new Date(inputData["time-stamp-of-data"]).toISOString()
+  };
+
+  return outputData;
+}
 function transformData(inputData) {
   const outputData = {
     "target-mac-address": `target-mac-address-${inputData["remote-mac-address"]}`,
@@ -199,7 +208,7 @@ function transformData(inputData) {
  * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
  * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
  * traceIndicator String Sequence of request numbers along the flow
- * customerJourney String Holds information supporting customer’s journey to which the execution applies
+ * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
  * returns List
  **/
 exports.provideListOfNetworkElementInterfacesOnPath = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
@@ -258,7 +267,7 @@ exports.provideListOfNetworkElementInterfacesOnPath = async function (body, user
  * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
  * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
  * traceIndicator String Sequence of request numbers along the flow
- * customerJourney String Holds information supporting customer’s journey to which the execution applies
+ * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
  * returns genericRepresentation
  **/
 exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
@@ -314,7 +323,7 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = fun
  * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
  * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
  * traceIndicator String Sequence of request numbers along the flow
- * customerJourney String Holds information supporting customer’s journey to which the execution applies
+ * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
  * returns List
  **/
 exports.provideMacTableOfAllDevices = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
@@ -366,7 +375,7 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
  * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
  * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
  * traceIndicator String Sequence of request numbers along the flow
- * customerJourney String Holds information supporting customer’s journey to which the execution applies
+ * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
  * returns List
  **/
 exports.provideMacTableOfSpecificDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
@@ -374,13 +383,10 @@ exports.provideMacTableOfSpecificDevice = async function (body, user, originator
 
     let client = await elasticsearchService.getClient(false);
     let mountName = body['mount-name'];
-
-
     let res2 = await client.get({
       index: '6',
       id: mountName
     });
-
 
     var source = res2.body._source['mac-address'];
 
@@ -418,6 +424,90 @@ exports.decodeAuthorizationCodeAndExtractUserName = function (authorizationCode)
 }
 
 
+function customEncode(input) {
+  return input
+    .replace(/\(/g, '%28')
+    .replace(/\)/g, '%29')
+    .replace(/;/g, '%3B')
+    .replace(/:/g, '%3A');
+}
+
+async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  try {
+    // matr-1-0-0-http-c-mwdi-1-0-0-000
+    let applicationNameAndHttpClient =
+      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
+
+    let operationNameAndOperationKey =
+      await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
+
+    let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
+    let applicationName = applicationNameAndHttpClient.applicationName;
+    let operationName = operationNameAndOperationKey.operationName;
+    let operationKey = operationNameAndOperationKey.operationKey;
+
+    let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    let ltpTcpUuid;
+    for (const ltp of logicalTerminationPointListTCP) {
+      const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
+      if (applicationNameAndHttpClient.httpClientLtpUuid === clientLtp[0]) {
+        ltpTcpUuid = ltp[onfAttributes.GLOBAL_CLASS.UUID];
+      }
+    }
+
+    let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
+    let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
+
+    let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
+
+    let originator = await httpServerInterface.getApplicationNameAsync();
+    let httpRequestHeader = new RequestHeader(
+      user,
+      originator,
+      xCorrelator,
+      traceIndicator,
+      customerJourney,
+      operationKey
+    );
+    httpRequestHeader = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
+
+    let splitUrl = finalUrl.split('fields=');
+
+    let fields = "";
+    let url = "";
+    let baseUrl = "";
+
+    let mountName = body['mount-name'];
+
+    if (splitUrl.length > 1) {
+      baseUrl = splitUrl[0];
+      fields = splitUrl[1];
+      console.log("url = " + baseUrl + "fields =" + fields);
+    }
+
+    let newBaseUrl = baseUrl.replace("{mount-name}", mountName);
+
+    const encodedFields = customEncode(fields);
+    const fullUrl = newBaseUrl + 'fields=' + encodedFields;
+
+    try {
+      let response = await axios.get(fullUrl, {
+        headers: httpRequestHeader
+      });
+      return (response.data);
+    } catch (error) {
+      throw error;
+    }
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+
+
 /**
  * Responses with the current MAC table of a specific device.
  *
@@ -426,25 +516,37 @@ exports.decodeAuthorizationCodeAndExtractUserName = function (authorizationCode)
  * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
  * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
  * traceIndicator String Sequence of request numbers along the flow
- * customerJourney String Holds information supporting customer’s journey to which the execution applies
+ * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
  * returns inline_response_200_2
  **/
 exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  let dataFromRequest;
+  const uuidArray = [];
+
   return new Promise(async function (resolve, reject) {
-    /*var examples = {};
-    examples['application/json'] = {
-      "request-id": "305251234-101120-1400"
-    };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }*/
-    const Authorization = "Basic c2lhZTpTaUdlbjAx";
-    finalUrl = "OpenDayLight://rests/operations/network-topology:network-topology/topology=topology-netconf/node=513250009/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses";
-    const result = await RestClient.dispatchEvent(finalUrl, 'GET', '', Authorization);
+    PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney)
+      .then(data => {      
+        dataFromRequest = data;
+        data["core-model-1-4:control-construct"].forEach(controlConstruct => {
+          controlConstruct["forwarding-domain"].forEach(forwardingDomain => {
+            if (
+              forwardingDomain["layer-protocol-name"].includes(
+                "mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER"
+              )
+            ) {
+              uuidArray.push(forwardingDomain.uuid);
+            }
+          });
+        });
 
-
+      })
+      .catch(error => {
+        console.error('Errore durante la richiesta:', error);
+      });
   });
+
+
+
 }
+
 
