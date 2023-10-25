@@ -1,5 +1,4 @@
 'use strict';
-const RestClient = require('./rest/client/dispacher')
 
 const { elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
 const onfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
@@ -582,7 +581,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
     let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
 
     let mountName = body['mount-name'];
-    let uuid = body['mount-name'];
+    let uuid = body['uuid'];
 
     let finalUrlTmp = finalUrl.replace("{mount-name}", mountName);
     finalUrl = finalUrlTmp.replace("{uuid}", uuid);
@@ -758,7 +757,6 @@ exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorre
 
 
       //STEP3 - MIDW call (MWDI://core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?\nfields=original-ltp-name)
-      /*
       PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney)
       .then(data => {
         dataFromRequest = data;
@@ -766,10 +764,11 @@ exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorre
       .catch(error => {
         console.error('Errore durante la richiesta:', error);
       });
-      */
+      
 
       //STEP4 - PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
       //"ElasticSearch": {MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc}
+      /*
       PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(body, user, originator, xCorrelator, traceIndicator, customerJourney)
         .then(data => {
           dataFromRequest = data;
@@ -777,6 +776,7 @@ exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorre
         .catch(error => {
           console.error('Errore durante la richiesta:', error);
         });
+      */  
 
 
 
