@@ -24,6 +24,7 @@ var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/open
 var app = expressAppConfig.getApp();
 appCommons.setupExpressApp(app);
 
+//TO FIX!
 global.databasePath ='d:/Working/VSCode/MacAddressTableRecorder/server/database/load.json'
 
 prepareElasticsearch().catch(err => {
