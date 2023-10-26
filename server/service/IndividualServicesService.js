@@ -529,17 +529,38 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
       customerJourney,
       operationKey
     );
-httpRequestHeader = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
 
     let mountName = body['mount-name'];
 
     let fullUrl = finalUrl.replace("{mount-name}", mountName);
 
+    var data = {
+      "input": 
+      {}
+    };
+
+    //TO FIX
+    let auth = "Basic YWRtaW46YWRtaW4=";
+
+    let httpRequestHeaderAuth = {      
+      "content-type": httpRequestHeader['contentType'],
+      "user": httpRequestHeader['user'],
+      "originator": httpRequestHeader['originator'],
+      "x-correlator": httpRequestHeader['xCorrelator'],
+      "trace-indicator": httpRequestHeader['traceIndicator'],
+      "customer-journey": httpRequestHeader['customerJourney'],
+      "operation-key": httpRequestHeader['operationKey'],
+      "Authorization": auth
+    };
+
+    httpRequestHeaderAuth = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
+    
+
     try {
-      let response = await axios.get(fullUrl, {
-        headers: httpRequestHeader
+      let response = await axios.post(fullUrl, data, {
+        headers: httpRequestHeaderAuth
       });
-      return (response.data);
+      return response.data;
     } catch (error) {
       throw error;
     }
@@ -746,8 +767,7 @@ exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorre
       */
 
 
-    //STEP2 - ODL call (ODL://...mac-fd-1-0:provide-learned-mac-addresses)      
-/*
+    //STEP2 - ODL call (POST ODL://...mac-fd-1-0:provide-learned-mac-addresses)      
     PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney)
       .then(data => {
         dataFromRequest = data;
