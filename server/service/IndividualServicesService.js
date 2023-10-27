@@ -350,6 +350,30 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
 }
 
 
+const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async function (body) {
+  return new Promise(async function (resolve, reject) {
+    let client = await elasticsearchService.getClient(false);
+    let mountName = body['mount-name'];
+
+    let res2 = await client.get({
+      index: '6',
+      id: mountName
+    });
+
+    var source = res2.body._source['mac-address'];
+
+    var response = {};
+    response['application/json'] = {
+      'mac-address': source
+    };
+
+    if (Object.keys(response).length > 0) {
+      resolve(response['application/json']['mac-address']);
+    } else {
+      resolve(null); // Resolve the promise with null if necessary
+    }
+  });
+};
 
 /**
  * Responses with the MAC table of a specific device.
@@ -363,6 +387,32 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
  * returns List
  **/
 exports.provideMacTableOfSpecificDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  return new Promise(function (resolve, reject) {
+     PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch(body)
+      .then(function(response) {
+        //console.log("Data from provideMacTableOfSpecificDevice:", response);      
+        resolve(response); 
+      })
+      .catch(function(error) {
+        reject(error); 
+      });
+  });
+};
+
+
+
+/**
+ * Responses with the MAC table of a specific device.
+ *
+ * body V1_providemactableofspecificdevice_body 
+ * user String User identifier from the system starting the service call
+ * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
+ * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
+ * traceIndicator String Sequence of request numbers along the flow
+ * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
+ * returns List
+ **/
+/*exports.provideMacTableOfSpecificDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
 
     let client = await elasticsearchService.getClient(false);
@@ -388,8 +438,8 @@ exports.provideMacTableOfSpecificDevice = async function (body, user, originator
       resolve();
     }
   });
+}*/
 
-}
 
 /**
  * @description To decode base64 authorization code from authorization header
@@ -535,14 +585,14 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
     let fullUrl = finalUrl.replace("{mount-name}", mountName);
 
     var data = {
-      "input": 
-      {}
+      "input":
+        {}
     };
 
     //TO FIX
     let auth = "Basic YWRtaW46YWRtaW4=";
 
-    let httpRequestHeaderAuth = {      
+    let httpRequestHeaderAuth = {
       "content-type": httpRequestHeader['contentType'],
       "user": httpRequestHeader['user'],
       "originator": httpRequestHeader['originator'],
@@ -554,7 +604,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
     };
 
     httpRequestHeaderAuth = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
-    
+
 
     try {
       let response = await axios.post(fullUrl, data, {
