@@ -302,17 +302,23 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = fun
 }
 
 
-/**
- * Responses with a list of MAC tables of all connected devices.
- *
- * user String User identifier from the system starting the service call
- * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
- * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
- * traceIndicator String Sequence of request numbers along the flow
- * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
- * returns List
- **/
-exports.provideMacTableOfAllDevices = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
+
+function orderData(input) {
+  
+  const output = {
+    "mount-name": input['mount-name'],
+    "own-mac-address": input['own-mac-address'],
+    "egress-ltp-uuid": input['egress-ltp-uuid'],
+    "original-ltp-name": input['original-ltp-name'],
+    "vlan-id": input['vlan-id'],
+    "remote-mac-address": input['remote-mac-address'],
+    "time-stamp-of-data": input['time-stamp-of-data']
+  };
+
+  return output;
+}
+
+const PromptForProvidingAllMacTablesCausesReadingFromElasticSearch = async function () {
   return new Promise(async function (resolve, reject) {
 
     let client = await elasticsearchService.getClient(false);
@@ -347,7 +353,31 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
     }
 
   });
-}
+};
+
+/**
+ * Responses with a list of MAC tables of all connected devices.
+ *
+ * user String User identifier from the system starting the service call
+ * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
+ * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
+ * traceIndicator String Sequence of request numbers along the flow
+ * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
+ * returns List
+ **/
+exports.provideMacTableOfAllDevices = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
+  return new Promise(function (resolve, reject) {
+    PromptForProvidingAllMacTablesCausesReadingFromElasticSearch()
+      .then(function (response) {         
+        const orderedArray = response.map(obj => orderData(obj));  
+        //console.log("Data from orderedArray:", response);   
+        resolve(orderedArray);
+      })
+      .catch(function (error) {
+        reject(error);
+      });
+  });
+};
 
 
 const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async function (body) {
@@ -375,6 +405,8 @@ const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async f
   });
 };
 
+
+
 /**
  * Responses with the MAC table of a specific device.
  *
@@ -388,13 +420,13 @@ const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async f
  **/
 exports.provideMacTableOfSpecificDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(function (resolve, reject) {
-     PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch(body)
-      .then(function(response) {
+    PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch(body)
+      .then(function (response) {
         //console.log("Data from provideMacTableOfSpecificDevice:", response);      
-        resolve(response); 
+        resolve(response);
       })
-      .catch(function(error) {
-        reject(error); 
+      .catch(function (error) {
+        reject(error);
       });
   });
 };
