@@ -1,5 +1,4 @@
 'use strict';
-const RestClient = require('./rest/client/dispacher')
 
 const { elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
 const onfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
@@ -188,17 +187,6 @@ function transformData(inputData) {
 
   return outputData;
 }
-function transformData(inputData) {
-  const outputData = {
-    "target-mac-address": `target-mac-address-${inputData["remote-mac-address"]}`,
-    "mount-name": inputData["mount-name"],
-    "original-ltp-name": inputData["original-ltp-name"],
-    "vlan-id": inputData["vlan-id"],
-    "time-stamp-of-data": new Date(inputData["time-stamp-of-data"]).toISOString()
-  };
-
-  return outputData;
-}
 
 /**
  * Provides unsorted list of network element interfaces on path to specific MAC address.
@@ -316,17 +304,23 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = fun
 }
 
 
-/**
- * Responses with a list of MAC tables of all connected devices.
- *
- * user String User identifier from the system starting the service call
- * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
- * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
- * traceIndicator String Sequence of request numbers along the flow
- * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
- * returns List
- **/
-exports.provideMacTableOfAllDevices = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
+
+function orderData(input) {
+  
+  const output = {
+    "mount-name": input['mount-name'],
+    "own-mac-address": input['own-mac-address'],
+    "egress-ltp-uuid": input['egress-ltp-uuid'],
+    "original-ltp-name": input['original-ltp-name'],
+    "vlan-id": input['vlan-id'],
+    "remote-mac-address": input['remote-mac-address'],
+    "time-stamp-of-data": input['time-stamp-of-data']
+  };
+
+  return output;
+}
+
+const PromptForProvidingAllMacTablesCausesReadingFromElasticSearch = async function () {
   return new Promise(async function (resolve, reject) {
 
     let client = await elasticsearchService.getClient(false);
@@ -361,16 +355,11 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
     }
 
   });
-}
-
-
-
-
+};
 
 /**
- * Responses with the MAC table of a specific device.
+ * Responses with a list of MAC tables of all connected devices.
  *
- * body V1_providemactableofspecificdevice_body 
  * user String User identifier from the system starting the service call
  * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
  * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
@@ -378,11 +367,27 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
  * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
  * returns List
  **/
-exports.provideMacTableOfSpecificDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
-  return new Promise(async function (resolve, reject) {
+exports.provideMacTableOfAllDevices = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
+  return new Promise(function (resolve, reject) {
+    PromptForProvidingAllMacTablesCausesReadingFromElasticSearch()
+      .then(function (response) {         
+        const orderedArray = response.map(obj => orderData(obj));  
+        //console.log("Data from orderedArray:", response);   
+        resolve(orderedArray);
+      })
+      .catch(function (error) {
+        reject(error);
+      });
+  });
+};
 
+
+const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async function (body) {
+  return new Promise(async function (resolve, reject) {
     let client = await elasticsearchService.getClient(false);
     let mountName = body['mount-name'];
+
+
     let res2 = await client.get({
       index: '6',
       id: mountName
@@ -398,11 +403,37 @@ exports.provideMacTableOfSpecificDevice = async function (body, user, originator
     if (Object.keys(response).length > 0) {
       resolve(response['application/json']['mac-address']);
     } else {
-      resolve();
+      resolve(null); // Resolve the promise with null if necessary
     }
   });
+};
 
-}
+
+
+/**
+ * Responses with the MAC table of a specific device.
+ *
+ * body V1_providemactableofspecificdevice_body 
+ * user String User identifier from the system starting the service call
+ * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
+ * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
+ * traceIndicator String Sequence of request numbers along the flow
+ * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
+ * returns List
+ **/
+exports.provideMacTableOfSpecificDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  return new Promise(function (resolve, reject) {
+    PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch(body)
+      .then(function (response) {
+        //console.log("Data from provideMacTableOfSpecificDevice:", response);      
+        resolve(response);
+      })
+      .catch(function (error) {
+        reject(error);
+      });
+  });
+};
+
 
 /**
  * @description To decode base64 authorization code from authorization header
@@ -432,9 +463,10 @@ function customEncode(input) {
     .replace(/:/g, '%3A');
 }
 
+
+//STEP 1
 async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
-    // matr-1-0-0-http-c-mwdi-1-0-0-000
     let applicationNameAndHttpClient =
       await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
 
@@ -504,6 +536,237 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
   }
 }
 
+//STEP 2
+async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  try {
+    let applicationNameAndHttpClient =
+      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
+
+    let operationNameAndOperationKey =
+      await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
+
+    let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
+    let applicationName = applicationNameAndHttpClient.applicationName;
+    let operationName = operationNameAndOperationKey.operationName;
+    let operationKey = operationNameAndOperationKey.operationKey;
+
+    let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    let ltpTcpUuid;
+    for (const ltp of logicalTerminationPointListTCP) {
+      const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
+      if (applicationNameAndHttpClient.httpClientLtpUuid === clientLtp[0]) {
+        ltpTcpUuid = ltp[onfAttributes.GLOBAL_CLASS.UUID];
+      }
+    }
+
+    let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
+    let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
+
+    let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
+
+    let originator = await httpServerInterface.getApplicationNameAsync();
+    let httpRequestHeader = new RequestHeader(
+      user,
+      originator,
+      xCorrelator,
+      traceIndicator,
+      customerJourney,
+      operationKey
+    );
+
+    let mountName = body['mount-name'];
+
+    let fullUrl = finalUrl.replace("{mount-name}", mountName);
+
+    var data = {
+      "input":
+        {}
+    };
+
+    //TO FIX
+    let auth = "Basic YWRtaW46YWRtaW4=";
+
+    let httpRequestHeaderAuth = {
+      "content-type": httpRequestHeader['contentType'],
+      "user": httpRequestHeader['user'],
+      "originator": httpRequestHeader['originator'],
+      "x-correlator": httpRequestHeader['xCorrelator'],
+      "trace-indicator": httpRequestHeader['traceIndicator'],
+      "customer-journey": httpRequestHeader['customerJourney'],
+      "operation-key": httpRequestHeader['operationKey'],
+      "Authorization": auth
+    };
+
+    httpRequestHeaderAuth = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
+
+
+    try {
+      let response = await axios.post(fullUrl, data, {
+        headers: httpRequestHeaderAuth
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+//STEP 3
+async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  try {
+    // matr-1-0-0-op-c-is-mwdi-1-0-0-001
+    let applicationNameAndHttpClient =
+      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
+
+    let operationNameAndOperationKey =
+      await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
+
+    let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
+    let applicationName = applicationNameAndHttpClient.applicationName;
+    let operationName = operationNameAndOperationKey.operationName;
+    let operationKey = operationNameAndOperationKey.operationKey;
+
+    let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    let ltpTcpUuid;
+    for (const ltp of logicalTerminationPointListTCP) {
+      const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
+      if (applicationNameAndHttpClient.httpClientLtpUuid === clientLtp[0]) {
+        ltpTcpUuid = ltp[onfAttributes.GLOBAL_CLASS.UUID];
+      }
+    }
+
+    let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
+    let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
+
+    let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
+
+    let mountName = body['mount-name'];
+    let uuid = mountName + "+" + body['uuid'];
+
+    let finalUrlTmp = finalUrl.replace("{mount-name}", mountName);
+    finalUrl = finalUrlTmp.replace("{uuid}", uuid);
+
+    let httpRequestHeader = new RequestHeader(
+      user,
+      originator,
+      xCorrelator,
+      traceIndicator,
+      customerJourney,
+      operationKey
+    );
+    httpRequestHeader = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
+
+    try {
+      let response = await axios.get(finalUrl, {
+        headers: httpRequestHeader
+      });
+      return (response.data);
+    } catch (error) {
+      throw error;
+    }
+
+    console.log("url = " + finalUrl);
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+//STEP4
+async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  try {
+    let applicationNameAndHttpClient =
+      await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
+
+    let operationNameAndOperationKey =
+      await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
+
+    let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
+    let applicationName = applicationNameAndHttpClient.applicationName;
+    let operationName = operationNameAndOperationKey.operationName;
+    let operationKey = operationNameAndOperationKey.operationKey;
+
+    let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    let ltpTcpUuid;
+    for (const ltp of logicalTerminationPointListTCP) {
+      const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
+      if (applicationNameAndHttpClient.httpClientLtpUuid === clientLtp[0]) {
+        ltpTcpUuid = ltp[onfAttributes.GLOBAL_CLASS.UUID];
+      }
+    }
+
+    let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
+    let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
+
+    let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + "/" + operationKey + "/_doc/305251234";
+
+    var data = {
+      "datatype": "mac-address",
+      "mac-address":
+        [
+          {
+            "mount-name": "305251234",
+            "own-mac-address": "00:00:00:00:00:00",
+            "egress-ltp-uuid": "305251234+mac-inf-VALE",
+            "original-ltp-name": "eth-1-0-3",
+            "vlan-id": 17,
+            "remote-mac-address": "01:01:01:01:01:01",
+            "time-stamp-of-data": "2010-11-20T13:00:00.000Z"
+          },
+          {
+            "mount-name": "305251234",
+            "own-mac-address": "00:00:00:00:00:00",
+            "egress-ltp-uuid": "305251234+mac-inf-VALE",
+            "original-ltp-name": "eth-1-0-3",
+            "vlan-id": 17,
+            "remote-mac-address": "FF:01:01:01:01:01",
+            "time-stamp-of-data": "2010-11-20T13:00:00.000Z"
+          }
+        ]
+    };
+
+
+    let originator = await httpServerInterface.getApplicationNameAsync();
+    let httpRequestHeader = new RequestHeader(
+      user,
+      originator,
+      xCorrelator,
+      traceIndicator,
+      customerJourney,
+      operationKey
+    );
+
+    httpRequestHeader = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
+
+
+    let additionalHeaders = {
+      'Authorization': operationName['api-key'],
+    };
+
+    let headersAll = {
+      httpRequestHeader,
+      additionalHeaders //custom header
+    };
+
+
+    try {
+      let response = await axios.post(finalUrl, data, {
+        headers: headersAll
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+
+  } catch (error) {
+    throw error;
+  }
+}
 
 
 
@@ -524,8 +787,11 @@ exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorre
   const uuidArray = [];
 
   return new Promise(async function (resolve, reject) {
+
+    //STEP1 - MIDW call (MWDI://core-model-1-4:network-control-domain=cache/control-construct={mount-name}?\nfields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur))))
+    /*
     PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney)
-      .then(data => {      
+      .then(data => {
         dataFromRequest = data;
         data["core-model-1-4:control-construct"].forEach(controlConstruct => {
           controlConstruct["forwarding-domain"].forEach(forwardingDomain => {
@@ -538,11 +804,51 @@ exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorre
             }
           });
         });
-
       })
       .catch(error => {
         console.error('Errore durante la richiesta:', error);
       });
+      */
+
+
+    //STEP2 - ODL call (POST ODL://...mac-fd-1-0:provide-learned-mac-addresses)      
+    PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney)
+      .then(data => {
+        dataFromRequest = data;
+      })
+      .catch(error => {
+        console.error('Errore durante la richiesta:', error);
+      });
+
+
+
+    //STEP3 - MIDW call (MWDI://core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?\nfields=original-ltp-name)
+    /*
+    PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney)
+    .then(data => {
+      dataFromRequest = data;
+    })
+    .catch(error => {
+      console.error('Errore durante la richiesta:', error);
+    });
+    */
+
+
+    //STEP4 - PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
+    //"ElasticSearch": {MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc}
+    /*
+    PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(body, user, originator, xCorrelator, traceIndicator, customerJourney)
+      .then(data => {
+        dataFromRequest = data;
+      })
+      .catch(error => {
+        console.error('Errore durante la richiesta:', error);
+      });
+    */
+
+
+
+
   });
 
 
