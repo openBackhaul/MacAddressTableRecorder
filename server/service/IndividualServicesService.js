@@ -869,7 +869,7 @@ function createMacAddressEntry(mountName, ownMacAddress, egressLtpUuid, original
     "own-mac-address": ownMacAddress,
     "egress-ltp-uuid": egressLtpUuid,
     "original-ltp-name": originalLtpName,
-    "vlan-id": vlanId,
+    "vlan-id": parseInt(vlanId),
     "remote-mac-address": remoteMacAddress,
     "time-stamp-of-data": timeStamp
   };
@@ -887,9 +887,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
   const FDomainArray = [];
   let step2DataArray = [];
-  let originalLtpNameArray = 0;
-  let uuidEgress = 0;
-  let step2Data = [];
   let macAddressArray = [];
 
   try {
