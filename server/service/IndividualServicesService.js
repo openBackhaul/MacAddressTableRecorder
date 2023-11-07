@@ -188,18 +188,15 @@ function transformData(inputData) {
   return outputData;
 }
 
-/**
- * Provides unsorted list of network element interfaces on path to specific MAC address.
- *
- * body V1_providelistofnetworkelementinterfacesonpath_body 
- * user String User identifier from the system starting the service call
- * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
- * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
- * traceIndicator String Sequence of request numbers along the flow
- * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
- * returns List
- **/
-exports.provideListOfNetworkElementInterfacesOnPath = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+
+
+
+
+
+
+
+
+const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch = async function (body) {
   return new Promise(async function (resolve, reject) {
     let client = await elasticsearchService.getClient(false);
 
@@ -241,10 +238,32 @@ exports.provideListOfNetworkElementInterfacesOnPath = async function (body, user
       resolve();
     }
 
-
-
   });
-}
+};
+
+/**
+ * Provides unsorted list of network element interfaces on path to specific MAC address.
+ *
+ * body V1_providelistofnetworkelementinterfacesonpath_body 
+ * user String User identifier from the system starting the service call
+ * originator String 'Identification for the system consuming the API, as defined in  [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]' 
+ * xCorrelator String UUID for the service execution flow that allows to correlate requests and responses
+ * traceIndicator String Sequence of request numbers along the flow
+ * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
+ * returns List
+ **/
+exports.provideListOfNetworkElementInterfacesOnPath = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  return new Promise(function (resolve, reject) {
+    RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch(body)
+      .then(function (response) {
+        resolve(response);
+      })
+      .catch(function (error) {
+        reject(error);
+      });
+  });
+};
+
 
 
 /**
