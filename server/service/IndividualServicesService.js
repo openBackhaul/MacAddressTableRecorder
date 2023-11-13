@@ -191,6 +191,86 @@ function transformData(inputData) {
 
 
 
+exports.embeddingCausesRequestForListOfDevicesAtMwdi = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+
+  return new Promise(async function (resolve, reject) {
+    try {
+
+      let applicationNameAndHttpClient =
+        await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
+
+      let operationNameAndOperationKey =
+        await resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
+
+      let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
+      let applicationName = applicationNameAndHttpClient.applicationName;
+      let operationName = operationNameAndOperationKey.operationName;
+      let operationKey = operationNameAndOperationKey.operationKey;
+
+      let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+      let ltpTcpUuid;
+      for (const ltp of logicalTerminationPointListTCP) {
+        const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
+        if (applicationNameAndHttpClient.httpClientLtpUuid === clientLtp[0]) {
+          ltpTcpUuid = ltp[onfAttributes.GLOBAL_CLASS.UUID];
+        }
+      }
+
+      let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
+      let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
+
+      let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
+      console.log("url = " + finalUrl);
+
+      //TO FIX
+      let auth = "Basic YWRtaW46YWRtaW4=";
+
+      if (operationKey === 'Operation key not yet provided.')
+        operationKey = "siaeTest";
+
+
+      let httpRequestHeader = new RequestHeader(
+        user,
+        originator,
+        xCorrelator,
+        traceIndicator,
+        customerJourney,
+        operationKey
+      );
+
+      let httpRequestHeaderAuth = {
+        "content-type": httpRequestHeader['contentType'],
+        "user": httpRequestHeader['user'],
+        "originator": httpRequestHeader['originator'],
+        "x-correlator": httpRequestHeader['xCorrelator'],
+        "trace-indicator": httpRequestHeader['traceIndicator'],
+        "customer-journey": httpRequestHeader['customerJourney'],
+        "operation-key": httpRequestHeader['operationKey'],
+        "Authorization": auth
+      };
+
+      httpRequestHeader = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
+
+      //empty body
+      body = {
+        "input":
+          {}
+      };
+
+      try {
+        let response = await axios.post(finalUrl, body, {
+          headers: httpRequestHeaderAuth
+        });
+        resolve (response.data);
+      } catch (error) {        
+        throw error;
+      }
+
+    } catch (error) {
+      throw error;
+    }
+  });
+};
 
 
 
@@ -949,6 +1029,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
       const step3DataArray = await Promise.all(originalLtpNamePromises);
 
+      //TO FIX: Timestamp
       // Esegui un loop su originalLtpNames
       step3DataArray.forEach((step3Data, index) => {
         // Puoi accedere a ciascun originalLtpName all'interno del loop
@@ -968,7 +1049,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
       const writingResultPromise = await PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(macAddressData, user, originator, xCorrelator, traceIndicator, customerJourney);
 
-      //TO FIX:
       var examples = {};
       examples['application/json'] = {
         "request-id": "305251234-101120-1414"
