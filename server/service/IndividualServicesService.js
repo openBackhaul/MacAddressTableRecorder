@@ -968,12 +968,13 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
       const writingResultPromise = await PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(macAddressData, user, originator, xCorrelator, traceIndicator, customerJourney);
 
+      //TO FIX:
       var examples = {};
       examples['application/json'] = {
-        "request-id" : "305251234-101120-1414"
+        "request-id": "305251234-101120-1414"
       };
 
-      return(examples['application/json']);
+      return (examples['application/json']);
 
     }
   }
