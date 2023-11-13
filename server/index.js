@@ -41,6 +41,6 @@ prepareElasticsearch().catch(err => {
         });
         //appCommons.performApplicationRegistration();
 
-        cp.startCyclicProcess(2);
+        //cp.startCyclicProcess(2);
     }
 );
