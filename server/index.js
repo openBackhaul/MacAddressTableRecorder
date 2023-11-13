@@ -1,3 +1,5 @@
+const cp = require('./service/individualServices/CyclicProcessService/cyclicProcess');
+
 'use strict';
 
 var path = require('path');
@@ -26,6 +28,7 @@ appCommons.setupExpressApp(app);
 
 //TO FIX!
 global.databasePath ='d:/Working/VSCode/MacAddressTableRecorder/server/database/load.json'
+//global.databasePath = './database/load.json'
 
 prepareElasticsearch().catch(err => {
     console.error(`Error preparing Elasticsearch : ${err}`);
@@ -36,6 +39,8 @@ prepareElasticsearch().catch(err => {
         console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
         console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
         });
-        appCommons.performApplicationRegistration();
+        //appCommons.performApplicationRegistration();
+
+        cp.startCyclicProcess(2);
     }
 );
