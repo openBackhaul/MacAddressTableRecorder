@@ -1,4 +1,4 @@
-const cp = require('./service/individualServices/CyclicProcessService/cyclicProcess');
+//const cp = require('./service/individualServices/CyclicProcessService/cyclicProcess');
 
 'use strict';
 
@@ -27,8 +27,8 @@ var app = expressAppConfig.getApp();
 appCommons.setupExpressApp(app);
 
 //TO FIX!
-global.databasePath ='d:/Working/VSCode/MacAddressTableRecorder/server/database/load.json'
-//global.databasePath = './database/load.json'
+//global.databasePath ='d:/Working/VSCode/MacAddressTableRecorder/server/database/load.json'
+global.databasePath = './database/load.json'
 
 prepareElasticsearch().catch(err => {
     console.error(`Error preparing Elasticsearch : ${err}`);
