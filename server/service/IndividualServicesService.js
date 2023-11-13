@@ -199,6 +199,7 @@ function transformData(inputData) {
 const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch = async function (body) {
   return new Promise(async function (resolve, reject) {
     let client = await elasticsearchService.getClient(false);
+
     let targetMacAddress = body['target-mac-address'];
 
     let res2 = await client.search({
@@ -224,6 +225,7 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
     const filteredObjects = mergedArray.filter(obj => obj['remote-mac-address'] === targetMacAddress);
 
     const transformedArray = filteredObjects.map(obj => transformData(obj));
+
 
     var response = {};
     response['application/json'] = {
@@ -404,6 +406,7 @@ const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async f
     let client = await elasticsearchService.getClient(false);
     let mountName = body['mount-name'];
 
+
     let res2 = await client.get({
       index: '6',
       id: mountName
@@ -481,7 +484,7 @@ function customEncode(input) {
 
 
 //STEP 1
-async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(mountName, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
     let applicationNameAndHttpClient =
       await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
@@ -525,8 +528,6 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
     let url = "";
     let baseUrl = "";
 
-    let mountName = body['mount-name'];
-
     if (splitUrl.length > 1) {
       baseUrl = splitUrl[0];
       fields = splitUrl[1];
@@ -553,7 +554,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
 }
 
 //STEP 2
-async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(mountName, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
     let applicationNameAndHttpClient =
       await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
@@ -590,7 +591,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
       operationKey
     );
 
-    let mountName = body['mount-name'];
+
 
     let fullUrl = finalUrl.replace("{mount-name}", mountName);
 
@@ -631,10 +632,15 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
 }
 
 
-
 //STEP 3
-async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(body, uuid, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
+
+    if (body['egress-ltp'] == "LTP-MNGT") {
+      body['original-ltp-name'] = "LAN-MNGT"
+      return body;
+    }
+
     // matr-1-0-0-op-c-is-mwdi-1-0-0-001
     let applicationNameAndHttpClient =
       await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
@@ -661,8 +667,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
 
     let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
 
-    let mountName = body['mount-name'];
-    let uuid = mountName + "+" + body['uuid'];
+    uuid = mountName + "+" + uuid;
 
     let finalUrlTmp = finalUrl.replace("{mount-name}", mountName);
     finalUrl = finalUrlTmp.replace("{uuid}", uuid);
@@ -718,34 +723,12 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
 
     let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
     let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
+    let mountName = body["mac-address"][0]["mount-name"];
 
-    let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + "/" + operationKey + "/_doc/305251234";
+    let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + "/" + operationKey + "/_doc/" + mountName;
 
-    var data = {
-      "datatype": "mac-address",
-      "mac-address":
-        [
-          {
-            "mount-name": "305251234",
-            "own-mac-address": "00:00:00:00:00:00",
-            "egress-ltp-uuid": "305251234+mac-inf-VALE",
-            "original-ltp-name": "eth-1-0-3",
-            "vlan-id": 17,
-            "remote-mac-address": "01:01:01:01:01:01",
-            "time-stamp-of-data": "2010-11-20T13:00:00.000Z"
-          },
-          {
-            "mount-name": "305251234",
-            "own-mac-address": "00:00:00:00:00:00",
-            "egress-ltp-uuid": "305251234+mac-inf-VALE",
-            "original-ltp-name": "eth-1-0-3",
-            "vlan-id": 17,
-            "remote-mac-address": "FF:01:01:01:01:01",
-            "time-stamp-of-data": "2010-11-20T13:00:00.000Z"
-          }
-        ]
-    };
 
+    var data = body;
 
     let originator = await httpServerInterface.getApplicationNameAsync();
     let httpRequestHeader = new RequestHeader(
@@ -798,15 +781,20 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
  * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
  * returns inline_response_200_2
  **/
+/*
 exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   let dataFromRequest;
   const uuidArray = [];
+  let egressArray = [];
+  let uuidEgress = 0;
+
 
   return new Promise(async function (resolve, reject) {
-
+    let error = false;
     //STEP1 - MIDW call (MWDI://core-model-1-4:network-control-domain=cache/control-construct={mount-name}?\nfields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur))))
-    /*
-    PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney)
+
+    let mountName = body['mount-name'];
+    PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(mountName, user, originator, xCorrelator, traceIndicator, customerJourney)
       .then(data => {
         dataFromRequest = data;
         data["core-model-1-4:control-construct"].forEach(controlConstruct => {
@@ -820,55 +808,182 @@ exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorre
             }
           });
         });
+
+        if (uuidArray.length != 0) {
+          //STEP2 - ODL call (POST ODL://...mac-fd-1-0:provide-learned-mac-addresses)      
+          PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(mountName, user, originator, xCorrelator, traceIndicator, customerJourney)
+            .then(data => {
+              dataFromRequest = data;
+
+              const egressSet = new Set(); // Utilizza un Set per memorizzare valori univoci
+
+              dataFromRequest["mac-fd-1-0:output"]["mac-table-entry-list"].forEach(entry => {
+                if (entry["affected-mac-fd"] === "MAC-FD") {
+                  egressSet.add(entry["egress-ltp"]);
+                }
+              });
+
+              egressArray = Array.from(egressSet);
+
+              const promises = egressArray.map(uuid => {
+                //STEP3
+                PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(mountName, uuid, originator, xCorrelator, traceIndicator, customerJourney)
+                  .then(data => {
+                    // Esegui operazioni sui dati
+                    console.log('Dati:', data);
+                    return data; // Restituisci il valore per la promessa
+                  })
+                  .catch(error => {
+                    // Gestisci l'errore per questa promessa, ma continua con le altre
+                    console.error('Errore durante la richiesta:', error);
+                    return null; // Restituisci un valore speciale o null, se necessario
+                  });
+              });
+
+            })
+            .catch(error => {
+              console.error('Error during request:', error);
+              error = true;
+            });
+        }
       })
       .catch(error => {
-        console.error('Errore durante la richiesta:', error);
-      });
-      */
-
-
-    //STEP2 - ODL call (POST ODL://...mac-fd-1-0:provide-learned-mac-addresses)      
-    PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney)
-      .then(data => {
-        dataFromRequest = data;
-      })
-      .catch(error => {
-        console.error('Errore durante la richiesta:', error);
-      });
+        console.error('Error during request:', error);
+        error = true;
+      });*/
 
 
 
-    //STEP3 - MIDW call (MWDI://core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?\nfields=original-ltp-name)
-    /*
-    PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney)
-    .then(data => {
-      dataFromRequest = data;
-    })
-    .catch(error => {
-      console.error('Errore durante la richiesta:', error);
-    });
-    */
+//STEP3 - MIDW call (MWDI://core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?\nfields=original-ltp-name)
+/*
+PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney)
+.then(data => {
+  dataFromRequest = data;
+})
+.catch(error => {
+  console.error('Errore durante la richiesta:', error);
+});
+*/
 
 
-    //STEP4 - PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
-    //"ElasticSearch": {MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc}
-    /*
-    PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(body, user, originator, xCorrelator, traceIndicator, customerJourney)
-      .then(data => {
-        dataFromRequest = data;
-      })
-      .catch(error => {
-        console.error('Errore durante la richiesta:', error);
-      });
-    */
-
-
-
-
+//STEP4 - PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
+//"ElasticSearch": {MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc}
+/*
+PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(body, user, originator, xCorrelator, traceIndicator, customerJourney)
+  .then(data => {
+    dataFromRequest = data;
+  })
+  .catch(error => {
+    console.error('Errore durante la richiesta:', error);
   });
+*/
+
+// });
+//}
 
 
-
+function createMacAddressEntry(mountName, ownMacAddress, egressLtpUuid, originalLtpName, vlanId, remoteMacAddress, timeStamp) {
+  return {
+    "mount-name": mountName,
+    "own-mac-address": ownMacAddress,
+    "egress-ltp-uuid": egressLtpUuid,
+    "original-ltp-name": originalLtpName,
+    "vlan-id": parseInt(vlanId),
+    "remote-mac-address": remoteMacAddress,
+    "time-stamp-of-data": timeStamp
+  };
 }
+
+function createMacAddressData(datatype, macAddressArray) {
+  return {
+    "datatype": datatype,
+    "mac-address": macAddressArray
+  };
+}
+
+
+exports.readCurrentMacTableFromDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+
+  const FDomainArray = [];
+  let step2DataArray = [];
+  let macAddressArray = [];
+
+  try {
+
+    //STEP1
+    const mountName = body['mount-name'];
+    const data = await PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(mountName, user, originator, xCorrelator, traceIndicator, customerJourney);
+
+    data["core-model-1-4:control-construct"].forEach(controlConstruct => {
+      controlConstruct["forwarding-domain"].forEach(forwardingDomain => {
+        if (
+          forwardingDomain["layer-protocol-name"].includes(
+            "mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER"
+          )
+        ) {
+          FDomainArray.push(forwardingDomain);
+        }
+      });
+    });
+
+
+    if (FDomainArray.length > 0) {
+      const dataFromRequest = await PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(mountName, user, originator, xCorrelator, traceIndicator, customerJourney);
+
+      let uuid = FDomainArray[0]['uuid'].split("+")[1];
+      let macAddressCur = FDomainArray[0]['mac-fd-1-0:mac-fd-pac']['mac-fd-status']['mac-address-cur'];
+
+      const egressSet = new Set();
+      dataFromRequest["mac-fd-1-0:output"]["mac-table-entry-list"].forEach(entry => {
+        if (entry["affected-mac-fd"] === uuid) {
+          entry["own-mac-address"] = macAddressCur;
+          egressSet.add(entry);
+        }
+      });
+
+      const step2DataArray = Array.from(egressSet);
+
+      const originalLtpNamePromises = step2DataArray.map(egressData => {
+        return PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(egressData, user, originator, xCorrelator, traceIndicator, customerJourney);
+      });
+
+      const step3DataArray = await Promise.all(originalLtpNamePromises);
+
+      // Esegui un loop su originalLtpNames
+      step3DataArray.forEach((step3Data, index) => {
+        // Puoi accedere a ciascun originalLtpName all'interno del loop
+        console.log('OriginalLtpName ${index}:' + step3Data['own-mac-address']);
+        const entry = createMacAddressEntry(
+          mountName,
+          step3Data['own-mac-address'],
+          step3Data['egress-ltp'],
+          step3Data['original-ltp-name'],
+          step3Data['vlan-id'],
+          step3Data['mac-address'],
+          "2010-11-20T14:00:00+01:00");
+        macAddressArray.push(entry);
+      });
+
+      const macAddressData = createMacAddressData("mac-address", macAddressArray);
+
+      const writingResultPromise = await PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(macAddressData, user, originator, xCorrelator, traceIndicator, customerJourney);
+
+      //TO FIX:
+      var examples = {};
+      examples['application/json'] = {
+        "request-id": "305251234-101120-1414"
+      };
+
+      return (examples['application/json']);
+
+    }
+  }
+  catch (error) {
+    console.error('Errore durante la richiesta:', error);
+    throw error;
+  }
+}
+
+
 
 

@@ -2,13 +2,14 @@
 
 var utils = require('../utils/writer.js');
 var BasicServices = require('onf-core-model-ap-bs/basicServices/BasicServicesService');
-var responseBuilder = require('onf-core-model-ap/applicationPattern/rest/server/ResponseBuilder');
+var RestResponseBuilder = require('onf-core-model-ap/applicationPattern/rest/server/ResponseBuilder');
 var responseCodeEnum = require('onf-core-model-ap/applicationPattern/rest/server/ResponseCode');
-var restResponseHeader = require('onf-core-model-ap/applicationPattern/rest/server/ResponseHeader');
+var RestResponseHeader = require('onf-core-model-ap/applicationPattern/rest/server/ResponseHeader');
+var ExecutionAndTraceService = require('onf-core-model-ap/applicationPattern/services/ExecutionAndTraceService');
 
 module.exports.embedYourself = async function embedYourself(req, res, next, body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   let startTime = process.hrtime();
-  let responseCode = responseCodeEnum.code.NO_CONTENT;
+  let responseCode = responseCodeEnum.code.OK;
   let responseBodyToDocument = {};
 
   await BasicServices.embedYourself(body, user, xCorrelator, traceIndicator, customerJourney, req.url)
@@ -223,7 +224,7 @@ module.exports.registerYourself =  async function registerYourself(req, res, nex
   let startTime = process.hrtime();
   let responseCode = responseCodeEnum.code.NO_CONTENT;
   let responseBodyToDocument = {};
-  if (Object.keys(req.body).length === 0) {
+  if (Object.keys(req.body).length === 0) { 
     body = req.body;
     user = req.headers["user"];
     originator = req.headers["originator"];
