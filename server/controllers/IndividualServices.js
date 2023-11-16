@@ -93,12 +93,12 @@ module.exports.provideMacTableOfSpecificDevice = async function provideMacTableO
   await IndividualServices.provideMacTableOfSpecificDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney, req.url)
     .then(async function (responseBody) {
       responseBodyToDocument = responseBody;
-      let responseHeader = await restResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
-      restResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
+      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
+      ResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
      })
     .catch(async function (responseBody) {
-      let responseHeader = await restResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
-      let sentResp = restResponseBuilder.buildResponse(res, undefined, responseBody, responseHeader);
+      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
+      let sentResp = ResponseBuilder.buildResponse(res, undefined, responseBody, responseHeader);
       responseCode = sentResp.code;
       responseBodyToDocument = sentResp.body;
     });
@@ -112,12 +112,12 @@ module.exports.readCurrentMacTableFromDevice = async function readCurrentMacTabl
   await IndividualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney, req.url)
     .then(async function (responseBody) {
       responseBodyToDocument = responseBody;
-      let responseHeader = await restResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
-      restResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
+      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
+      ResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
     })
     .catch(async function (responseBody) {
-      let responseHeader = await restResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
-      let sentResp = restResponseBuilder.buildResponse(res, undefined, responseBody, responseHeader);
+      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
+      let sentResp = ResponseBuilder.buildResponse(res, undefined, responseBody, responseHeader);
       responseCode = sentResp.code;
       responseBodyToDocument = sentResp.body;
     });
