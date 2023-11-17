@@ -55,11 +55,11 @@ async function sendRequest(device) {
             'node-id': device['node-id']
         };
     } catch (error) {
+        console.error(`Error during REST call for device:`, error.message);
         return {
             'ret': error,
             'node-id': device['node-id']
         };
-        console.error(`Error during REST call for device:`, error.message);
     }
 }  
 
