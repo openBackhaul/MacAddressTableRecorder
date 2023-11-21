@@ -17,32 +17,9 @@ let lastDeviceListIndex = -1;
 let print_log_level = 2;
 
 
-/**
- * REST request simulator with random delay
- */
-/*async function sendRequest(device) {
-    try {
-        let ret = await individualServices.getLiveControlConstruct('/core-model-1-4:network-control-domain=live/control-construct=' + device['node-id'])
-        return {
-            'ret': ret,
-            'node-id': device['node-id']
-        };
-    } catch (error) {
-        console.error(`Errore nella chiamata REST per il dispositivo ${device.node_id}:`, error.message);
-        debugger;
-    }
-}*/
-
-async function sendRequest(device) {
+async function sendRequest(device, user, originator, xCorrelator, traceIndicator, customerJourney) {
 
     let ret;
-
-    //TO FIX  
-    let user = "User Name";
-    let originator = "Resolver";
-    let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
-    let traceIndicator = "1.3.1";
-    let customerJourney = "Unknown value";
 
     const body = {
         "mount-name": device['node-id']
@@ -51,17 +28,16 @@ async function sendRequest(device) {
     try {
         ret = await individualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney);
         return {
-            'ret': ret,
+            'ret': { 'code': 200, 'message': 'Correctly Managed' },
             'node-id': device['node-id']
         };
     } catch (error) {
-        console.error(`Error during REST call for device:`, error.message);
         return {
-            'ret': error,
+            'ret': { 'code': error.code, 'message': error.message },
             'node-id': device['node-id']
         };
     }
-}  
+}
 
 /**
  * Returns a device object for the sliding window adding timeout informations
@@ -252,9 +228,17 @@ async function requestMessage(index) {
             return;
         }
 
-        sendRequest(slidingWindow[index]).then(retObj => {            
-            if (retObj.ret.code !== 200) {
-            //errore    
+        //TO FIX  
+        let user = "User Name";
+        let originator = "Resolver";
+        let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
+        let traceIndicator = "1.3.1";
+        let customerJourney = "Unknown value";
+
+
+        sendRequest(slidingWindow[index], user, originator, xCorrelator, traceIndicator, customerJourney).then(retObj => {
+            if (retObj.ret.code != 200) {
+                //errore    
                 let elementIndex = checkDeviceExistsInSlidingWindow(retObj['node-id']);
                 if (slidingWindow[elementIndex].retries == 0) {
                     printLog('Error (' + retObj.ret.code + ' - ' + retObj.ret.message + ') from element (II time) ' + retObj['node-id'] + ' --> Dropped from Sliding Window', print_log_level >= 2);
@@ -324,9 +308,8 @@ module.exports.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr 
     let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
     let traceIndicator = "1.3.1";
     let customerJourney = "Unknown value";
-    let body = "";
 
-    let deviceListMount = await individualServices.updateCurrentConnectedEquipment(body, user, originator, xCorrelator, traceIndicator, customerJourney);
+    let deviceListMount = await individualServices.updateCurrentConnectedEquipment(user, originator, xCorrelator, traceIndicator, customerJourney);
     deviceList = deviceListMount['mountName-list'];
 
     slidingWindowSize = (slidingWindowSizeDb > deviceList.length) ? deviceList.length : slidingWindowSizeDb;
