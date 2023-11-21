@@ -5,6 +5,200 @@ info:
 servers:
   - url: /
 paths:
+  /v1/test-mac-address-data:
+    post:
+      tags:
+        - IndividualServices
+      summary: Generic Test function for MATR
+      operationId: testMacAddressData
+      parameters:
+        - name: user
+          in: header
+          description: User identifier from the system starting the service call
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: User Name
+        - name: originator
+          in: header
+          description: |
+            'Identification for the system consuming the API, as defined in
+             [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minLength: 3
+            type: string
+            example: Resolver
+        - name: x-correlator
+          in: header
+          description:
+            UUID for the service execution flow that allows to correlate
+            requests and responses
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 550e8400-e29b-11d4-a716-446655440000
+        - name: trace-indicator
+          in: header
+          description: Sequence of request numbers along the flow
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([0-9]+)(\\.([0-9]+))*$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 1.3.1
+        - name: customer-journey
+          in: header
+          description:
+            Holds information supporting customer’s journey to which the
+            execution applies
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: Unknown value
+      responses:
+        "204":
+          description: Process of embedding a new release initiated
+          headers:
+            x-correlator:
+              description:
+                UUID for the service execution flow that allows to correlate
+                requests and responses. Its value must be identical at the response
+                compared with its corresponding request
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: 550e8400-e29b-11d4-a716-446655440000
+            exec-time:
+              description:
+                "Value written by the service provider, reporting the total\
+                \ elapsed time for the execution, including all the additional processing\
+                \ needed to retrieve the data from the backend service. Expressed\
+                \ in milliseconds"
+              style: simple
+              explode: false
+              schema:
+                type: integer
+                example: 1100
+            backend-time:
+              description:
+                "Value written by the service provider, reporting the elapsed\
+                \ time for data retrieval from the backend (service invocation, database\
+                \ access…). Expressed in milliseconds"
+              style: simple
+              explode: false
+              schema:
+                type: integer
+                example: 850
+            life-cycle-state:
+              description: |
+                'Life cycle state of the consumed service find in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-0-op-s-im-000/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: EXPERIMENTAL
+                enum:
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
+        "500":
+          description: Response in case of errored service requests
+          headers:
+            x-correlator:
+              description:
+                UUID for the service execution flow that allows to correlate
+                requests and responses. Its value must be identical at the response
+                compared with its corresponding request
+              style: simple
+              explode: false
+              schema:
+                pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                type: string
+                example: 550e8400-e29b-11d4-a716-446655440000
+            exec-time:
+              description:
+                "Value written by the service provider, reporting the total\
+                \ elapsed time for the execution, including all the additional processing\
+                \ needed to retrieve the data from the backend service. Expressed\
+                \ in milliseconds"
+              style: simple
+              explode: false
+              schema:
+                type: integer
+                example: 1100
+            backend-time:
+              description:
+                "Value written by the service provider, reporting the elapsed\
+                \ time for data retrieval from the backend (service invocation, database\
+                \ access…). Expressed in milliseconds"
+              style: simple
+              explode: false
+              schema:
+                type: integer
+                example: 850
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorDescription"
+        default:
+          description: Response in case of errored service requests
+          headers:
+            x-correlator:
+              description:
+                UUID for the service execution flow that allows to correlate
+                requests and responses. Its value must be identical at the response
+                compared with its corresponding request
+              style: simple
+              explode: false
+              schema:
+                pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                type: string
+                example: 550e8400-e29b-11d4-a716-446655440000
+            exec-time:
+              description:
+                "Value written by the service provider, reporting the total\
+                \ elapsed time for the execution, including all the additional processing\
+                \ needed to retrieve the data from the backend service. Expressed\
+                \ in milliseconds"
+              style: simple
+              explode: false
+              schema:
+                type: integer
+                example: 1100
+            backend-time:
+              description:
+                "Value written by the service provider, reporting the elapsed\
+                \ time for data retrieval from the backend (service invocation, database\
+                \ access…). Expressed in milliseconds"
+              style: simple
+              explode: false
+              schema:
+                type: integer
+                example: 850
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/errorDescription"
+      security:
+        - apiKeyAuth: []
+      x-swagger-router-controller: IndividualServices
   /v1/bequeath-your-data-and-die:
     post:
       tags:
@@ -60,7 +254,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -103,7 +297,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -153,7 +347,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -192,7 +386,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -231,7 +425,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -270,7 +464,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -309,7 +503,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -348,7 +542,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -413,7 +607,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -513,7 +707,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -562,7 +756,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -601,7 +795,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -640,7 +834,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -679,7 +873,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -718,7 +912,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -757,7 +951,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -821,7 +1015,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -879,7 +1073,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -928,7 +1122,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -967,7 +1161,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1006,7 +1200,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1045,7 +1239,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1084,7 +1278,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1123,7 +1317,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1189,7 +1383,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -1259,7 +1453,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1308,7 +1502,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1347,7 +1541,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1386,7 +1580,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1425,7 +1619,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1464,7 +1658,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1503,7 +1697,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -1571,7 +1765,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -1608,7 +1802,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -1680,7 +1874,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -1719,7 +1913,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -1758,7 +1952,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -1797,7 +1991,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -1836,7 +2030,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -1875,7 +2069,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -1943,7 +2137,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -1986,7 +2180,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2058,7 +2252,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2097,7 +2291,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2136,7 +2330,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2175,7 +2369,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2214,7 +2408,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2253,7 +2447,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2321,7 +2515,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -2366,7 +2560,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2421,7 +2615,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2471,7 +2665,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2510,7 +2704,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2549,7 +2743,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2588,7 +2782,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2627,7 +2821,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2666,7 +2860,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -2731,7 +2925,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -2791,7 +2985,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -2885,7 +3079,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -2924,7 +3118,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -2963,7 +3157,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3002,7 +3196,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3041,7 +3235,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3080,7 +3274,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3179,7 +3373,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3218,7 +3412,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3257,7 +3451,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3321,7 +3515,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -3389,7 +3583,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3455,7 +3649,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3494,7 +3688,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3533,7 +3727,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3572,7 +3766,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3611,7 +3805,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3650,7 +3844,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3755,7 +3949,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3794,7 +3988,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3833,7 +4027,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -3897,7 +4091,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -3992,7 +4186,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -4041,7 +4235,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -4080,7 +4274,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -4119,7 +4313,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -4158,7 +4352,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -4197,7 +4391,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -4236,7 +4430,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -4306,7 +4500,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -4351,7 +4545,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4419,7 +4613,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4458,7 +4652,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4497,7 +4691,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4536,7 +4730,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4575,7 +4769,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4614,7 +4808,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4684,7 +4878,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -4729,7 +4923,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4783,7 +4977,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4822,7 +5016,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4861,7 +5055,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4900,7 +5094,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4939,7 +5133,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -4978,7 +5172,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5047,7 +5241,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -5105,7 +5299,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5155,7 +5349,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5194,7 +5388,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5233,7 +5427,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5272,7 +5466,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5311,7 +5505,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5350,7 +5544,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5415,7 +5609,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -5544,7 +5738,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -5593,7 +5787,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -5632,7 +5826,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -5671,7 +5865,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -5710,7 +5904,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -5749,7 +5943,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -5817,7 +6011,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -5860,7 +6054,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5910,7 +6104,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5949,7 +6143,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -5988,7 +6182,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -6027,7 +6221,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -6066,7 +6260,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -6105,7 +6299,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -6170,7 +6364,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -6258,7 +6452,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6308,7 +6502,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6347,7 +6541,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6386,7 +6580,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6425,7 +6619,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6464,7 +6658,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6503,7 +6697,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6567,7 +6761,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -6616,7 +6810,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6693,7 +6887,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6732,7 +6926,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6771,7 +6965,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6810,7 +7004,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6849,7 +7043,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6888,7 +7082,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -6952,7 +7146,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -6989,7 +7183,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7055,7 +7249,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7094,7 +7288,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7133,7 +7327,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7172,7 +7366,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7211,7 +7405,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7250,7 +7444,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7314,7 +7508,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -7365,7 +7559,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7414,7 +7608,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7453,7 +7647,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7492,7 +7686,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7531,7 +7725,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7570,7 +7764,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7609,7 +7803,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -7677,7 +7871,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -7722,7 +7916,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -7772,7 +7966,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -7811,7 +8005,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -7850,7 +8044,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -7889,7 +8083,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -7928,7 +8122,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -7967,7 +8161,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -8032,7 +8226,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -8151,7 +8345,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -8200,7 +8394,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -8239,7 +8433,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -8278,7 +8472,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -8317,7 +8511,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -8356,7 +8550,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -8395,7 +8589,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -8463,7 +8657,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -8506,7 +8700,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -8556,7 +8750,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -8595,7 +8789,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -8634,7 +8828,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -8673,7 +8867,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -8712,7 +8906,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -8751,7 +8945,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -8816,7 +9010,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -8918,7 +9112,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -8967,7 +9161,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -9006,7 +9200,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -9045,7 +9239,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -9084,7 +9278,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -9123,7 +9317,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -9162,7 +9356,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -9230,7 +9424,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -9273,7 +9467,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9323,7 +9517,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9362,7 +9556,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9401,7 +9595,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9440,7 +9634,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9479,7 +9673,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9518,7 +9712,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9586,7 +9780,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -9629,7 +9823,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9679,7 +9873,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9718,7 +9912,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9757,7 +9951,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9796,7 +9990,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9835,7 +10029,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9874,7 +10068,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -9939,7 +10133,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -10012,7 +10206,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -10088,7 +10282,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -10127,7 +10321,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -10166,7 +10360,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -10205,7 +10399,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -10244,7 +10438,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -10283,7 +10477,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -10353,7 +10547,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -10396,7 +10590,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10446,7 +10640,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10485,7 +10679,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10524,7 +10718,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10563,7 +10757,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10602,7 +10796,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10641,7 +10835,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10709,7 +10903,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -10746,7 +10940,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10800,7 +10994,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10839,7 +11033,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10878,7 +11072,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10917,7 +11111,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10956,7 +11150,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -10995,7 +11189,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -11065,7 +11259,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -11110,7 +11304,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -11164,7 +11358,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -11203,7 +11397,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -11242,7 +11436,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -11281,7 +11475,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -11320,7 +11514,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -11359,7 +11553,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -11427,7 +11621,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -11470,7 +11664,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11519,7 +11713,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11558,7 +11752,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11597,7 +11791,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11636,7 +11830,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11675,7 +11869,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11714,7 +11908,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11781,7 +11975,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -11831,7 +12025,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11880,7 +12074,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11919,7 +12113,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11958,7 +12152,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -11997,7 +12191,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12036,7 +12230,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12075,7 +12269,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12142,7 +12336,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -12233,7 +12427,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12282,7 +12476,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12321,7 +12515,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12360,7 +12554,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12399,7 +12593,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12438,7 +12632,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12477,7 +12671,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12544,7 +12738,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -12612,7 +12806,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12661,7 +12855,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12700,7 +12894,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12739,7 +12933,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12778,7 +12972,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12817,7 +13011,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12856,7 +13050,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -12923,7 +13117,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -12977,7 +13171,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13026,7 +13220,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13065,7 +13259,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13104,7 +13298,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13143,7 +13337,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13182,7 +13376,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13221,7 +13415,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13288,7 +13482,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -13331,7 +13525,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13380,7 +13574,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13419,7 +13613,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13458,7 +13652,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13497,7 +13691,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13536,7 +13730,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13575,7 +13769,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13642,7 +13836,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -13692,7 +13886,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13741,7 +13935,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13780,7 +13974,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13819,7 +14013,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13858,7 +14052,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13897,7 +14091,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -13936,7 +14130,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14003,7 +14197,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -14094,7 +14288,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14143,7 +14337,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14182,7 +14376,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14221,7 +14415,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14260,7 +14454,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14299,7 +14493,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14338,7 +14532,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14405,7 +14599,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -14477,7 +14671,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14526,7 +14720,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14565,7 +14759,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14604,7 +14798,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14643,7 +14837,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14682,7 +14876,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14721,7 +14915,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14788,7 +14982,7 @@ paths:
                 - name: customer-journey
                   in: header
                   description:
-                    Holds information supporting customerâ€™s journey to which
+                    Holds information supporting customer’s journey to which
                     the execution applies
                   required: true
                   style: simple
@@ -14842,7 +15036,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14891,7 +15085,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14930,7 +15124,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -14969,7 +15163,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -15008,7 +15202,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -15047,7 +15241,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -15086,7 +15280,7 @@ paths:
                       description:
                         "Value written by the service provider, reporting\
                         \ the elapsed time for data retrieval from the backend (service\
-                        \ invocation, database accessâ€¦). Expressed in milliseconds"
+                        \ invocation, database access…). Expressed in milliseconds"
                       style: simple
                       explode: false
                       schema:
@@ -15154,7 +15348,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -15197,7 +15391,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15247,7 +15441,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15286,7 +15480,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15325,7 +15519,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15364,7 +15558,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15403,7 +15597,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15442,7 +15636,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15512,7 +15706,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -15555,7 +15749,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15605,7 +15799,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15644,7 +15838,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15683,7 +15877,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15722,7 +15916,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15761,7 +15955,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15800,7 +15994,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15868,7 +16062,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -15905,7 +16099,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15959,7 +16153,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -15998,7 +16192,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16037,7 +16231,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16076,7 +16270,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16115,7 +16309,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16181,7 +16375,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -16218,7 +16412,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16272,7 +16466,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16311,7 +16505,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16350,7 +16544,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16389,7 +16583,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16455,7 +16649,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -16492,7 +16686,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16546,7 +16740,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16585,7 +16779,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16624,7 +16818,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16663,7 +16857,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16729,7 +16923,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -16766,7 +16960,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16828,7 +17022,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16867,7 +17061,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16906,7 +17100,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -16945,7 +17139,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -17011,7 +17205,7 @@ paths:
         - name: customer-journey
           in: header
           description:
-            Holds information supporting customerâ€™s journey to which the
+            Holds information supporting customer’s journey to which the
             execution applies
           required: true
           style: simple
@@ -17048,7 +17242,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -17102,7 +17296,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -17141,7 +17335,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -17180,7 +17374,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -17219,7 +17413,7 @@ paths:
               description:
                 "Value written by the service provider, reporting the elapsed\
                 \ time for data retrieval from the backend (service invocation, database\
-                \ accessâ€¦). Expressed in milliseconds"
+                \ access…). Expressed in milliseconds"
               style: simple
               explode: false
               schema:
@@ -25867,7 +26061,7 @@ components:
           description:
             "Value written by the service provider, reporting the elapsed\
             \ time for data retrieval from the backend (service invocation, database\
-            \ accessâ€¦). Expressed in milliseconds"
+            \ access…). Expressed in milliseconds"
           style: simple
           explode: false
           schema:
@@ -25937,7 +26131,7 @@ components:
       name: customer-journey
       in: header
       description:
-        Holds information supporting customerâ€™s journey to which the execution
+        Holds information supporting customer’s journey to which the execution
         applies
       required: true
       style: simple

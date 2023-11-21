@@ -4,6 +4,7 @@ const { strict } = require('assert');
 const { setTimeout } = require('timers');
 const path = require("path");
 const individualServices = require("./../../IndividualServicesService.js");
+const { elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
 
 const DEVICE_NOT_PRESENT = -1;
 let maximumNumberOfRetries = 1;
@@ -16,19 +17,25 @@ let lastDeviceListIndex = -1;
 let print_log_level = 2;
 
 
-/**
- * REST request simulator with random delay
- */
-async function sendRequest(device) {
+async function sendRequest(device, user, originator, xCorrelator, traceIndicator, customerJourney) {
+
+    let ret;
+
+    const body = {
+        "mount-name": device['node-id']
+    };
+
     try {
-        let ret = await individualServices.getLiveControlConstruct('/core-model-1-4:network-control-domain=live/control-construct=' + device['node-id'])
+        ret = await individualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney);
         return {
-            'ret': ret,
+            'ret': { 'code': 200, 'message': 'Correctly Managed' },
             'node-id': device['node-id']
         };
     } catch (error) {
-        console.error(`Errore nella chiamata REST per il dispositivo ${device.node_id}:`, error.message);
-        debugger;
+        return {
+            'ret': { 'code': error.code, 'message': error.message },
+            'node-id': device['node-id']
+        };
     }
 }
 
@@ -39,7 +46,7 @@ function prepareObjectForWindow(deviceListIndex) {
     try {
         let windowObject = {
             "index": deviceListIndex,
-            "node-id": deviceList[deviceListIndex]['node-id'],
+            "node-id": deviceList[deviceListIndex],
             "ttl": responseTimeout,
             "retries": maximumNumberOfRetries
         };
@@ -108,8 +115,8 @@ function addNextDeviceListElementInWindow() {
                 printLog('+++++ addNextDeviceListElementInWindow: newDeviceListIndex = -1 +++++', print_log_level >= 3)
                 return false
             }
-            if (checkDeviceExistsInSlidingWindow(deviceList[newDeviceListIndex]['node-id']) != DEVICE_NOT_PRESENT) {
-                printLog('+++++ Element ' + deviceList[newDeviceListIndex]['node-id'] + ' (indice: ' + newDeviceListIndex + ') already exists in Sliding Window +++++', print_log_level >= 3)
+            if (checkDeviceExistsInSlidingWindow(deviceList[newDeviceListIndex]) != DEVICE_NOT_PRESENT) {
+                printLog('+++++ Element ' + deviceList[newDeviceListIndex] + ' (indice: ' + newDeviceListIndex + ') already exists in Sliding Window +++++', print_log_level >= 3)
             } else {
                 slidingWindow.push(prepareObjectForWindow(newDeviceListIndex));
                 elementAdded = true;
@@ -128,7 +135,7 @@ function addNextDeviceListElementInWindow() {
 function discardElementFromDeviceList(nodeId) {
     try {
         for (let i = 0; i < deviceList.length; i++) {
-            if (deviceList[i]['node-id'] == nodeId) {
+            if (deviceList[i] == nodeId) {
                 deviceList.splice(i, 1);
                 if (lastDeviceListIndex > i) {
                     lastDeviceListIndex -= 1;
@@ -153,6 +160,16 @@ function printList(listName, list) {
     return listGraph;
 }
 
+
+function printListDevice(listName, list) {
+    let listGraph = listName + ': [';
+    for (let i = 0; i < list.length; i++) {
+        listGraph += (i < list.length - 1) ? (list[i] + '|') : list[i];
+    }
+    listGraph += "] (" + list.length + ")";
+    return listGraph;
+}
+
 /**
  * Prints a console log message only the print_log flag is enabled
  */
@@ -162,22 +179,6 @@ function printLog(text, print_log) {
     }
 }
 
-/**
- * Sets the timestamp to a deviceList element indexed by its node-id
- */
-function setDeviceListElementTimeStamp(node_id) {
-    try {
-        for (let i = 0; i < deviceList.length; i++) {
-            if (deviceList[i]['node-id'] == node_id) {
-                deviceList[i]['timestamp'] = Date.now();
-                return;
-            }
-        }
-    } catch (error) {
-        console.log("Error in setDeviceListElementTimeStamp (" + error + ")");
-        debugger;
-    }
-}
 
 /**
  * Timeout checking cycle
@@ -227,8 +228,17 @@ async function requestMessage(index) {
             return;
         }
 
-        sendRequest(slidingWindow[index]).then(retObj => {
-            if (retObj.ret.code !== undefined) {
+        //TO FIX  
+        let user = "User Name";
+        let originator = "Resolver";
+        let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
+        let traceIndicator = "1.3.1";
+        let customerJourney = "Unknown value";
+
+
+        sendRequest(slidingWindow[index], user, originator, xCorrelator, traceIndicator, customerJourney).then(retObj => {
+            if (retObj.ret.code != 200) {
+                //errore    
                 let elementIndex = checkDeviceExistsInSlidingWindow(retObj['node-id']);
                 if (slidingWindow[elementIndex].retries == 0) {
                     printLog('Error (' + retObj.ret.code + ' - ' + retObj.ret.message + ') from element (II time) ' + retObj['node-id'] + ' --> Dropped from Sliding Window', print_log_level >= 2);
@@ -245,6 +255,7 @@ async function requestMessage(index) {
                     requestMessage(elementIndex);
                 }
             } else {
+                //retrun OK 
                 printLog('****************************************************************************************************', print_log_level >= 2);
                 let elementIndex = checkDeviceExistsInSlidingWindow(retObj['node-id']);
                 if (elementIndex == DEVICE_NOT_PRESENT) {
@@ -252,10 +263,9 @@ async function requestMessage(index) {
                 } else {
                     printLog('Response from element ' + retObj['node-id'] + ' --> Dropped from Sliding Window. Timestamp: ' + Date.now(), print_log_level >= 2);
                     slidingWindow.splice(elementIndex, 1);
-                    setDeviceListElementTimeStamp(retObj['node-id']);
                     if (addNextDeviceListElementInWindow()) {
                         printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
-                        printLog(printList('Device List', deviceList), print_log_level >= 2);
+                        printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
                         printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
                         requestMessage(slidingWindow.length - 1);
                     }
@@ -269,163 +279,12 @@ async function requestMessage(index) {
     }
 }
 
-/**
- * Realigns the current device list with the new one 
- * 
- * newDeviceList is the new device list that update the old one. It's mandatory.
- */
-module.exports.deviceListSynchronization = async function deviceListSynchronization() {
-    try {
-        let newDeviceList = await individualServices.getLiveDeviceList();
-        if (newDeviceList == false) {
-            return false;
-        }
-
-        slidingWindowSize = (slidingWindowSizeDb > deviceList.length) ? deviceList.length : slidingWindowSizeDb;
-
-        printLog(printList('Device List', deviceList), print_log_level >= 2);
-        printLog('***************************************************************************', print_log_level >= 2);
-        printLog('*                       DEVICE LIST REALIGNMENT', print_log_level >= 2);
-        printLog('***************************************************************************', print_log_level >= 2);
-        printLog(printList('New Device List', newDeviceList), print_log_level >= 2);
-
-        // Drop all the sliding window elements not more present in new device list
-        for (let i = 0; i < slidingWindow.length;) {
-            let found = false;
-            for (let j = 0; j < newDeviceList.length; j++) {
-                if (slidingWindow[i]['node-id'] == newDeviceList[j]['node-id']) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                slidingWindow.splice(i, 1);
-            } else {
-                i++;
-            }
-        }
-
-        // Drop all the device list elements not more present in new device list
-        for (let i = 0; i < deviceList.length;) {
-            let found = false;
-            for (let j = 0; j < newDeviceList.length; j++) {
-                if (deviceList[i]['node-id'] == newDeviceList[j]['node-id']) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                deviceList.splice(i, 1);
-            } else {
-                i++;
-            }
-        }
-
-        // Drop all the device list and new device list elements present in sliding window
-        for (let i = 0; i < deviceList.length;) {
-            let found = false;
-            for (let j = 0; j < slidingWindow.length; j++) {
-                if (deviceList[i]['node-id'] == slidingWindow[j]['node-id']) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
-                deviceList.splice(i, 1);
-            } else {
-                i++;
-            }
-        }
-
-        // Drop all the new device list elements present in sliding window
-        for (let i = 0; i < newDeviceList.length;) {
-            let found = false;
-            for (let j = 0; j < slidingWindow.length; j++) {
-                if (newDeviceList[i]['node-id'] == slidingWindow[j]['node-id']) {
-                    found = true;
-                    break;
-                }
-            }
-            if (found) {
-                newDeviceList.splice(i, 1);
-            } else {
-                i++;
-            }
-        }
-
-        // Creation of a tail device list with all the elements from:
-        // (1) all the sliding window elements (waiting a response)
-        // (2) device list with defined time stamp not present in device list sorted ascending
-        let tailDeviceList = []
-        for (let i = 0; i < deviceList.length; i++) {
-            if (deviceList[i]['timestamp']) {
-                tailDeviceList.push(deviceList[i]);
-            }
-        }
-        tailDeviceList.sort((a, b) => (a.timestamp - b.timestamp));
-        tailDeviceList = [].concat(tailDeviceList, slidingWindow);
-
-        // Creation of middle device list with all the new
-        // device list elements not present in device list
-        let middleDeviceList = [];
-        for (let i = 0; i < newDeviceList.length; i++) {
-            let found = false;
-            for (let j = 0; j < deviceList.length; j++) {
-                if (newDeviceList[i]['node-id'] == deviceList[j]['node-id']) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                middleDeviceList.push(newDeviceList[i]);
-            }
-        }
-
-        // Creation of head device list with all the 
-        // device list elements with timestamp not defined
-        let headDeviceList = [];
-        for (let i = 0; i < deviceList.length; i++) {
-            if (deviceList[i]['timestamp'] == undefined) {
-                headDeviceList.push(deviceList[i]);
-            }
-        }
-
-        // Update the device list composing the three lists above
-        deviceList = [].concat(headDeviceList, middleDeviceList, tailDeviceList);
-        printLog(printList('Device List', deviceList), print_log_level >= 2);
-
-        // Fill the sliding window at the max allowed
-        let slidingWindowFilled = false
-        for (let i = slidingWindow.length; i < slidingWindowSize; i++) {
-            for (let j = 0; j < deviceList.length; j++) {
-                if (checkDeviceExistsInSlidingWindow(deviceList[j]['node-id']) == DEVICE_NOT_PRESENT) {
-                    slidingWindow.push(prepareObjectForWindow(j));
-                    lastDeviceListIndex = j;
-                    printLog('Filled sliding window with ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' then send request...', print_log_level >= 2);
-                    printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
-                    requestMessage(slidingWindow.length - 1);
-                    slidingWindowFilled = true;
-                    break;
-                }
-            }
-        }
-        if (!slidingWindowFilled) {
-            lastDeviceListIndex = -1;
-        }
-        return true;
-    } catch (error) {
-        console.log('Error in realignDeviceList: ' + error);
-        debugger;
-    }
-}
-
 
 async function extractProfileConfiguration(uuid) {
     const profileCollection = require('onf-core-model-ap/applicationPattern/onfModel/models/ProfileCollection');
     const profile = await profileCollection.getProfileAsync(uuid)
     return profile["integer-profile-1-0:integer-profile-pac"]["integer-profile-configuration"]["integer-value"]
 }
-
 
 /**
  * Entry point function
@@ -435,15 +294,7 @@ async function extractProfileConfiguration(uuid) {
  * deviceList: list of devices in connected state. It's optional. If
  *             deviceList is present the procedure will starts immediatly
  **/
-module.exports.startCyclicProcess = async function startCyclicProcess(logging_level) {
-
-    // 0) eliminare il try in testa
-    // Testare la funzione nelle quattro combinazioni:
-    // 1) ODL non risponde
-    // 2) ODL risponde
-    // 3) ES DL non esiste --> la sovrascrivo
-    // 4) ES esiste quindi effettuo il comparison (in una versione futura)
-    // 
+module.exports.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr = async function (logging_level) {
 
     slidingWindowSizeDb = await extractProfileConfiguration("matr-1-0-0-integer-p-000")
     responseTimeout = await extractProfileConfiguration("matr-1-0-0-integer-p-001")
@@ -451,33 +302,16 @@ module.exports.startCyclicProcess = async function startCyclicProcess(logging_le
 
     print_log_level = logging_level;
 
-    let odlDeviceList;
-
     //TO FIX  
     let user = "User Name";
     let originator = "Resolver";
     let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
     let traceIndicator = "1.3.1";
     let customerJourney = "Unknown value";
-    let body = "";
-   
-    let operationNameAndOperationKey =
-        await individualServices.embeddingCausesRequestForListOfDevicesAtMwdi(body, user, originator, xCorrelator, traceIndicator, customerJourney);
 
-    /*    
-    try {
-        odlDeviceList = await individualServices.getLiveDeviceList();
-    } catch (error) {
-        console.log(error);
-        return;
-    }
+    let deviceListMount = await individualServices.updateCurrentConnectedEquipment(user, originator, xCorrelator, traceIndicator, customerJourney);
+    deviceList = deviceListMount['mountName-list'];
 
-    odlDeviceList = filterConnectedDevices(odlDeviceList);
-    printLog(printList('Device List (ODL)', odlDeviceList), print_log_level >= 1);
-
-
-    //the macaddress data into es will be deleted before write new macaddress data    
-    deviceList = odlDeviceList;
     slidingWindowSize = (slidingWindowSizeDb > deviceList.length) ? deviceList.length : slidingWindowSizeDb;
 
     lastDeviceListIndex = -1;
@@ -488,6 +322,6 @@ module.exports.startCyclicProcess = async function startCyclicProcess(logging_le
     }
 
     printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
-    startTtlChecking();*/
+    startTtlChecking();
     return true;
 }
