@@ -440,7 +440,7 @@ forwardings:
       - server-name: /v1/read-current-mac-table-from-device
         uuid: matr-1-0-0-op-s-is-002
     consequent-requests:
-      - client-name: MicroWaveDeviceInventory://rests/data/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/core-model-1-4:control-construct?fields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))
+      - client-name: MicroWaveDeviceInventory://core-model-1-4:network-control-domain=cache/control-construct={mount-name}?fields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))
         uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-002
 
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice
