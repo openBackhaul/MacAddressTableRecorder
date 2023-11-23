@@ -935,7 +935,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
 
 //STEP 3
 async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(mountName, body, user, originator, xCorrelator, traceIndicator, customerJourney) {
-  let additionaResponse;
+  let additionaResponse = {};
   try {
 
     if (body == "LTP-MNGT") {
@@ -1003,18 +1003,12 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
         headers: httpRequestHeader
       });
 
-      let data = response.data['core-model-1-4:logical-termination-point'][0]['name'];
+      let data = response.data['ltp-augment-1-0:ltp-augment-pac']['original-ltp-name'];
 
       if (data !== null && data !== undefined) {
-        // Find element with "value-name" equal to "ltpName"
-        var desiredItem = data.find(item => item["value-name"] === "ltpName");
-
-        // Get the value
-        var nameLtp = desiredItem ? desiredItem["value"] : undefined;
-
         additionaResponse = {
           'egress-ltp': body,
-          'original-ltp-name': nameLtp
+          'original-ltp-name': data
         };
       }
       else {
@@ -1335,7 +1329,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           getOriginalLtpName(step3DataArray, step2Data['egress-ltp']),
           step2Data['vlan-id'],
           step2Data['mac-address'],
-          "2010-11-20T14:00:00+01:00");
+          "1111111111");
         macAddressArray.push(entry);
       });
 
