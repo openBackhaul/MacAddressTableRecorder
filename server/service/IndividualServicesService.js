@@ -683,13 +683,21 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
 };
 
 
+function formatTimestamp(timestamp) {
+  if (isNaN(timestamp) || timestamp < 0 || timestamp > 9999999999999) {
+    return "Invalid Timestamp";
+  }
+
+  const date = new Date(timestamp);
+  return date.toISOString();
+}
+
 const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async function (body) {
   return new Promise(async function (resolve, reject) {
     let client = await elasticsearchService.getClient(false);
 
     try {
       let mountName = body['mount-name'];
-
 
       let res2 = await client.get({
         index: '6',
@@ -698,10 +706,18 @@ const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async f
 
       var source = res2.body._source['mac-address'];
 
+      const formattedEntries = source.map(entry => {
+        return {
+          ...entry,
+          "time-stamp-of-data": formatTimestamp(entry["time-stamp-of-data"])
+        };
+      });
+
       var response = {};
       response['application/json'] = {
-        'mac-address': source
+        'mac-address': formattedEntries
       };
+
 
       if (Object.keys(response).length > 0) {
         resolve(response['application/json']['mac-address']);
@@ -1320,7 +1336,10 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
         throw (customError);
       }
 
-      //TO FIX: Timestamp
+      // Get the current timestamp in milliseconds
+      const timestamp = new Date().getTime();
+
+
       step2DataArray.forEach((step2Data, index) => {
         const entry = createMacAddressEntry(
           mountName,
@@ -1329,7 +1348,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           getOriginalLtpName(step3DataArray, step2Data['egress-ltp']),
           step2Data['vlan-id'],
           step2Data['mac-address'],
-          "1111111111");
+          timestamp);
         macAddressArray.push(entry);
       });
 
