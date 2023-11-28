@@ -219,7 +219,7 @@ const RequestForListOfConnectedEquipmentFromElasticSearch = async function () {
       }
 
     } catch (error) {
-      reject(error);
+      resolve(null);
     }
 
   });
