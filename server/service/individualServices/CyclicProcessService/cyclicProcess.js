@@ -33,7 +33,7 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
         };
     } catch (error) {
         return {
-            'ret': { 'code': error.code, 'message': error.message },
+            'ret': { 'code': 500, 'message': error.message },
             'node-id': device['node-id']
         };
     }
@@ -309,19 +309,24 @@ module.exports.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr 
     let traceIndicator = "1.3.1";
     let customerJourney = "Unknown value";
 
-    let deviceListMount = await individualServices.updateCurrentConnectedEquipment(user, originator, xCorrelator, traceIndicator, customerJourney);
-    deviceList = deviceListMount['mountName-list'];
+    try {
+        let deviceListMount = await individualServices.updateCurrentConnectedEquipment(user, originator, xCorrelator, traceIndicator, customerJourney);
+        deviceList = deviceListMount['mountName-list'];
 
-    slidingWindowSize = (slidingWindowSizeDb > deviceList.length) ? deviceList.length : slidingWindowSizeDb;
+        slidingWindowSize = (slidingWindowSizeDb > deviceList.length) ? deviceList.length : slidingWindowSizeDb;
 
-    lastDeviceListIndex = -1;
-    for (let i = 0; i < slidingWindowSize; i++) {
-        addNextDeviceListElementInWindow();
-        requestMessage(i);
-        printLog('Element ' + slidingWindow[i]['node-id'] + ' send request...', print_log_level >= 2);
+        lastDeviceListIndex = -1;
+        for (let i = 0; i < slidingWindowSize; i++) {
+            addNextDeviceListElementInWindow();
+            requestMessage(i);
+            printLog('Element ' + slidingWindow[i]['node-id'] + ' send request...', print_log_level >= 2);
+        }
+
+        printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
+        startTtlChecking();
+        return true;
     }
-
-    printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
-    startTtlChecking();
-    return true;
+    catch (error) {
+        console.error("Error on MATR cycle");
+    }
 }
