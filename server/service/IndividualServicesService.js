@@ -643,6 +643,7 @@ const PromptForProvidingAllMacTablesCausesReadingFromElasticSearch = async funct
         const source = hit._source['mac-address'];
 
         for (const element of source) {
+          element["time-stamp-of-data"] = formatTimestamp(element["time-stamp-of-data"]);
           response['application/json'].push(element);
         }
       }
