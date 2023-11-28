@@ -1,4 +1,4 @@
-//const cp = require('./service/individualServices/CyclicProcessService/cyclicProcess');
+const cp = require('./service/individualServices/CyclicProcessService/cyclicProcess');
 
 'use strict';
 
@@ -41,6 +41,6 @@ prepareElasticsearch().catch(err => {
         });
         //appCommons.performApplicationRegistration();
 
-        //cp.startCyclicProcess(2);
+        cp.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr(2);
     }
 );
