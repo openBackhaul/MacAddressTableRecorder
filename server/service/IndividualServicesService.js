@@ -219,7 +219,7 @@ const RequestForListOfConnectedEquipmentFromElasticSearch = async function () {
       }
 
     } catch (error) {
-      resolve(null);
+      reject(error);
     }
 
   });
@@ -229,20 +229,25 @@ const RequestForListOfConnectedEquipmentFromElasticSearch = async function () {
 
 const RequestForWriteListConnectedEquipmentIntoElasticSearch = async function (body) {
   return new Promise(async function (resolve, reject) {
-    //let indexAlias = await getIndexAliasAsync();
-    let client = await elasticsearchService.getClient(false);
+    try {
+      //let indexAlias = await getIndexAliasAsync();
+      let client = await elasticsearchService.getClient(false);
 
-    let result = await client.index({
-      index: 6,
-      id: 'mountName-list',
-      body: body
-    });
+      let result = await client.index({
+        index: 6,
+        id: 'mountName-list',
+        body: body
+      });
 
 
-    if (Object.keys(result).length > 0) {
-      resolve(result);
-    } else {
-      resolve();
+      if (Object.keys(result).length > 0) {
+        resolve(result);
+      } else {
+        resolve();
+      }
+    }
+    catch (error) {
+      reject(error)
     }
   });
 };
@@ -250,20 +255,25 @@ const RequestForWriteListConnectedEquipmentIntoElasticSearch = async function (b
 
 const RequestForDeleteEquipmentIntoElasticSearch = async function (mountName) {
   return new Promise(async function (resolve, reject) {
-    //let indexAlias = await getIndexAliasAsync();
-    let client = await elasticsearchService.getClient(false);
+    try {
+      //let indexAlias = await getIndexAliasAsync();
+      let client = await elasticsearchService.getClient(false);
 
-    let result = await client.delete({
-      index: 6,
-      id: mountName
-    });
+      let result = await client.delete({
+        index: 6,
+        id: mountName
+      });
 
-    resolve(result);
-
-    if (Object.keys(result).length > 0) {
       resolve(result);
-    } else {
-      resolve();
+
+      if (Object.keys(result).length > 0) {
+        resolve(result);
+      } else {
+        resolve();
+      }
+    }
+    catch (error) {
+      reject(error)
     }
   });
 };
@@ -345,6 +355,14 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
       //"mountName - list" from ES
       let oldConnectedListFromES = await RequestForListOfConnectedEquipmentFromElasticSearch();
 
+      try {
+        //MIDW applicationInfo
+        let MIDWApplicationInfo = await EmbeddingCausesRequestForListOfApplicationsAtRo(user, originator, xCorrelator, traceIndicator, customerJourney);
+      }
+      catch {
+        console.error('MIDW application is not registered. Skypping');
+      }
+
       //mountName - list from network/Mwdi
       let newConnectedListFromMwdi = await EmbeddingCausesRequestForListOfDevicesAtMwdi(user, originator, xCorrelator, traceIndicator, customerJourney);
 
@@ -356,7 +374,6 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         console.log("Number of disconnected equipment:" + listDisconnectedEq + "=> remove mac-adress data from ES");
 
         //remove mac-address data in ES of equipment that are that are no longer connected  
-
         if (Array.isArray(listDisconnectedEq)) {
           for (const elementToRemove of listDisconnectedEq) {
             const mountName = listES.indexOf(elementToRemove);
@@ -370,12 +387,101 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
       }
       resolve(newConnectedListFromMwdi);
     }
-    catch(error)
-    {
-       reject(error);
+    catch (error) {
+      reject(error);
     }
   });
 }
+
+
+
+const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
+  return new Promise(async function (resolve, reject) {
+    try {
+
+      let applicationNameAndHttpClient =
+        await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
+
+      let operationNameAndOperationKey =
+        await resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
+
+      let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
+      let applicationName = applicationNameAndHttpClient.applicationName;
+      let operationName = operationNameAndOperationKey.operationName;
+      let operationKey = operationNameAndOperationKey.operationKey;
+
+      let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+      let ltpTcpUuid;
+      for (const ltp of logicalTerminationPointListTCP) {
+        const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
+        if (applicationNameAndHttpClient.httpClientLtpUuid === clientLtp[0]) {
+          ltpTcpUuid = ltp[onfAttributes.GLOBAL_CLASS.UUID];
+        }
+      }
+
+      let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
+      let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
+
+      let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
+      console.log("url = " + finalUrl);
+
+      //TO FIX
+      let auth = "Basic YWRtaW46YWRtaW4=";
+
+      let httpRequestHeader = new RequestHeader(
+        user,
+        originator,
+        xCorrelator,
+        traceIndicator,
+        customerJourney,
+        operationKey
+      );
+
+      let httpRequestHeaderAuth = {
+        "content-type": httpRequestHeader['contentType'],
+        "user": httpRequestHeader['user'],
+        "originator": httpRequestHeader['originator'],
+        "x-correlator": httpRequestHeader['xCorrelator'],
+        "trace-indicator": httpRequestHeader['traceIndicator'],
+        "customer-journey": httpRequestHeader['customerJourney'],
+        "operation-key": httpRequestHeader['operationKey'],
+        "Authorization": auth
+      };
+
+      httpRequestHeaderAuth = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
+
+      //empty body
+      let body = {
+        "input":
+          {}
+      };
+
+      try {
+        let response = await axios.post(finalUrl, body, {
+          headers: httpRequestHeaderAuth
+        });
+
+        const result = response.data
+          .filter(item => item['application-name'] === 'MicroWaveDeviceInventory')
+          .map(item => ({ port: item.port, ipAddress: item.address['ip-address']['ipv-4-address'] }));
+
+        //check if MIDW is present
+        if (result != null)
+          resolve(result);
+        else
+          resolve(null);
+
+      } catch (error) {
+        reject(error);
+      }
+
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+
 
 const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
@@ -451,11 +557,11 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
         response.data
         resolve(response.data);
       } catch (error) {
-        throw error;
+        resolve(error);
       }
 
     } catch (error) {
-      throw error;
+      resolve(error);
     }
   });
 };
