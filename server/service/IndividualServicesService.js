@@ -271,8 +271,10 @@ const RequestForDeleteEquipmentIntoElasticSearch = async function (mountName) {
       } else {
         resolve();
       }
+      console.log('Remove mountName={' + mountName + '}');
     }
     catch (error) {
+      console.error('Failed to remove mountName={' + mountName + '}');
       reject(error)
     }
   });
@@ -298,7 +300,7 @@ const findNotConnectedElements = async function (listJsonES, listJsonMD) {
         if (missingElements.length > 0) {
           // Create a new JSON object with the result
           const resultJSON = {
-            "mountName - list": missingElements
+            "mountName-list": missingElements
           };
           resolve(resultJSON);
         }
@@ -369,22 +371,23 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
       //list of equipment that was connected (mac-address data in ES) but now that are not connected
       const listJsonDisconnectedEq = await findNotConnectedElements(oldConnectedListFromES, newConnectedListFromMwdi);
 
-      if (listJsonDisconnectedEq != null) {
-        listDisconnectedEq = listJsonDisconnectedEq["mountName-list"];
-        console.log("Number of disconnected equipment:" + listDisconnectedEq + "=> remove mac-adress data from ES");
-
-        //remove mac-address data in ES of equipment that are that are no longer connected  
-        if (Array.isArray(listDisconnectedEq)) {
-          for (const elementToRemove of listDisconnectedEq) {
-            const mountName = listES.indexOf(elementToRemove);
-            RequestForDeleteEquipmentIntoElasticSearch(mountName);
-          }
-        }
-      }
       //Write new "mountName - list" list into ES
       if (areEqualArray(oldConnectedListFromES, newConnectedListFromMwdi) == false) {
         result = await RequestForWriteListConnectedEquipmentIntoElasticSearch(newConnectedListFromMwdi);
       }
+
+      if (listJsonDisconnectedEq != null) {
+        listDisconnectedEq = listJsonDisconnectedEq["mountName-list"];
+        console.log("Number of disconnected equipment:" + listDisconnectedEq.length + "=> remove mac-adress data from ES");
+
+        //remove mac-address data in ES of equipment that are that are no longer connected  
+        if (Array.isArray(listDisconnectedEq)) {
+          for (const elementToRemove of listDisconnectedEq) {
+            RequestForDeleteEquipmentIntoElasticSearch(elementToRemove);
+          }
+        }
+      }
+      
       resolve(newConnectedListFromMwdi);
     }
     catch (error) {
@@ -516,9 +519,6 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
       //TO FIX
       let auth = "Basic YWRtaW46YWRtaW4=";
 
-      if (operationKey === 'Operation key not yet provided.')
-        operationKey = "siaeTest";
-
 
       let httpRequestHeader = new RequestHeader(
         user,
@@ -554,7 +554,6 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
         });
 
         console.log("Number of connected devices = " + response.data['mountName-list'].length);
-        response.data
         resolve(response.data);
       } catch (error) {
         resolve(error);
