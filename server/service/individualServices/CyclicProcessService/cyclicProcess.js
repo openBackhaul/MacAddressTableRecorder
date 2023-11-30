@@ -15,6 +15,9 @@ let slidingWindow = [];
 let deviceList = [];
 let lastDeviceListIndex = -1;
 let print_log_level = 2;
+let stop = false;
+var handle = 0;
+
 
 
 async function sendRequest(device, user, originator, xCorrelator, traceIndicator, customerJourney) {
@@ -87,6 +90,7 @@ function getNextDeviceListIndex() {
             lastDeviceListIndex = -1;
         } else if (lastDeviceListIndex >= (deviceList.length - 1)) {
             lastDeviceListIndex = 0;
+            stop = true;
         } else {
             lastDeviceListIndex += 1;
         }
@@ -115,13 +119,21 @@ function addNextDeviceListElementInWindow() {
                 printLog('+++++ addNextDeviceListElementInWindow: newDeviceListIndex = -1 +++++', print_log_level >= 3)
                 return false
             }
-            if (checkDeviceExistsInSlidingWindow(deviceList[newDeviceListIndex]) != DEVICE_NOT_PRESENT) {
-                printLog('+++++ Element ' + deviceList[newDeviceListIndex] + ' (indice: ' + newDeviceListIndex + ') already exists in Sliding Window +++++', print_log_level >= 3)
-            } else {
-                slidingWindow.push(prepareObjectForWindow(newDeviceListIndex));
-                elementAdded = true;
+
+            if (stop != true) {
+                if (checkDeviceExistsInSlidingWindow(deviceList[newDeviceListIndex]) != DEVICE_NOT_PRESENT) {
+                    printLog('+++++ Element ' + deviceList[newDeviceListIndex] + ' (indice: ' + newDeviceListIndex + ') already exists in Sliding Window +++++', print_log_level >= 3)
+                } else {
+                    slidingWindow.push(prepareObjectForWindow(newDeviceListIndex));
+                    elementAdded = true;
+                }
             }
+            else {
+                break;
+            }
+
         } while (!elementAdded);
+        return elementAdded;
         return true;
     } catch (error) {
         console.log("Error in addNextDeviceListElementInWindow (" + error + ")")
@@ -186,9 +198,9 @@ function printLog(text, print_log) {
  * When time-to-live achieves zero another request gets done and ttl reset to the original value.
  * When even all the retries achieve zero the sliding window element is discarded from both the lists.
  */
-async function startTtlChecking() {
+function startTtlChecking() {
     try {
-        async function upgradeTtl() {
+        function upgradeTtl() {
             for (let index = 0; index < slidingWindow.length; index++) {
                 slidingWindow[index].ttl -= 1;
                 if (slidingWindow[index].ttl == 0) {
@@ -200,6 +212,11 @@ async function startTtlChecking() {
                             printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
                             requestMessage(slidingWindow.length - 1);
                         }
+                        else {
+                            printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+                            printLog('Sliding Window IS EMPTY', print_log_level >= 1);
+                        }
+
                     } else {
                         slidingWindow[index].ttl = responseTimeout;
                         slidingWindow[index].retries -= 1;
@@ -208,8 +225,16 @@ async function startTtlChecking() {
                     }
                 }
             }
+            if (slidingWindow.length == 0) {
+                clearInterval(handle);
+                handle = 0; // I just do this so I know I've cleared the interval        
+                stop = false;    
+                MATRCycle(2);
+            }
         }
-        setInterval(upgradeTtl, 1000);
+
+        handle = setInterval(upgradeTtl, 1000);
+
     } catch (error) {
         console.log("Error in startTtlChecking (" + error + ")");
         debugger;
@@ -228,6 +253,10 @@ async function requestMessage(index) {
             return;
         }
 
+        if (slidingWindow.length == 0) {
+            return;
+        }
+
         //TO FIX  
         let user = "User Name";
         let originator = "Resolver";
@@ -240,22 +269,33 @@ async function requestMessage(index) {
             if (retObj.ret.code != 200) {
                 //errore    
                 let elementIndex = checkDeviceExistsInSlidingWindow(retObj['node-id']);
-                if (slidingWindow[elementIndex].retries == 0) {
-                    printLog('Error (' + retObj.ret.code + ' - ' + retObj.ret.message + ') from element (II time) ' + retObj['node-id'] + ' --> Dropped from Sliding Window', print_log_level >= 2);
-                    slidingWindow.splice(elementIndex, 1);
-                    if (addNextDeviceListElementInWindow()) {
-                        printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
-                        requestMessage(slidingWindow.length - 1);
+                if (elementIndex == DEVICE_NOT_PRESENT) {
+                    printLog('Response from element ' + retObj['node-id'] + ' not more present in Sliding Window. Ignore that.', print_log_level >= 2);
+                }
+                else {
+                    if (slidingWindow[elementIndex].retries == 0) {
+                        printLog('Error (' + retObj.ret.code + ' - ' + retObj.ret.message + ') from element (II time) ' + retObj['node-id'] + ' --> Dropped from Sliding Window', print_log_level >= 2);
+                        slidingWindow.splice(elementIndex, 1);
+                        if (addNextDeviceListElementInWindow()) {
+                            printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
+                            printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+                            printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
+                            requestMessage(slidingWindow.length - 1);
+                        }
+                        else {
+                            printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+                            printLog('Sliding Window IS EMPTY', print_log_level >= 1);
+                        }
+
+                    } else {
+                        printLog('Error (' + retObj.ret.code + ' - ' + retObj.ret.message + ') from element (I time) ' + retObj['node-id'] + ' Resend the request....', print_log_level >= 2);
+                        slidingWindow[elementIndex].ttl = responseTimeout;
+                        slidingWindow[elementIndex].retries -= 1;
+                        requestMessage(elementIndex);
                     }
-                    printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
-                } else {
-                    printLog('Error (' + retObj.ret.code + ' - ' + retObj.ret.message + ') from element (I time) ' + retObj['node-id'] + ' Resend the request....', print_log_level >= 2);
-                    slidingWindow[elementIndex].ttl = responseTimeout;
-                    slidingWindow[elementIndex].retries -= 1;
-                    requestMessage(elementIndex);
                 }
             } else {
-                //retrun OK 
+                //return OK 
                 printLog('****************************************************************************************************', print_log_level >= 2);
                 let elementIndex = checkDeviceExistsInSlidingWindow(retObj['node-id']);
                 if (elementIndex == DEVICE_NOT_PRESENT) {
@@ -264,11 +304,16 @@ async function requestMessage(index) {
                     printLog('Response from element ' + retObj['node-id'] + ' --> Dropped from Sliding Window. Timestamp: ' + Date.now(), print_log_level >= 2);
                     slidingWindow.splice(elementIndex, 1);
                     if (addNextDeviceListElementInWindow()) {
-                        printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
+                            printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
+                            printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+                            printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
+                            requestMessage(slidingWindow.length - 1);
+                    }
+                    else {
                         printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
                         printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
-                        requestMessage(slidingWindow.length - 1);
                     }
+
                 }
                 printLog('****************************************************************************************************', print_log_level >= 2);
             }
@@ -295,6 +340,16 @@ async function extractProfileConfiguration(uuid) {
  *             deviceList is present the procedure will starts immediatly
  **/
 module.exports.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr = async function (logging_level) {
+    MATRCycle(2);
+}
+
+async function MATRCycle(logging_level) {
+
+    printLog('*****************************************************************', print_log_level >= 1);
+    printLog('                                                                 ', print_log_level >= 1);
+    printLog('                       START MATR CYCLE                          ', print_log_level >= 1);
+    printLog('                                                                 ', print_log_level >= 1);
+    printLog('*****************************************************************', print_log_level >= 1);
 
     slidingWindowSizeDb = await extractProfileConfiguration("matr-1-0-0-integer-p-000")
     responseTimeout = await extractProfileConfiguration("matr-1-0-0-integer-p-001")
@@ -322,11 +377,10 @@ module.exports.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr 
             printLog('Element ' + slidingWindow[i]['node-id'] + ' send request...', print_log_level >= 2);
         }
 
-        printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
+        printLog(printList('Sliding Window - MAIN', slidingWindow), print_log_level >= 1);
         startTtlChecking();
-        return true;
     }
     catch (error) {
-        console.error("Error on MATR cycle");
+        console.error("Error on MATR cycle: " + error);
     }
 }
