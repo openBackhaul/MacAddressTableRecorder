@@ -292,7 +292,7 @@ const findNotConnectedElements = async function (listJsonES, listJsonMD) {
     else {
       listES = listJsonES["mountName-list"];
       if (listJsonMD != null) {
-        listMD = listJsonMD["mountName-list"];
+        listMD = listJsonMD["mount-name-list"];
 
         // Filter the elements present in listES but not in listMD
         let missingElements = listES.filter(element => !listMD.includes(element));
@@ -321,7 +321,7 @@ function areEqualArray(listJsonES, listJsonMD) {
   }
 
   if (listJsonMD != null) {
-    array2 = listJsonMD["mountName-list"];
+    array2 = listJsonMD["mount-name-list"];
   }
 
   if ((array1 != null) && (array2 != null)) {
@@ -553,7 +553,7 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
           headers: httpRequestHeaderAuth
         });
 
-        console.log("Number of connected devices = " + response.data['mountName-list'].length);
+        console.log("Number of connected devices = " + response.data['mount-name-list'].length);
         resolve(response.data);
       } catch (error) {
         resolve(error);
