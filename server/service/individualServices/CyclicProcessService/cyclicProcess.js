@@ -366,7 +366,7 @@ async function MATRCycle(logging_level) {
 
     try {
         let deviceListMount = await individualServices.updateCurrentConnectedEquipment(user, originator, xCorrelator, traceIndicator, customerJourney);
-        deviceList = deviceListMount['mountName-list'];
+        deviceList = deviceListMount['mount-name-list'];
 
         slidingWindowSize = (slidingWindowSizeDb > deviceList.length) ? deviceList.length : slidingWindowSizeDb;
 
