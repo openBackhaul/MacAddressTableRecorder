@@ -200,7 +200,7 @@ const RequestForListOfConnectedEquipmentFromElasticSearch = async function () {
     try {
       let result = await client.get({
         index: '6',
-        id: 'mountName-list'
+        id: 'mount-name-list'
       });
 
       let mergedArray = [];
@@ -209,7 +209,7 @@ const RequestForListOfConnectedEquipmentFromElasticSearch = async function () {
 
       var response = {};
       response['application/json'] = {
-        'mountName-list': mountList['mount-name-list']
+        'mount-name-list': mountList['mount-name-list']
       };
 
       if (Object.keys(response).length > 0) {
@@ -317,7 +317,7 @@ function areEqualArray(listJsonES, listJsonMD) {
   let array2 = null;
 
   if (listJsonES != null) {
-    array1 = listJsonES["mountName-list"];
+    array1 = listJsonES["mount-name-list"];
   }
 
   if (listJsonMD != null) {
@@ -384,7 +384,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
       }
 
       if (listJsonDisconnectedEq != null) {
-        listDisconnectedEq = listJsonDisconnectedEq["mountName-list"];
+        listDisconnectedEq = listJsonDisconnectedEq["mount-name-list"];
         console.log("Number of disconnected equipment:" + listDisconnectedEq.length + "=> remove mac-adress data from ES");
 
         //remove mac-address data in ES of equipment that are that are no longer connected  
