@@ -209,7 +209,7 @@ const RequestForListOfConnectedEquipmentFromElasticSearch = async function () {
 
       var response = {};
       response['application/json'] = {
-        'mountName-list': mountList['mountName-list']
+        'mountName-list': mountList['mount-name-list']
       };
 
       if (Object.keys(response).length > 0) {
@@ -235,7 +235,7 @@ const RequestForWriteListConnectedEquipmentIntoElasticSearch = async function (b
 
       let result = await client.index({
         index: 6,
-        id: 'mountName-list',
+        id: 'mount-name-list',
         body: body
       });
 
@@ -290,7 +290,7 @@ const findNotConnectedElements = async function (listJsonES, listJsonMD) {
     if (listJsonES == null)
       resolve(null);
     else {
-      listES = listJsonES["mountName-list"];
+      listES = listJsonES["mount-name-list"];
       if (listJsonMD != null) {
         listMD = listJsonMD["mount-name-list"];
 
@@ -300,7 +300,7 @@ const findNotConnectedElements = async function (listJsonES, listJsonMD) {
         if (missingElements.length > 0) {
           // Create a new JSON object with the result
           const resultJSON = {
-            "mountName-list": missingElements
+            "mount-name-list": missingElements
           };
           resolve(resultJSON);
         }
@@ -352,16 +352,23 @@ function areEqualArray(listJsonES, listJsonMD) {
 exports.updateCurrentConnectedEquipment = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
   let result;
   let listDisconnectedEq = [];
+  let oldConnectedListFromES = null;
   return new Promise(async function (resolve, reject) {
     try {
-      //"mountName - list" from ES
-      let oldConnectedListFromES = await RequestForListOfConnectedEquipmentFromElasticSearch();
+      //"mount-name-list" from ES
+      try {
+        oldConnectedListFromES = await RequestForListOfConnectedEquipmentFromElasticSearch();
+      }
+      catch (error) {
+        oldConnectedListFromES = null;
+        console.error('mount-name-list is not present. Elastic Search error');
+      }
 
       try {
         //MIDW applicationInfo
         let MIDWApplicationInfo = await EmbeddingCausesRequestForListOfApplicationsAtRo(user, originator, xCorrelator, traceIndicator, customerJourney);
       }
-      catch {
+      catch(error) {
         console.error('MIDW application is not registered. Skypping');
       }
 
@@ -387,7 +394,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
           }
         }
       }
-      
+
       resolve(newConnectedListFromMwdi);
     }
     catch (error) {
