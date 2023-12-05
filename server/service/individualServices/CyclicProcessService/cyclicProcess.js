@@ -228,7 +228,7 @@ function startTtlChecking() {
             if (slidingWindow.length == 0) {
                 clearInterval(handle);
                 handle = 0; // I just do this so I know I've cleared the interval        
-                stop = false;    
+                stop = false;
                 MATRCycle(2);
             }
         }
@@ -304,10 +304,10 @@ async function requestMessage(index) {
                     printLog('Response from element ' + retObj['node-id'] + ' --> Dropped from Sliding Window. Timestamp: ' + Date.now(), print_log_level >= 2);
                     slidingWindow.splice(elementIndex, 1);
                     if (addNextDeviceListElementInWindow()) {
-                            printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
-                            printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
-                            printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
-                            requestMessage(slidingWindow.length - 1);
+                        printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
+                        printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+                        printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
+                        requestMessage(slidingWindow.length - 1);
                     }
                     else {
                         printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
@@ -345,6 +345,8 @@ module.exports.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr 
 
 async function MATRCycle(logging_level) {
 
+    let deviceListMount = null;
+
     printLog('*****************************************************************', print_log_level >= 1);
     printLog('                                                                 ', print_log_level >= 1);
     printLog('                       START MATR CYCLE                          ', print_log_level >= 1);
@@ -365,7 +367,10 @@ async function MATRCycle(logging_level) {
     let customerJourney = "Unknown value";
 
     try {
-        let deviceListMount = await individualServices.updateCurrentConnectedEquipment(user, originator, xCorrelator, traceIndicator, customerJourney);
+        do {
+            deviceListMount = await individualServices.updateCurrentConnectedEquipment(user, originator, xCorrelator, traceIndicator, customerJourney);
+        } while (deviceListMount == null);
+
         deviceList = deviceListMount['mount-name-list'];
 
         slidingWindowSize = (slidingWindowSizeDb > deviceList.length) ? deviceList.length : slidingWindowSizeDb;
@@ -379,6 +384,7 @@ async function MATRCycle(logging_level) {
 
         printLog(printList('Sliding Window - MAIN', slidingWindow), print_log_level >= 1);
         startTtlChecking();
+
     }
     catch (error) {
         console.error("Error on MATR cycle: " + error);
