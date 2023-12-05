@@ -264,12 +264,10 @@ const RequestForDeleteEquipmentIntoElasticSearch = async function (mountName) {
         id: mountName
       });
 
-      resolve(result);
-
       if (Object.keys(result).length > 0) {
         resolve(result);
       } else {
-        resolve();
+        resolve(null);
       }
       console.log('Remove mountName={' + mountName + '}');
     }
@@ -287,27 +285,32 @@ const findNotConnectedElements = async function (listJsonES, listJsonMD) {
     let listES;
     let listMD;
 
-    if (listJsonES == null)
-      resolve(null);
-    else {
-      listES = listJsonES["mount-name-list"];
-      if (listJsonMD != null) {
-        listMD = listJsonMD["mount-name-list"];
+    try {
+      if (listJsonES == null)
+        resolve(null);
+      else {
+        listES = listJsonES["mount-name-list"];
+        if (listJsonMD != null) {
+          listMD = listJsonMD["mount-name-list"];
 
-        // Filter the elements present in listES but not in listMD
-        let missingElements = listES.filter(element => !listMD.includes(element));
+          // Filter the elements present in listES but not in listMD
+          let missingElements = listES.filter(element => !listMD.includes(element));
 
-        if (missingElements.length > 0) {
-          // Create a new JSON object with the result
-          const resultJSON = {
-            "mount-name-list": missingElements
-          };
-          resolve(resultJSON);
-        }
-        else {
-          resolve(null);
+          if (missingElements.length > 0) {
+            // Create a new JSON object with the result
+            const resultJSON = {
+              "mount-name-list": missingElements
+            };
+            resolve(resultJSON);
+          }
+          else {
+            resolve(null);
+          }
         }
       }
+    }
+    catch (error) {
+      reject(error)
     }
   });
 }
@@ -316,11 +319,11 @@ function areEqualArray(listJsonES, listJsonMD) {
   let array1 = null;
   let array2 = null;
 
-  if (listJsonES != null) {
+  if (listJsonES != null && listJsonES != undefined) {
     array1 = listJsonES["mount-name-list"];
   }
 
-  if (listJsonMD != null) {
+  if (listJsonMD != null && listJsonMD != undefined) {
     array2 = listJsonMD["mount-name-list"];
   }
 
@@ -353,6 +356,8 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
   let result;
   let listDisconnectedEq = [];
   let oldConnectedListFromES = null;
+  let newConnectedListFromMwdi = null;
+  let listJsonDisconnectedEq = [];
   return new Promise(async function (resolve, reject) {
     try {
       //"mount-name-list" from ES
@@ -368,34 +373,65 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         //MIDW applicationInfo
         let MIDWApplicationInfo = await EmbeddingCausesRequestForListOfApplicationsAtRo(user, originator, xCorrelator, traceIndicator, customerJourney);
       }
-      catch(error) {
+      catch (error) {
         console.error('MIDW application is not registered. Skypping');
       }
 
-      //mountName - list from network/Mwdi
-      let newConnectedListFromMwdi = await EmbeddingCausesRequestForListOfDevicesAtMwdi(user, originator, xCorrelator, traceIndicator, customerJourney);
-
-      //list of equipment that was connected (mac-address data in ES) but now that are not connected
-      const listJsonDisconnectedEq = await findNotConnectedElements(oldConnectedListFromES, newConnectedListFromMwdi);
-
-      //Write new "mountName - list" list into ES
-      if (areEqualArray(oldConnectedListFromES, newConnectedListFromMwdi) == false) {
-        result = await RequestForWriteListConnectedEquipmentIntoElasticSearch(newConnectedListFromMwdi);
+      try {
+        //mountName - list from network/Mwdi
+        newConnectedListFromMwdi = await EmbeddingCausesRequestForListOfDevicesAtMwdi(user, originator, xCorrelator, traceIndicator, customerJourney);
+      }
+      catch (error) {
+        console.error('No Equipment connected. Retry to read...');
+        newConnectedListFromMwdi = null;
       }
 
-      if (listJsonDisconnectedEq != null) {
-        listDisconnectedEq = listJsonDisconnectedEq["mount-name-list"];
-        console.log("Number of disconnected equipment:" + listDisconnectedEq.length + "=> remove mac-adress data from ES");
+      if (newConnectedListFromMwdi != null) {
+        try {
+          //list of equipment that was connected (mac-address data in ES) but now that are not connected
+          listJsonDisconnectedEq = await findNotConnectedElements(oldConnectedListFromES, newConnectedListFromMwdi);
+        }
+        catch (error) {
+          listJsonDisconnectedEq = null;
+          console.error('No Equipment disconnected');
+        }
 
-        //remove mac-address data in ES of equipment that are that are no longer connected  
-        if (Array.isArray(listDisconnectedEq)) {
-          for (const elementToRemove of listDisconnectedEq) {
-            RequestForDeleteEquipmentIntoElasticSearch(elementToRemove);
+
+        //Write new "mount-name-list" list into ES
+        if (areEqualArray(oldConnectedListFromES, newConnectedListFromMwdi) == false) {
+          try {
+            result = await RequestForWriteListConnectedEquipmentIntoElasticSearch(newConnectedListFromMwdi);
+          }
+          catch (error) {
+            console.error('Error during updating operation of mount-name-list into db');
+          }
+        }
+
+        if (listJsonDisconnectedEq != null) {
+          listDisconnectedEq = listJsonDisconnectedEq["mount-name-list"];
+          console.log("Number of disconnected equipment:" + listDisconnectedEq.length + "=> remove mac-adress data from ES");
+
+          //remove mac-address data in ES of equipment that are that are no longer connected  
+          try {
+            if (Array.isArray(listDisconnectedEq)) {
+              for (const elementToRemove of listDisconnectedEq) {
+                try{
+                RequestForDeleteEquipmentIntoElasticSearch(elementToRemove);
+                }
+                catch(error)
+                {
+                  console.error('Error during deleting operation of old mac address data into db (' + elementToRemove +')');
+                }
+              }
+            }
+          }
+          catch (error) {
+            console.error('Error during deleting operation of old mac address data into db');
           }
         }
       }
-
       resolve(newConnectedListFromMwdi);
+
     }
     catch (error) {
       reject(error);
@@ -409,6 +445,7 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
   return new Promise(async function (resolve, reject) {
     try {
 
+      let auth = "Basic YWRtaW46YWRtaW4=";
       let applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
 
@@ -435,9 +472,6 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
       let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
       console.log("url = " + finalUrl);
 
-      //TO FIX
-      let auth = "Basic YWRtaW46YWRtaW4=";
-
       let httpRequestHeader = new RequestHeader(
         user,
         originator,
@@ -446,6 +480,9 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
         customerJourney,
         operationKey
       );
+
+      if (operationKey != "Operation key not yet provided.")
+        auth = httpRequestHeader['operationKey'];
 
       let httpRequestHeaderAuth = {
         "content-type": httpRequestHeader['contentType'],
@@ -496,7 +533,7 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
 const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
     try {
-
+      let auth = "Basic YWRtaW46YWRtaW4=";
       let applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
 
@@ -523,9 +560,6 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
       let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
       console.log("url = " + finalUrl);
 
-      //TO FIX
-      let auth = "Basic YWRtaW46YWRtaW4=";
-
 
       let httpRequestHeader = new RequestHeader(
         user,
@@ -535,6 +569,10 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
         customerJourney,
         operationKey
       );
+
+      if (operationKey != "Operation key not yet provided.")
+        auth = httpRequestHeader['operationKey']; //#issue171
+
 
       let httpRequestHeaderAuth = {
         "content-type": httpRequestHeader['contentType'],
@@ -563,11 +601,11 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
         console.log("Number of connected devices = " + response.data['mount-name-list'].length);
         resolve(response.data);
       } catch (error) {
-        resolve(error);
+        reject(error);
       }
 
     } catch (error) {
-      resolve(error);
+      reject(error);
     }
   });
 };
@@ -993,6 +1031,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
 //STEP 2
 async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(mountName, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
+    let auth = "Basic YWRtaW46YWRtaW4=";
     let applicationNameAndHttpClient =
       await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
 
@@ -1037,8 +1076,8 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
         {}
     };
 
-    //TO FIX
-    let auth = "Basic YWRtaW46YWRtaW4=";
+    if (operationKey != "Operation key not yet provided.")
+      auth = httpRequestHeader['operationKey']; //#issue171
 
     let httpRequestHeaderAuth = {
       "content-type": httpRequestHeader['contentType'],
