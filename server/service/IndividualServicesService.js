@@ -180,7 +180,7 @@ exports.bequeathYourDataAndDie = async function (body, user, originator, xCorrel
 
 function transformData(inputData) {
   const outputData = {
-    "target-mac-address": `target-mac-address-${inputData["remote-mac-address"]}`,
+    "target-mac-address": `${inputData["remote-mac-address"]}`,
     "mount-name": inputData["mount-name"],
     "original-ltp-name": inputData["original-ltp-name"],
     "vlan-id": inputData["vlan-id"],
@@ -416,7 +416,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
             if (Array.isArray(listDisconnectedEq)) {
               for (const elementToRemove of listDisconnectedEq) {
                 try{
-                RequestForDeleteEquipmentIntoElasticSearch(elementToRemove);
+                  RequestForDeleteEquipmentIntoElasticSearch(elementToRemove);
                 }
                 catch(error)
                 {
@@ -748,9 +748,9 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = fun
     } else {
       resolve();
     }
-  });
+    });
 }
-
+        
 
 
 function orderData(input) {
