@@ -21,6 +21,7 @@ const RequestHeader = require('onf-core-model-ap/applicationPattern/rest/client/
 const RestRequestBuilder = require('onf-core-model-ap/applicationPattern/rest/client/RequestBuilder');
 var responseCodeEnum = require('onf-core-model-ap/applicationPattern/rest/server/ResponseCode');
 const TcpClient = require('../service/TcpClientService');
+const genericRepresentation = require('onf-core-model-ap-bs/basicServices/GenericRepresentation');
 const createHttpError = require("http-errors");
 const axios = require('axios');
 
@@ -186,7 +187,6 @@ function transformData(inputData) {
     "vlan-id": inputData["vlan-id"],
     "time-stamp-of-data": new Date(inputData["time-stamp-of-data"]).toISOString()
   };
-
   return outputData;
 }
 
@@ -415,12 +415,11 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
           try {
             if (Array.isArray(listDisconnectedEq)) {
               for (const elementToRemove of listDisconnectedEq) {
-                try{
+                try {
                   RequestForDeleteEquipmentIntoElasticSearch(elementToRemove);
                 }
-                catch(error)
-                {
-                  console.error('Error during deleting operation of old mac address data into db (' + elementToRemove +')');
+                catch (error) {
+                  console.error('Error during deleting operation of old mac address data into db (' + elementToRemove + ')');
                 }
               }
             }
@@ -674,8 +673,10 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
  * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
  * returns List
  **/
-exports.provideListOfNetworkElementInterfacesOnPath = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+exports.provideListOfNetworkElementInterfacesOnPath = async function (body, url) {
   return new Promise(function (resolve, reject) {
+
+
     RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch(body)
       .then(function (response) {
         resolve(response);
@@ -706,51 +707,89 @@ exports.provideListOfNetworkElementInterfacesOnPath = async function (body, user
  * customerJourney String Holds information supporting customerâ€™s journey to which the execution applies
  * returns genericRepresentation
  **/
-exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
-  return new Promise(function (resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-      "consequent-action-list": [{
-        "request": "request",
-        "input-value-list": [{
-          "field-name": "field-name",
-          "unit": "unit"
-        }, {
-          "field-name": "field-name",
-          "unit": "unit"
-        }],
-        "display-in-new-browser-window": true,
-        "label": "label"
-      }, {
-        "request": "request",
-        "input-value-list": [{
-          "field-name": "field-name",
-          "unit": "unit"
-        }, {
-          "field-name": "field-name",
-          "unit": "unit"
-        }],
-        "display-in-new-browser-window": true,
-        "label": "label"
-      }],
-      "response-value-list": [{
-        "field-name": "field-name",
-        "datatype": "datatype",
-        "value": "value"
-      }, {
-        "field-name": "field-name",
-        "datatype": "datatype",
-        "value": "value"
-      }]
-    };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = async function (body, req) {
+  return new Promise(async function (resolve, reject) {
+
+    const inputValueList = body["input-value-list"];
+    let fieldValues;
+    let fieldValueFinal = [];
+    let result = [];
+    let responseValueVist;
+
+    let operationServerName = req;
+
+    if (inputValueList && inputValueList.length > 0) {
+      // Crea un vettore per memorizzare i valori "field-value"
+      fieldValues = inputValueList.map(item => item["field-value"]);
     }
+
+    for (const inputValue of body["input-value-list"]) {
+      // Estrarre il campo "field-value" dall'input
+      const fieldValue = inputValue["field-value"];
+
+      // Creare un nuovo oggetto nel formato desiderato e aggiungerlo all'array risultante
+      fieldValueFinal.push({
+        "target-mac-address": fieldValue
+      });
+    }
+
+    // Loop attraverso ogni elemento di fieldValues e esegui la richiesta per ciascuno
+    const promises = fieldValueFinal.map(fieldValue => {
+      return RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch(fieldValue)
+        .then(
+          response => response
+        )
+        .catch(error => {
+          if (error.name == 'TimeoutError') {
+            const requestTimeout = createHttpError.RequestTimeout('Elastic Search error: ' + error.message);
+            throw requestTimeout;
+          } else {
+            const notFoundError = createHttpError.InternalServerError('Elastic Search error: ' + error.message);
+            throw notFoundError;
+          }
+        });
     });
-}
+
+
+
+    let existingItem = false;
+    Promise.all(promises)
+      .then(response => {
+        // Tutte le richieste sono state completate con successo
+        let pippo = 0;
+
+        response.at(0).forEach(element => {
+          // Puoi accedere alle proprietà di ciascun elemento qui
+          console.log("Target MAC Address:", element["target-mac-address"]);
+
+          existingItem = result.find(item => item["value"].includes(element["mount-name"]));
         
+          if (existingItem!=undefined) {
+            existingItem["value"] = existingItem["value"] + ";" + element["target-mac-address"];
+          } else {
+            result.push({
+              "value": `${element["mount-name"]}:${element["target-mac-address"]}`,
+              "datatype": "string",
+              "field-name": "listOfNetworkElementInterfacesOnPath"
+            });
+          }
+
+        });
+
+       
+        let fullResponse =
+        {
+          "consequent-action-list": [],
+          "response-value-list": result
+        }
+
+        resolve(fullResponse); 
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  });
+}
 
 
 function orderData(input) {
