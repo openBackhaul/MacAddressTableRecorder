@@ -32,7 +32,7 @@ module.exports.provideListOfNetworkElementInterfacesOnPath = async function prov
   let startTime = process.hrtime();
   let responseCode = responseCodeEnum.code.OK;
   let responseBodyToDocument = {};
-  await IndividualServices.provideListOfNetworkElementInterfacesOnPath(body, user, originator, xCorrelator, traceIndicator, customerJourney, req.url)
+  await IndividualServices.provideListOfNetworkElementInterfacesOnPath(body, req.url)
     .then(async function (responseBody) {
       responseBodyToDocument = responseBody;
       let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
@@ -50,9 +50,9 @@ module.exports.provideListOfNetworkElementInterfacesOnPath = async function prov
 
 module.exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = async function provideListOfNetworkElementInterfacesOnPathInGenericRepresentation(req, res, next, body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   let startTime = process.hrtime();
-  let responseCode = responseCodeEnum.code.NO_CONTENT;
+  let responseCode = responseCodeEnum.code.OK;
   let responseBodyToDocument = {};
-  await IndividualServices.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation(body, user, originator, xCorrelator, traceIndicator, customerJourney, req.url)
+  await IndividualServices.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation(body, req.url)
     .then(async function (responseBody) {
       responseBodyToDocument = responseBody;
       let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
