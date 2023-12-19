@@ -773,7 +773,7 @@ paths:
         content:
           application/json:
             schema:
-              oneOf:
+              anyOf:
                 - description: "bare update of elasticsearch"
                   type: object
                   required:
