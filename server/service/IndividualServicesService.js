@@ -586,14 +586,8 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
 
       httpRequestHeader = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
 
-      //empty body
-      let body = {
-        "input":
-          {}
-      };
-
       try {
-        let response = await axios.post(finalUrl, body, {
+        let response = await axios.post(finalUrl, {}, {
           headers: httpRequestHeaderAuth
         });
 
@@ -763,8 +757,8 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
           console.log("Target MAC Address:", element["target-mac-address"]);
 
           existingItem = result.find(item => item["value"].includes(element["mount-name"]));
-        
-          if (existingItem!=undefined) {
+
+          if (existingItem != undefined) {
             existingItem["value"] = existingItem["value"] + ";" + element["target-mac-address"];
           } else {
             result.push({
@@ -776,14 +770,14 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
 
         });
 
-       
+
         let fullResponse =
         {
           "consequent-action-list": [],
           "response-value-list": result
         }
 
-        resolve(fullResponse); 
+        resolve(fullResponse);
       })
       .catch(error => {
         console.error(error);
