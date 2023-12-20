@@ -747,29 +747,30 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
 
 
     let existingItem = false;
+    let element;
     Promise.all(promises)
       .then(response => {
-        // Tutte le richieste sono state completate con successo
-        let pippo = 0;
 
-        response.at(0).forEach(element => {
-          // Puoi accedere alle proprietà di ciascun elemento qui
-          console.log("Target MAC Address:", element["target-mac-address"]);
+        for (let i = 0; i < response.length; i++) {
+          const innerArray = response[i];
 
-          existingItem = result.find(item => item["value"].includes(element["mount-name"]));
+          for (let j = 0; j < innerArray.length; j++) {
+            element = innerArray[j];
 
-          if (existingItem != undefined) {
-            existingItem["value"] = existingItem["value"] + ";" + element["target-mac-address"];
-          } else {
-            result.push({
-              "value": `${element["mount-name"]}:${element["target-mac-address"]}`,
-              "datatype": "string",
-              "field-name": "listOfNetworkElementInterfacesOnPath"
-            });
+            existingItem = result.find(item => item["value"].includes(element["mount-name"]));
+
+            if (existingItem != undefined) {
+              existingItem["value"] = existingItem["value"] + ";" + element["target-mac-address"];
+            } else {
+              result.push({
+                "value": `${element["mount-name"]}:${element["target-mac-address"]}`,
+                "datatype": "string",
+                "field-name": "listOfNetworkElementInterfacesOnPath"
+              });
+            }
+
           }
-
-        });
-
+        }
 
         let fullResponse =
         {
