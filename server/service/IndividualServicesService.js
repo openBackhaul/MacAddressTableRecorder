@@ -1044,7 +1044,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
       });
 
       if (response.status === 200) {
-        console.log("STEP1(" + mountName + "): " + newBaseUrl + 'fields=' + fields);
+        //console.log("STEP1(" + mountName + "): " + newBaseUrl + 'fields=' + fields);
         return (response.data);
       }
       else {
@@ -1130,7 +1130,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
       let response = await axios.post(fullUrl, data, {
         headers: httpRequestHeaderAuth
       });
-      console.log("STEP2(" + mountName + "): " + fullUrl);
+      //console.log("STEP2(" + mountName + "): " + fullUrl);
       return response.data;
     } catch (error) {
       throw error;
@@ -1148,7 +1148,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
   try {
 
     if (body == "LTP-MNGT") {
-      console.log("STEP3(" + mountName + ") = LAN-MNGT");
+      //console.log("STEP3(" + mountName + ") = LAN-MNGT");
       return "LAN-MNGT";
     }
 
@@ -1226,7 +1226,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
         };
       }
 
-      console.log("STEP3(" + mountName + "): " + finalUrl);
+      //console.log("STEP3(" + mountName + "): " + finalUrl);
       return (additionaResponse);
     } catch (error) {
       additionaResponse = {
@@ -1547,7 +1547,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           console.error('STEP4(' + mountName + '):' + error.message);
           throw (error.message + '(STEP4)');
         }
-        console.log('STEP4(' + mountName + ')');
+        //console.log('STEP4(' + mountName + ')');
 
         result['application/json'] = {
           "request-id": reqId
