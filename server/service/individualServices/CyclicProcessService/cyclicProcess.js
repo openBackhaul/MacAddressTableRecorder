@@ -28,6 +28,9 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
         "mount-name": device['node-id']
     };
 
+    console.log("Send Request (" + body["mount-name"] + ")");
+
+
     try {
         ret = await individualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney);
         return {
@@ -55,7 +58,7 @@ function prepareObjectForWindow(deviceListIndex) {
         };
         return windowObject;
     } catch (error) {
-        console.log("Error in prepareObjectForWindow (" + error + ")");
+        console.error("Error in prepareObjectForWindow (" + error + ")");
         debugger;
     }
 }
@@ -283,7 +286,7 @@ async function requestMessage(index) {
                             requestMessage(slidingWindow.length - 1);
                         }
                         else {
-                            printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+                            //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
                             printLog('Sliding Window IS EMPTY', print_log_level >= 1);
                         }
 
@@ -305,13 +308,13 @@ async function requestMessage(index) {
                     slidingWindow.splice(elementIndex, 1);
                     if (addNextDeviceListElementInWindow()) {
                         printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
-                        printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
-                        printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
+                        //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+                        //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
                         requestMessage(slidingWindow.length - 1);
                     }
                     else {
-                        printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
-                        printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
+                        //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+                        //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
                     }
 
                 }
@@ -361,7 +364,7 @@ async function MATRCycle(logging_level) {
 
     //TO FIX  
     let user = "User Name";
-    let originator = "Resolver";
+    let originator = "MacAddressTableResolver";
     let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
     let traceIndicator = "1.3.1";
     let customerJourney = "Unknown value";
@@ -379,10 +382,10 @@ async function MATRCycle(logging_level) {
         for (let i = 0; i < slidingWindowSize; i++) {
             addNextDeviceListElementInWindow();
             requestMessage(i);
-            printLog('Element ' + slidingWindow[i]['node-id'] + ' send request...', print_log_level >= 2);
+            //printLog('Element ' + slidingWindow[i]['node-id'] + ' send request...', print_log_level >= 2);
         }
 
-        printLog(printList('Sliding Window - MAIN', slidingWindow), print_log_level >= 1);
+        //printLog(printList('Sliding Window - MAIN', slidingWindow), print_log_level >= 1);
         startTtlChecking();
 
     }
