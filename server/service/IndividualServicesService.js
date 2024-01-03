@@ -620,7 +620,7 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
         body: {
           query: {
             match: {
-              'mac-address.remote-mac-address.keyword': targetMacAddress
+              'mac-address.remote-mac-address': targetMacAddress
             }
           }
         }
@@ -634,7 +634,9 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
         mergedArray = mergedArray.concat(source);
       }
 
-      const filteredObjects = mergedArray.filter(obj => obj['remote-mac-address'] === targetMacAddress);
+      const filteredObjects = mergedArray.filter(obj => 
+        obj['remote-mac-address'].toLowerCase() === targetMacAddress.toLowerCase()
+      );
 
       const transformedArray = filteredObjects.map(obj => transformData(obj));
 
