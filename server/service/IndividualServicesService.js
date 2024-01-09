@@ -352,6 +352,16 @@ function areEqualArray(listJsonES, listJsonMD) {
   return true;
 }
 
+function waitAsync(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function executeAfterWait() {  
+  // Wait 60 seconds
+  await waitAsync(60000);  
+}
+
+
 exports.updateCurrentConnectedEquipment = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
   let result;
   let listDisconnectedEq = [];
@@ -382,7 +392,8 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         newConnectedListFromMwdi = await EmbeddingCausesRequestForListOfDevicesAtMwdi(user, originator, xCorrelator, traceIndicator, customerJourney);
       }
       catch (error) {
-        console.error('No Equipment connected. Retry to read...');
+        console.error('No Equipment connected. Wait 60 seconds and retry to read...');
+        executeAfterWait(); 
         newConnectedListFromMwdi = null;
       }
 
