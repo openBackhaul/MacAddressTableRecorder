@@ -356,9 +356,9 @@ function waitAsync(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function executeAfterWait() {  
+async function executeAfterWait() {
   // Wait 60 seconds
-  await waitAsync(60000);  
+  await waitAsync(60000);
 }
 
 
@@ -393,7 +393,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
       }
       catch (error) {
         console.error('No Equipment connected. Wait 60 seconds and retry to read...');
-        executeAfterWait(); 
+        executeAfterWait();
         newConnectedListFromMwdi = null;
       }
 
@@ -645,7 +645,7 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
         mergedArray = mergedArray.concat(source);
       }
 
-      const filteredObjects = mergedArray.filter(obj => 
+      const filteredObjects = mergedArray.filter(obj =>
         obj['remote-mac-address'].toLowerCase() === targetMacAddress.toLowerCase()
       );
 
@@ -822,7 +822,7 @@ const PromptForProvidingAllMacTablesCausesReadingFromElasticSearch = async funct
 
     try {
       let res2 = await client.search({
-        index: '6', // Sostituisci con il nome del tuo indice
+        index: '6', 
         _source: 'mac-address',
         body: {
           query: {
@@ -900,11 +900,13 @@ function formatTimestamp(timestamp) {
 const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async function (body) {
   return new Promise(async function (resolve, reject) {
     let client = await elasticsearchService.getClient(false);
+    let res2;
+    var response = { 'application/json': [] }; 
 
     try {
       let mountName = body['mount-name'];
 
-      let res2 = await client.get({
+      res2 = await client.get({
         index: '6',
         id: mountName
       });
@@ -923,14 +925,14 @@ const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async f
         'mac-address': formattedEntries
       };
 
-
+      
       if (Object.keys(response).length > 0) {
         resolve(response['application/json']['mac-address']);
       } else {
         resolve(null); // Resolve the promise with null if necessary
       }
     } catch (error) {
-      reject(error);
+      resolve(response['application/json']);
     }
   });
 };
