@@ -5,19 +5,23 @@ const { setTimeout } = require('timers');
 const path = require("path");
 const individualServices = require("./../../IndividualServicesService.js");
 const { elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
+const onfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
+const onfAttributes = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfAttributes');
+var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
 
 const DEVICE_NOT_PRESENT = -1;
 let maximumNumberOfRetries = 1;
 let responseTimeout = 600;
 let slidingWindowSizeDb = 500;
 let slidingWindowSize = 3;
+let deviceListSyncPeriod = 3;
 let slidingWindow = [];
 let deviceList = [];
 let lastDeviceListIndex = -1;
 let print_log_level = 2;
 let stop = false;
 var handle = 0;
-
+let loopStartTime = 0;
 
 
 async function sendRequest(device, user, originator, xCorrelator, traceIndicator, customerJourney) {
@@ -194,6 +198,16 @@ function printLog(text, print_log) {
     }
 }
 
+function convertTime(millisecondi) {
+    let secondi = Math.floor(millisecondi / 1000);
+    let ore = Math.floor(secondi / 3600);
+    let minuti = Math.floor((secondi % 3600) / 60);
+    let restantiSecondi = secondi % 60;
+
+    return `${ore.toString().padStart(2, '0')}:${minuti.toString().padStart(2, '0')}:${restantiSecondi.toString().padStart(2, '0')}`;
+}
+
+
 
 /**
  * Timeout checking cycle
@@ -232,7 +246,17 @@ function startTtlChecking() {
                 clearInterval(handle);
                 handle = 0; // I just do this so I know I've cleared the interval        
                 stop = false;
-                MATRCycle(2);
+
+                const now = new Date();
+                let timeSpent = now.getTime() - loopStartTime;
+
+                let timeFormatted = convertTime(timeSpent);
+
+                printLog('MATR CYCLE DURATION:' + timeFormatted, print_log_level >= 1);
+
+                MATRCycle(false, 2);
+
+
             }
         }
 
@@ -330,8 +354,20 @@ async function requestMessage(index) {
 
 async function extractProfileConfiguration(uuid) {
     const profileCollection = require('onf-core-model-ap/applicationPattern/onfModel/models/ProfileCollection');
-    const profile = await profileCollection.getProfileAsync(uuid)
-    return profile["integer-profile-1-0:integer-profile-pac"]["integer-profile-configuration"]["integer-value"]
+    //const profile = await profileCollection.getProfileAsync(uuid);
+    let profileConf;
+
+    const regexPattern = `.*${uuid}`;
+    const regex = new RegExp(regexPattern);
+
+    let profileList = await fileOperation.readFromDatabaseAsync(onfPaths.PROFILE);
+    if (profileList !== undefined) {
+        //return profileList.find(profile => profile[onfAttributes.GLOBAL_CLASS.UUID] === profileUuid);
+        profileConf = profileList.find(profile => regex.test(profile[onfAttributes.GLOBAL_CLASS.UUID]));
+
+    }
+
+    return profileConf["integer-profile-1-0:integer-profile-pac"]["integer-profile-configuration"]["integer-value"];
 }
 
 /**
@@ -343,53 +379,90 @@ async function extractProfileConfiguration(uuid) {
  *             deviceList is present the procedure will starts immediatly
  **/
 module.exports.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr = async function (logging_level) {
-    MATRCycle(2);
+    MATRCycle(true, 2);
 }
 
-async function MATRCycle(logging_level) {
+async function MATRCycle(firstTime, logging_level) {
 
     let deviceListMount = null;
+    let remainder = 0;
 
-    printLog('*****************************************************************', print_log_level >= 1);
-    printLog('                                                                 ', print_log_level >= 1);
-    printLog('                       START MATR CYCLE                          ', print_log_level >= 1);
-    printLog('                                                                 ', print_log_level >= 1);
-    printLog('*****************************************************************', print_log_level >= 1);
+    slidingWindowSizeDb = await extractProfileConfiguration("integer-p-000");
+    responseTimeout = await extractProfileConfiguration("integer-p-001");
+    maximumNumberOfRetries = await extractProfileConfiguration("integer-p-002");
+    deviceListSyncPeriod = await extractProfileConfiguration("integer-p-003");
 
-    slidingWindowSizeDb = await extractProfileConfiguration("matr-1-0-0-integer-p-000")
-    responseTimeout = await extractProfileConfiguration("matr-1-0-0-integer-p-001")
-    maximumNumberOfRetries = await extractProfileConfiguration("matr-1-0-0-integer-p-002")
+    if (firstTime === false) {
+        const now = new Date();
+        const periodicSynchTime = deviceListSyncPeriod * 60 * 1000;
 
-    print_log_level = logging_level;
+        let nextTimeStart = now.getTime() - now.getTime() % periodicSynchTime + periodicSynchTime;
+        remainder = nextTimeStart - now.getTime();
 
-    //TO FIX  
-    let user = "User Name";
-    let originator = "MacAddressTableResolver";
-    let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
-    let traceIndicator = "1.3.1";
-    let customerJourney = "Unknown value";
+        const date = new Date(nextTimeStart);
+        printLog('NEXT MATR CYCLE START AT TIME:' + date, print_log_level >= 1);
 
-    try {
-        do {
-            deviceListMount = await individualServices.updateCurrentConnectedEquipment(user, originator, xCorrelator, traceIndicator, customerJourney);
-        } while (deviceListMount == null);
+    }
+    else {
+        remainder = 0;
+        printLog('NEXT MATR CYCLE START IMMEDIATELY', print_log_level >= 1);
+    }
 
-        deviceList = deviceListMount['mount-name-list'];
+    setTimeout(async () => {
+        let startDate = new Date();
+        loopStartTime = startDate.getTime();
 
-        slidingWindowSize = (slidingWindowSizeDb > deviceList.length) ? deviceList.length : slidingWindowSizeDb;
+        let day = startDate.getDate();
+        let month = startDate.getMonth() + 1;
+        let year = startDate.getFullYear();
+        let hours = startDate.getHours();
+        let minutes = startDate.getMinutes();
+        let seconds = startDate.getSeconds();
 
-        lastDeviceListIndex = -1;
-        for (let i = 0; i < slidingWindowSize; i++) {
-            addNextDeviceListElementInWindow();
-            requestMessage(i);
-            //printLog('Element ' + slidingWindow[i]['node-id'] + ' send request...', print_log_level >= 2);
+        const formattedHours = String(hours).padStart(2, '0');
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = String(seconds).padStart(2, '0');
+
+        const formattedDate = `${day}/${month}/${year} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+
+        printLog('*****************************************************************', print_log_level >= 1);
+        printLog('                                                                 ', print_log_level >= 1);
+        printLog(' MATR CYCLE START AT:    ' + formattedDate, print_log_level >= 1);
+        printLog('                                                                 ', print_log_level >= 1);
+        printLog('*****************************************************************', print_log_level >= 1);
+
+        print_log_level = logging_level;
+
+        //TO FIX  
+        let user = "User Name";
+        let originator = "MacAddressTableResolver";
+        let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
+        let traceIndicator = "1.3.1";
+        let customerJourney = "Unknown value";
+
+        try {
+            do {
+                deviceListMount = await individualServices.updateCurrentConnectedEquipment(user, originator, xCorrelator, traceIndicator, customerJourney);
+            } while (deviceListMount == null);
+
+            deviceList = deviceListMount['mount-name-list'];
+
+            slidingWindowSize = (slidingWindowSizeDb > deviceList.length) ? deviceList.length : slidingWindowSizeDb;
+
+            lastDeviceListIndex = -1;
+            for (let i = 0; i < slidingWindowSize; i++) {
+                addNextDeviceListElementInWindow();
+                requestMessage(i);
+                printLog('Element ' + slidingWindow[i]['node-id'] + ' send request...', print_log_level >= 2);
+            }
+
+            //printLog(printList('Sliding Window - MAIN', slidingWindow), print_log_level >= 1);
+            startTtlChecking();
+        }
+        catch (error) {
+            console.error("Error on MATR cycle: " + error);
         }
 
-        //printLog(printList('Sliding Window - MAIN', slidingWindow), print_log_level >= 1);
-        startTtlChecking();
+    }, remainder);
 
-    }
-    catch (error) {
-        console.error("Error on MATR cycle: " + error);
-    }
 }
