@@ -455,7 +455,8 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
   return new Promise(async function (resolve, reject) {
     try {
 
-      let auth = "Basic YWRtaW46YWRtaW4=";
+      //let auth = "Basic YWRtaW46YWRtaW4=";
+      let auth;
       let applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
 
@@ -543,7 +544,8 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
 const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
     try {
-      let auth = "Basic YWRtaW46YWRtaW4=";
+      //let auth = "Basic YWRtaW46YWRtaW4=";  //used as default value
+      let auth;
       let applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
 
@@ -1080,7 +1082,8 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
 //STEP 2
 async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(mountName, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
-    let auth = "Basic YWRtaW46YWRtaW4=";
+    //let auth = "Basic YWRtaW46YWRtaW4=" //used as default value;
+    let auth;
     let applicationNameAndHttpClient =
       await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
 
