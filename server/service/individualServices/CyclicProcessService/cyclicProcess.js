@@ -226,7 +226,7 @@ function startTtlChecking() {
                         slidingWindow.splice(index, 1);
                         if (addNextDeviceListElementInWindow()) {
                             printLog('Added element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in window and sent request...', print_log_level >= 2);
-                            printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
+                            //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
                             requestMessage(slidingWindow.length - 1);
                         }
                         else {
@@ -305,8 +305,8 @@ async function requestMessage(index) {
                         slidingWindow.splice(elementIndex, 1);
                         if (addNextDeviceListElementInWindow()) {
                             printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
-                            printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
-                            printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
+                            //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+                            //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
                             requestMessage(slidingWindow.length - 1);
                         }
                         else {

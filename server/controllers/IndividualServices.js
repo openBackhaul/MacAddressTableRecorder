@@ -142,6 +142,8 @@ module.exports.testMacAddressData = async function testMacAddressData(req, res, 
       message: 'Richiesta elaborata con successo'
     };
 
+    console.log('testMacAddressData RECEIVED DATA:', JSON.stringify(requestData));
+
     res.status(200).json(responseBody);
   } catch (error) {
     console.error('Errore durante l\'elaborazione della richiesta:', error);
