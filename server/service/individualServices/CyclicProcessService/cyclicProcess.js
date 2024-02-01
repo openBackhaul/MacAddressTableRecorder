@@ -7,6 +7,7 @@ const individualServices = require("./../../IndividualServicesService.js");
 const { elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
 const onfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
 const onfAttributes = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfAttributes');
+const forwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
 var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
 
 const DEVICE_NOT_PRESENT = -1;
@@ -354,20 +355,10 @@ async function requestMessage(index) {
 
 async function extractProfileConfiguration(uuid) {
     const profileCollection = require('onf-core-model-ap/applicationPattern/onfModel/models/ProfileCollection');
-    //const profile = await profileCollection.getProfileAsync(uuid);
-    let profileConf;
-
-    const regexPattern = `.*${uuid}`;
-    const regex = new RegExp(regexPattern);
-
-    let profileList = await fileOperation.readFromDatabaseAsync(onfPaths.PROFILE);
-    if (profileList !== undefined) {
-        //return profileList.find(profile => profile[onfAttributes.GLOBAL_CLASS.UUID] === profileUuid);
-        profileConf = profileList.find(profile => regex.test(profile[onfAttributes.GLOBAL_CLASS.UUID]));
-
-    }
-
-    return profileConf["integer-profile-1-0:integer-profile-pac"]["integer-profile-configuration"]["integer-value"];
+    let profile = await profileCollection.getProfileAsync(uuid);
+    let objectKey = Object.keys(profile)[2];
+    profile = profile[objectKey];
+    return profile["integer-profile-configuration"]["integer-value"];
 }
 
 /**
@@ -387,26 +378,38 @@ async function MATRCycle(firstTime, logging_level) {
     let deviceListMount = null;
     let remainder = 0;
 
-    slidingWindowSizeDb = await extractProfileConfiguration("integer-p-000");
-    responseTimeout = await extractProfileConfiguration("integer-p-001");
-    maximumNumberOfRetries = await extractProfileConfiguration("integer-p-002");
-    deviceListSyncPeriod = await extractProfileConfiguration("integer-p-003");
+    const forwardingName = "EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr";
+    const forwardingConstruct = await forwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
+    let coreModelPrefix = forwardingConstruct.name[0].value.split(':')[0];
+    let prefix = forwardingConstruct.uuid.split('op')[0];
+    slidingWindowSizeDb = await extractProfileConfiguration(prefix + "integer-p-000");
+    responseTimeout = await extractProfileConfiguration(prefix + "integer-p-001");
+    maximumNumberOfRetries = await extractProfileConfiguration(prefix + "integer-p-002");
 
-    if (firstTime === false) {
-        const now = new Date();
-        const periodicSynchTime = deviceListSyncPeriod * 60 * 1000;
+    try {
+        deviceListSyncPeriod = await extractProfileConfiguration(prefix + "integer-p-003");
 
-        let nextTimeStart = now.getTime() - now.getTime() % periodicSynchTime + periodicSynchTime;
-        remainder = nextTimeStart - now.getTime();
+        if (firstTime === false) {
+            const now = new Date();
+            const periodicSynchTime = deviceListSyncPeriod * 60 * 1000;
 
-        const date = new Date(nextTimeStart);
-        printLog('NEXT MATR CYCLE START AT TIME:' + date, print_log_level >= 1);
+            let nextTimeStart = now.getTime() - now.getTime() % periodicSynchTime + periodicSynchTime;
+            remainder = nextTimeStart - now.getTime();
 
+            const date = new Date(nextTimeStart);
+            printLog('NEXT MATR CYCLE START AT TIME:' + date, print_log_level >= 1);
+
+        }
+        else {
+            remainder = 0;
+            printLog('NEXT MATR CYCLE START IMMEDIATELY', print_log_level >= 1);
+        }
     }
-    else {
-        remainder = 0;
-        printLog('NEXT MATR CYCLE START IMMEDIATELY', print_log_level >= 1);
+    catch(error)
+    {
+        printLog('NO Device List Sync Period', print_log_level >= 1);
     }
+    
 
     setTimeout(async () => {
         let startDate = new Date();
