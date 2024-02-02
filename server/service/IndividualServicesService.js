@@ -24,6 +24,8 @@ const TcpClient = require('../service/TcpClientService');
 const genericRepresentation = require('onf-core-model-ap-bs/basicServices/GenericRepresentation');
 const createHttpError = require("http-errors");
 const axios = require('axios');
+const authKey = require("../application-data/encrypted-odl-key.json");
+
 
 var appCommons = require('onf-core-model-ap/applicationPattern/commons/AppCommons');
 
@@ -466,8 +468,6 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
   return new Promise(async function (resolve, reject) {
     try {
 
-      //let auth = "Basic YWRtaW46YWRtaW4=";
-      let auth;
       let applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
 
@@ -503,9 +503,6 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
         operationKey
       );
 
-      if (operationKey != "Operation key not yet provided.")
-        auth = httpRequestHeader['operationKey'];
-
       let httpRequestHeaderAuth = {
         "content-type": httpRequestHeader['contentType'],
         "user": httpRequestHeader['user'],
@@ -513,8 +510,7 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
         "x-correlator": httpRequestHeader['xCorrelator'],
         "trace-indicator": httpRequestHeader['traceIndicator'],
         "customer-journey": httpRequestHeader['customerJourney'],
-        "operation-key": httpRequestHeader['operationKey'],
-        "Authorization": auth
+        "operation-key": httpRequestHeader['operationKey']
       };
 
       httpRequestHeaderAuth = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
@@ -555,8 +551,6 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
 const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
     try {
-      //let auth = "Basic YWRtaW46YWRtaW4=";  //used as default value
-      let auth;
       let applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
 
@@ -593,10 +587,6 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
         operationKey
       );
 
-      if (operationKey != "Operation key not yet provided.")
-        auth = httpRequestHeader['operationKey']; //#issue171
-
-
       let httpRequestHeaderAuth = {
         "content-type": httpRequestHeader['contentType'],
         "user": httpRequestHeader['user'],
@@ -605,7 +595,6 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
         "trace-indicator": httpRequestHeader['traceIndicator'],
         "customer-journey": httpRequestHeader['customerJourney'],
         "operation-key": httpRequestHeader['operationKey'],
-        "Authorization": auth
       };
 
       httpRequestHeader = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
@@ -1098,8 +1087,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
 //STEP 2
 async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(mountName, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
-    //let auth = "Basic YWRtaW46YWRtaW4=" //used as default value;
-    let auth;
+    let auth = authKey['api-key'];  //read from external file
     let applicationNameAndHttpClient =
       await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
 
@@ -1143,9 +1131,6 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
       "input":
         {}
     };
-
-    if (operationKey != "Operation key not yet provided.")
-      auth = httpRequestHeader['operationKey']; //#issue171
 
     let httpRequestHeaderAuth = {
       "content-type": httpRequestHeader['contentType'],
