@@ -33,7 +33,7 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
         "mount-name": device['node-id']
     };
 
-    console.log("Send Request (" + body["mount-name"] + ")");
+    //console.log("Send Request (" + body["mount-name"] + ")");
 
 
     try {
@@ -199,6 +199,12 @@ function printLog(text, print_log) {
     }
 }
 
+function printErr(text, print_log) {
+    if (print_log) {
+        console.error(text);
+    }
+}
+
 function convertTime(millisecondi) {
     let secondi = Math.floor(millisecondi / 1000);
     let ore = Math.floor(secondi / 3600);
@@ -231,7 +237,7 @@ function startTtlChecking() {
                             requestMessage(slidingWindow.length - 1);
                         }
                         else {
-                            printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+                            //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
                             printLog('Sliding Window IS EMPTY', print_log_level >= 1);
                         }
 
@@ -302,7 +308,7 @@ async function requestMessage(index) {
                 }
                 else {
                     if (slidingWindow[elementIndex].retries == 0) {
-                        printLog('Error (' + retObj.ret.code + ' - ' + retObj.ret.message + ') from element (II time) ' + retObj['node-id'] + ' --> Dropped from Sliding Window', print_log_level >= 2);
+                        printErr(retObj.ret.code + ' - ' + retObj.ret.message + ' from element (II time) ' + retObj['node-id'] + ' --> Dropped from Sliding Window', print_log_level >= 2);
                         slidingWindow.splice(elementIndex, 1);
                         if (addNextDeviceListElementInWindow()) {
                             printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
@@ -316,7 +322,7 @@ async function requestMessage(index) {
                         }
 
                     } else {
-                        printLog('Error (' + retObj.ret.code + ' - ' + retObj.ret.message + ') from element (I time) ' + retObj['node-id'] + ' Resend the request....', print_log_level >= 2);
+                        printErr(retObj.ret.code + ' - ' + retObj.ret.message + ' from element (I time) ' + retObj['node-id'] + ' Resend the request....', print_log_level >= 2);
                         slidingWindow[elementIndex].ttl = responseTimeout;
                         slidingWindow[elementIndex].retries -= 1;
                         requestMessage(elementIndex);

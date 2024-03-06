@@ -188,6 +188,7 @@ function transformData(inputData) {
     "target-mac-address": `${inputData["remote-mac-address"]}`,
     "mount-name": inputData["mount-name"],
     "original-ltp-name": inputData["original-ltp-name"],
+    "egress-ltp-uuid": inputData["egress-ltp-uuid"],
     "vlan-id": inputData["vlan-id"],
     "time-stamp-of-data": new Date(inputData["time-stamp-of-data"]).toISOString()
   };
@@ -225,7 +226,7 @@ const RequestForListOfConnectedEquipmentFromElasticSearch = async function () {
       }
 
     } catch (error) {
-      reject(error);
+      resolve(null);
     }
 
   });
@@ -278,11 +279,10 @@ const RequestForDeleteEquipmentIntoElasticSearch = async function (mountName) {
       } else {
         resolve(null);
       }
-      console.log('Remove mountName={' + mountName + '}');
+      console.log('Remove mountName = ' + mountName);
     }
     catch (error) {
-      console.error('Failed to remove mountName={' + mountName + '}');
-      reject(error)
+      reject(error);
     }
   });
 };
@@ -388,8 +388,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         oldConnectedListFromES = await RequestForListOfConnectedEquipmentFromElasticSearch();
       }
       catch (error) {
-        oldConnectedListFromES = null;
-        console.error('mount-name-list is not present. Elastic Search error');
+        console.log("mount-name-list is not present (elastic search error)");
       }
 
       try {
@@ -410,6 +409,9 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         newConnectedListFromMwdi = null;
       }
 
+
+
+
       if (newConnectedListFromMwdi != null) {
         try {
           //list of equipment that was connected (mac-address data in ES) but now that are not connected
@@ -419,7 +421,6 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
           listJsonDisconnectedEq = null;
           console.error('No Equipment disconnected');
         }
-
 
         //Write new "mount-name-list" list into ES
         if (areEqualArray(oldConnectedListFromES, newConnectedListFromMwdi) == false) {
@@ -433,23 +434,23 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
 
         if (listJsonDisconnectedEq != null) {
           listDisconnectedEq = listJsonDisconnectedEq["mount-name-list"];
-          console.log("Number of disconnected equipment:" + listDisconnectedEq.length + "=> remove mac-adress data from ES");
+          console.log("Number of disconnected equipment = " + listDisconnectedEq.length + " => remove mac-address data from ES");
 
           //remove mac-address data in ES of equipment that are that are no longer connected  
           try {
             if (Array.isArray(listDisconnectedEq)) {
               for (const elementToRemove of listDisconnectedEq) {
                 try {
-                  RequestForDeleteEquipmentIntoElasticSearch(elementToRemove);
+                  await RequestForDeleteEquipmentIntoElasticSearch(elementToRemove);
                 }
                 catch (error) {
-                  console.error('Error during deleting operation of old mac address data into db (' + elementToRemove + ')');
+                  console.error('Error during remove operation of old mac address data into db (' + elementToRemove + ')');
                 }
               }
             }
           }
           catch (error) {
-            console.error('Error during deleting operation of old mac address data into db');
+            console.error('Error during remove operation of old mac address data into db');
           }
         }
       }
@@ -617,11 +618,26 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
 };
 
 
+function generateMountAndEgressPairs(data) {
+  const uniquePairs = {};
+
+  data.forEach(entry => {
+    const key = `${entry["mount-name"]}:${entry["egress-ltp-uuid"]}`;
+    uniquePairs[key] = true;
+  });
+
+  return Object.keys(uniquePairs);
+}
 
 
 
 const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch = async function (body) {
   return new Promise(async function (resolve, reject) {
+
+    let transformedArray = null;
+    let result = null;
+    let resultString = null;
+
     let client = await elasticsearchService.getClient(false);
 
     try {
@@ -653,19 +669,24 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
         obj['remote-mac-address'].toLowerCase() === targetMacAddress.toLowerCase()
       );
 
-      const transformedArray = filteredObjects.map(obj => transformData(obj));
+      transformedArray = filteredObjects.map(obj => transformData(obj));
 
+      if (transformedArray != null) {
+        result = generateMountAndEgressPairs(transformedArray);
 
-      var response = {};
-      response['application/json'] = {
-        'targetMacAddress': transformedArray
-      };
+        if (result != null)
+          resultString = result.join(';');
+        else
+          resolve(null);
 
-      if (Object.keys(response).length > 0) {
-        resolve(response['application/json']['targetMacAddress']);
-      } else {
-        resolve();
+        if (resultString.length > 0) {
+          resolve(resultString);
+        } else {
+          resolve(null);
+        }
       }
+      else
+        resolve(null);
     } catch (error) {
       reject(error);
     }
@@ -686,8 +707,6 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
  **/
 exports.provideListOfNetworkElementInterfacesOnPath = async function (body, url) {
   return new Promise(function (resolve, reject) {
-
-
     RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch(body)
       .then(function (response) {
         resolve(response);
@@ -767,27 +786,11 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
     let element;
     Promise.all(promises)
       .then(response => {
-
-        for (let i = 0; i < response.length; i++) {
-          const innerArray = response[i];
-
-          for (let j = 0; j < innerArray.length; j++) {
-            element = innerArray[j];
-
-            existingItem = result.find(item => item["value"].includes(element["mount-name"]));
-
-            if (existingItem != undefined) {
-              existingItem["value"] = existingItem["value"] + ";" + element["target-mac-address"];
-            } else {
-              result.push({
-                "value": `${element["mount-name"]}:${element["target-mac-address"]}`,
-                "datatype": "string",
-                "field-name": "listOfNetworkElementInterfacesOnPath"
-              });
-            }
-
-          }
-        }
+        result.push({
+          "value": response,
+          "datatype": "string",
+          "field-name": "listOfNetworkElementInterfacesOnPath"
+        });
 
         let fullResponse =
         {
@@ -940,7 +943,7 @@ const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async f
         resolve(null); // Resolve the promise with null if necessary
       }
     } catch (error) {
-      resolve(response['application/json']);
+      reject(error);
     }
   });
 };
@@ -1071,10 +1074,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
         return (response.data);
       }
       else {
-        throw {
-          statusCode: response.status,
-          message: response.statusText
-        };
+        throw new Error(" Empty data from " + fullUrl);
       }
     } catch (error) {
       throw error;
@@ -1150,7 +1150,12 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
       let response = await axios.post(fullUrl, data, {
         headers: httpRequestHeaderAuth
       });
-      return response.data;
+      if (response.data == '') {
+        throw new Error("Empty data from " + fullUrl);
+      }
+      else {
+        return response.data;
+      }
     } catch (error) {
       throw error;
     }
@@ -1262,6 +1267,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
 //STEP4
 async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
+    let mountName = undefined;
     let applicationNameAndHttpClient =
       await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
 
@@ -1284,7 +1290,13 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
 
     let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
     let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
-    let mountName = body["mac-address"][0]["mount-name"];
+
+
+    if (body && body["mac-address"] && Array.isArray(body["mac-address"]) && body["mac-address"].length > 0 && body["mac-address"][0]["mount-name"]) {
+      mountName = body["mac-address"][0]["mount-name"];
+    } else {
+      throw new Error("Writing operation into Elastic Search Failed : body structure is not correct");
+    }
 
     let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + "/" + operationKey + "/_doc/" + mountName;
 
@@ -1321,21 +1333,15 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
       if (response.status === 200)
         return (response.data);
       else {
-        console.error('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(' + mountName + '): ' + error.message);
-        throw {
-          statusCode: response.status,
-          message: response.statusText
-        };
+        throw error;
       }
 
     } catch (error) {
-      console.error('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(' + mountName + '): ' + error.message);
       throw error;
     }
 
   } catch (error) {
-    console.error('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(' + mountName + '): ' + error.message);
-    throw error;
+    throw new Error("Writing operation into Elastic Search Failed (" + mountName + ")");
   }
 }
 
@@ -1454,7 +1460,6 @@ function transformArray(reqId, inputArray) {
 
   // Itera attraverso l'array fornito
   inputArray.forEach(item => {
-
     // Crea un oggetto con le informazioni richieste
     const transformedObject = {
       requestId: reqId,  // Sostituisci con il valore corretto
@@ -1492,7 +1497,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
   return new Promise(async function (resolve, reject) {
 
     var result = {};
-
     const mountName = body['mount-name'];
 
     try {
@@ -1518,55 +1522,87 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
         const data = await PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(mountName, user, originator, xCorrelator, traceIndicator, customerJourney);
 
-        data["core-model-1-4:control-construct"].forEach(controlConstruct => {
-          controlConstruct["forwarding-domain"].forEach(forwardingDomain => {
-            if (
-              forwardingDomain["layer-protocol-name"].includes(
-                "mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER"
-              )
-            ) {
-              FDomainArray.push(forwardingDomain);
-            }
+        if (
+          data &&
+          data["core-model-1-4:control-construct"] &&
+          Array.isArray(data["core-model-1-4:control-construct"]) &&
+          data["core-model-1-4:control-construct"].length > 0 &&
+          data["core-model-1-4:control-construct"][0]["forwarding-domain"] &&
+          Array.isArray(data["core-model-1-4:control-construct"][0]["forwarding-domain"]) &&
+          data["core-model-1-4:control-construct"][0]["forwarding-domain"].length > 0
+        ) {
+          data["core-model-1-4:control-construct"].forEach(controlConstruct => {
+            controlConstruct["forwarding-domain"].forEach(forwardingDomain => {
+              if (
+                forwardingDomain["layer-protocol-name"].includes(
+                  "mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER"
+                )
+              ) {
+                FDomainArray.push(forwardingDomain);
+              }
+            });
+
           });
-        });
+        }
+        else {
+          throw new Error("Received data are not correct (Missing core-model-1-4:control-construct/forwarding-domain)");
+        }
 
       } catch (error) {
-        throw ("PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(" + mountName + "):" + error.message);
+        throw ("(" + mountName + "):" + error.message);
       }
-
 
       //STEP2
       //"/rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses" 
-      if (FDomainArray.length > 0) {
+      if (FDomainArray.length >= 0) {
         try {
           const dataFromRequest = await PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(mountName, user, originator, xCorrelator, traceIndicator, customerJourney);
 
-          let uuid = FDomainArray[0]['uuid'];
-          let macAddressCur = FDomainArray[0]['mac-fd-1-0:mac-fd-pac']['mac-fd-status']['mac-address-cur'];
+          let uuid = 0;
+          let macAddressCur = "00:00:00:00:00:00";
+          if (FDomainArray.length > 0) {
+            uuid = FDomainArray[0]['uuid'];
+            macAddressCur = FDomainArray[0]['mac-fd-1-0:mac-fd-pac']['mac-fd-status']['mac-address-cur'];
+          }
 
           const step2Data = new Set();
           let egressData = [];
-          dataFromRequest["mac-fd-1-0:output"]["mac-table-entry-list"].forEach(entry => {
-            if (entry["affected-mac-fd"] === uuid) {
-              entry["own-mac-address"] = macAddressCur;
-              step2Data.add(entry);
-            }
-          });
 
-          step2DataArray = Array.from(step2Data);
+          if (
+            dataFromRequest &&
+            dataFromRequest["mac-fd-1-0:output"] &&
+            dataFromRequest["mac-fd-1-0:output"]["mac-table-entry-list"] &&
+            Array.isArray(dataFromRequest["mac-fd-1-0:output"]["mac-table-entry-list"])
+          ) {
+            dataFromRequest["mac-fd-1-0:output"]["mac-table-entry-list"].forEach(entry => {
+              if ((FDomainArray.length > 0) && (entry["affected-mac-fd"] === uuid)) {
+                entry["own-mac-address"] = macAddressCur;
+                step2Data.add(entry);
+              }
+              else if (FDomainArray.length == 0) {
+                entry["own-mac-address"] = macAddressCur;
+                step2Data.add(entry);
+              }
+            });
 
-          const eggressUniqSet = new Set();
-          // Iterare sugli oggetti nell'array e aggiungere i cognomi al Set
-          step2DataArray.forEach(obj => {
-            eggressUniqSet.add(obj['egress-ltp']);
-          });
+            step2DataArray = Array.from(step2Data);
 
-          // Convertire il Set in un array
-          eggressUniqArray = [...eggressUniqSet];
+            const eggressUniqSet = new Set();
+            step2DataArray.forEach(obj => {
+              eggressUniqSet.add(obj['egress-ltp']);
+            });
+
+            // Convertire il Set in un array
+            eggressUniqArray = [...eggressUniqSet];
+          }
+          else {
+            throw new Error("Received data are not correct (mac-fd-1-0:output/mac-table-entry-list)");
+          }
         }
         catch (error) {
-          throw ("PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice:" + error.message);
+          throw ("(" + mountName + "): " + error.message);
         }
+
 
         //STEP3
         try {
@@ -1575,11 +1611,12 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           });
           step3DataArray = await Promise.all(originalLtpNamePromises);
         } catch (error) {
-          throw ("PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(" + mountName + "):" + error.message);
+          throw ("(" + mountName + "): " + error.message);
         }
 
         // Get the current timestamp in milliseconds
         const timestamp = new Date().getTime();
+
 
         step2DataArray.forEach((step2Data, index) => {
           const entry = createMacAddressEntry(
@@ -1593,6 +1630,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           macAddressArray.push(entry);
         });
 
+
         const macAddressDataDb = createMacAddressDataForDb("mac-address", macAddressArray);
 
 
@@ -1601,7 +1639,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           const writingResultPromise = await PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(macAddressDataDb, user, originator, xCorrelator, traceIndicator, customerJourney);
         }
         catch (error) {
-          throw ("PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(" + mountName + "):" + error.message);
+          throw error;
         }
 
 
@@ -1611,7 +1649,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
 
         if (urlRequestor != null) {
-
           const transformedArray = transformArray(reqId, macAddressArray);
 
           bodyRequestor['application/json'] = {
@@ -1629,10 +1666,12 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
         }
         resolve(result['application/json']);
       }
+      else {
+        throw new Error("Missing mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER");
+      }
     }
     catch (error) {
       let internalServerError = createHttpError.InternalServerError(error);
-      console.error(error);
       reject(internalServerError);
     }
   });
