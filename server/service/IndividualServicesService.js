@@ -638,6 +638,7 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
     let result = null;
     let resultString = null;
 
+
     let client = await elasticsearchService.getClient(false);
 
     try {
@@ -672,6 +673,22 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
       transformedArray = filteredObjects.map(obj => transformData(obj));
 
       if (transformedArray != null) {
+        var response = {};
+        response['application/json'] = {
+          'targetMacAddress': transformedArray
+        };
+
+        if (Object.keys(response).length > 0) {
+          resolve(response['application/json']['targetMacAddress']);
+        } else {
+          resolve();
+        }
+      }
+    } catch (error) {
+      reject(error);
+    }
+
+    /*  if (transformedArray != null) {
         result = generateMountAndEgressPairs(transformedArray);
 
         if (result != null)
@@ -686,10 +703,7 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
         }
       }
       else
-        resolve(null);
-    } catch (error) {
-      reject(error);
-    }
+        resolve(null);*/
 
   });
 };
@@ -1333,7 +1347,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
       if (response.status === 200)
         return (response.data);
       else {
-        throw error;
+        throw new Error("Writing operation into Elastic Search Failed (" + mountName + ")");
       }
 
     } catch (error) {
@@ -1341,7 +1355,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     }
 
   } catch (error) {
-    throw new Error("Writing operation into Elastic Search Failed (" + mountName + ")");
+    throw error;
   }
 }
 
