@@ -619,14 +619,25 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
 
 
 function generateMountAndEgressPairs(data) {
-  const uniquePairs = {};
+  const formattedArray = [];
 
-  data.forEach(entry => {
-    const key = `${entry["mount-name"]}:${entry["egress-ltp-uuid"]}`;
-    uniquePairs[key] = true;
+  const mounts = {};
+
+  data[0].forEach(entry => {
+    const mountname = entry['mount-name'];
+    const egressltpuuid = entry['egress-ltp-uuid'];
+    if (mounts[mountname]) {
+      mounts[mountname].push(egressltpuuid);
+    } else {
+      mounts[mountname] = [egressltpuuid];
+    }
   });
 
-  return Object.keys(uniquePairs);
+  for (const [mount, egresses] of Object.entries(mounts)) {
+    formattedArray.push(`${mount}:${egresses.join(':')}`);
+  }
+
+  return formattedArray;
 }
 
 
@@ -687,26 +698,9 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
     } catch (error) {
       reject(error);
     }
-
-    /*  if (transformedArray != null) {
-        result = generateMountAndEgressPairs(transformedArray);
-
-        if (result != null)
-          resultString = result.join(';');
-        else
-          resolve(null);
-
-        if (resultString.length > 0) {
-          resolve(resultString);
-        } else {
-          resolve(null);
-        }
-      }
-      else
-        resolve(null);*/
-
   });
 };
+
 
 /**
  * Provides unsorted list of network element interfaces on path to specific MAC address.
@@ -753,12 +747,11 @@ exports.provideListOfNetworkElementInterfacesOnPath = async function (body, url)
  **/
 exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = async function (body, req) {
   return new Promise(async function (resolve, reject) {
-
     const inputValueList = body["input-value-list"];
     let fieldValues;
     let fieldValueFinal = [];
-    let result = [];
-    let responseValueVist;
+    let result = [];   
+    let arrayMountNameInterface = [];
 
     let operationServerName = req;
 
@@ -777,7 +770,14 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
       });
     }
 
-    // Loop attraverso ogni elemento di fieldValues e esegui la richiesta per ciascuno
+    let startTime = process.hrtime();
+    let responseCode = responseCodeEnum.code.OK;
+    let responseBodyToDocument = {};
+
+    let consequentActionList = await genericRepresentation.getConsequentActionList(operationServerName);
+    let responseValueList = await genericRepresentation.getResponseValueList(operationServerName);
+
+
     const promises = fieldValueFinal.map(fieldValue => {
       return RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch(fieldValue)
         .then(
@@ -793,22 +793,23 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
           }
         });
     });
-
-
-
-    let existingItem = false;
-    let element;
+    
     Promise.all(promises)
       .then(response => {
-        result.push({
-          "value": response,
-          "datatype": "string",
-          "field-name": "listOfNetworkElementInterfacesOnPath"
+        const arrayMountNameInterface = generateMountAndEgressPairs(response);
+
+        arrayMountNameInterface.forEach(entry => {
+          result.push({
+            "value": entry,      
+            "datatype": "string",
+            "field-name": responseValueList[0]["fieldName"]
+          });
         });
+
 
         let fullResponse =
         {
-          "consequent-action-list": [],
+          "consequent-action-list": consequentActionList,
           "response-value-list": result
         }
 
@@ -819,7 +820,6 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
       });
   });
 }
-
 
 function orderData(input) {
 
