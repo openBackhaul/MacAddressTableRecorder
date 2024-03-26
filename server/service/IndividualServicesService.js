@@ -371,6 +371,9 @@ async function executeAfterWait() {
     await waitAsync(30000);
   } catch (error) {
     console.error('An error occurred during the wait:', error);
+    console.error('An error occurred during the wait:', error);
+    // Puoi gestire l'errore in modo appropriato, ad esempio, registrandolo o gestendolo in qualche altro modo.
+    console.error('An error occurred during the wait:', error);    
     // Puoi gestire l'errore in modo appropriato, ad esempio, registrandolo o gestendolo in qualche altro modo.
   }
 }
@@ -402,15 +405,18 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
       try {
         //mountName - list from network/Mwdi
         newConnectedListFromMwdi = await EmbeddingCausesRequestForListOfDevicesAtMwdi(user, originator, xCorrelator, traceIndicator, customerJourney);
+
+        if ((newConnectedListFromMwdi!= null)  && (newConnectedListFromMwdi.length == 0))
+        {
+          console.warning('No Equipment connected. Wait 30 seconds and retry to read...');
+          await executeAfterWait();
+        }
       }
       catch (error) {
-        console.error('No Equipment connected. Wait 30 seconds and retry to read...');
+        console.error(error + ', wait 30 seconds and retry to read...');        
         await executeAfterWait();
         newConnectedListFromMwdi = null;
       }
-
-
-
 
       if (newConnectedListFromMwdi != null) {
         try {
@@ -1160,10 +1166,11 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
     httpRequestHeaderAuth = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
 
 
-    try {
+    try {   
       let response = await axios.post(fullUrl, data, {
         headers: httpRequestHeaderAuth
       });
+
       if (response.data == '') {
         throw new Error("Empty data from " + fullUrl);
       }
@@ -1614,7 +1621,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           }
         }
         catch (error) {
-          throw ("(" + mountName + "): " + error.message);
+          throw (error.message);
         }
 
 
@@ -1625,7 +1632,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           });
           step3DataArray = await Promise.all(originalLtpNamePromises);
         } catch (error) {
-          throw ("(" + mountName + "): " + error.message);
+          throw (error.message);
         }
 
         // Get the current timestamp in milliseconds
