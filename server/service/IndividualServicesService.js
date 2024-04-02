@@ -373,7 +373,7 @@ async function executeAfterWait() {
     console.error('An error occurred during the wait:', error);
     console.error('An error occurred during the wait:', error);
     // Puoi gestire l'errore in modo appropriato, ad esempio, registrandolo o gestendolo in qualche altro modo.
-    console.error('An error occurred during the wait:', error);    
+    console.error('An error occurred during the wait:', error);
     // Puoi gestire l'errore in modo appropriato, ad esempio, registrandolo o gestendolo in qualche altro modo.
   }
 }
@@ -406,14 +406,13 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         //mountName - list from network/Mwdi
         newConnectedListFromMwdi = await EmbeddingCausesRequestForListOfDevicesAtMwdi(user, originator, xCorrelator, traceIndicator, customerJourney);
 
-        if ((newConnectedListFromMwdi!= null)  && (newConnectedListFromMwdi.length == 0))
-        {
+        if ((newConnectedListFromMwdi != null) && (newConnectedListFromMwdi.length == 0)) {
           console.warning('No Equipment connected. Wait 30 seconds and retry to read...');
           await executeAfterWait();
         }
       }
       catch (error) {
-        console.error(error + ', wait 30 seconds and retry to read...');        
+        console.error(error + ', wait 30 seconds and retry to read...');
         await executeAfterWait();
         newConnectedListFromMwdi = null;
       }
@@ -723,7 +722,14 @@ exports.provideListOfNetworkElementInterfacesOnPath = async function (body, url)
   return new Promise(function (resolve, reject) {
     RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSearch(body)
       .then(function (response) {
-        resolve(response);
+        let newArray = JSON.parse(JSON.stringify(response));
+
+        // Remove the key "egress-ltp-uuid"
+        newArray.forEach(obj => {
+          delete obj["egress-ltp-uuid"];
+        });
+
+        resolve(newArray);
       })
       .catch(function (error) {
         if (error.name == 'TimeoutError') {
@@ -756,7 +762,7 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
     const inputValueList = body["input-value-list"];
     let fieldValues;
     let fieldValueFinal = [];
-    let result = [];   
+    let result = [];
     let arrayMountNameInterface = [];
 
     let operationServerName = req;
@@ -799,14 +805,14 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
           }
         });
     });
-    
+
     Promise.all(promises)
       .then(response => {
         const arrayMountNameInterface = generateMountAndEgressPairs(response);
 
         arrayMountNameInterface.forEach(entry => {
           result.push({
-            "value": entry,      
+            "value": entry,
             "datatype": "string",
             "field-name": responseValueList[0]["fieldName"]
           });
@@ -1166,7 +1172,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
     httpRequestHeaderAuth = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
 
 
-    try {   
+    try {
       let response = await axios.post(fullUrl, data, {
         headers: httpRequestHeaderAuth
       });
