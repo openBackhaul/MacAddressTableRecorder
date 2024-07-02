@@ -1356,9 +1356,11 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
       let response = await axios.post(finalUrl, data, {
         headers: headersAll
       });
-
-      if (response.status === 200)
+      if (/^20[0-9]$/.test(response.status.toString()))   //bug @216
+        {
+        console.log("Writing (" +  mountName + ") data into Elastic Search ");
         return (response.data);
+        }
       else {
         throw new Error("Writing operation into Elastic Search Failed (" + mountName + ")");
       }
