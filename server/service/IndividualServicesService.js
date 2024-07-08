@@ -384,11 +384,38 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
   let oldConnectedListFromES = null;
   let newConnectedListFromMwdi = null;
   let listJsonDisconnectedEq = [];
+
+
+  function printArray(array, alphabetical = false) {
+    // Create a copy of the array to sort if alphabetical is true
+    let outputArray = alphabetical ? [...array].sort() : array;
+
+    // Join the elements with a comma and a space
+    let result = outputArray.join(", ");
+    console.log(result);
+  }
+
+  const refreshIndex = async () => {    
+    try {
+      let client = await elasticsearchService.getClient(false);
+      let indexAlias = await getIndexAliasAsync();
+      let result = await client.indices.refresh({ index: indexAlias });
+      console.log(`Index ${indexAlias} refreshed successfully`, result);
+    } catch (error) {
+      console.error(`Error refreshing index ${indexAlias}:`, error);
+    }
+  };
+
+
   return new Promise(async function (resolve, reject) {
     try {
+
+      await refreshIndex();
+
       //"mount-name-list" from ES
       try {
         oldConnectedListFromES = await RequestForListOfConnectedEquipmentFromElasticSearch();
+        console.log("mount-name-list (ES), number of elements:" + oldConnectedListFromES['mount-name-list'].length);
       }
       catch (error) {
         console.log("mount-name-list is not present (elastic search error)");
@@ -399,7 +426,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         let MIDWApplicationInfo = await EmbeddingCausesRequestForListOfApplicationsAtRo(user, originator, xCorrelator, traceIndicator, customerJourney);
       }
       catch (error) {
-        console.error('MIDW application is not registered. Skypping');
+        //console.log('MIDW application is not registered. Skypping');
       }
 
       try {
@@ -409,6 +436,9 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         if ((newConnectedListFromMwdi != null) && (newConnectedListFromMwdi.length == 0)) {
           console.warning('No Equipment connected. Wait 30 seconds and retry to read...');
           await executeAfterWait();
+        }
+        else {
+          console.log("mount-name-list (MWDI), number of elements:" + newConnectedListFromMwdi['mount-name-list'].length);
         }
       }
       catch (error) {
@@ -421,25 +451,36 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         try {
           //list of equipment that was connected (mac-address data in ES) but now that are not connected
           listJsonDisconnectedEq = await findNotConnectedElements(oldConnectedListFromES, newConnectedListFromMwdi);
+          if (listJsonDisconnectedEq != null) {
+            console.log("list of equipments disconnected, number of elements:  -" + listJsonDisconnectedEq['mount-name-list'].length + " => remove mac-address data from ES");
+            //printArray(listJsonDisconnectedEq['mount-name-list']);
+          }
+          else {
+            console.log("list of equipments disconnected, number of elements:" + 0);
+          }
         }
         catch (error) {
           listJsonDisconnectedEq = null;
-          console.error('No Equipment disconnected');
+          console.log('No Equipment disconnected');
         }
 
         //Write new "mount-name-list" list into ES
+        printArray(newConnectedListFromMwdi['mount-name-list']);
         if (areEqualArray(oldConnectedListFromES, newConnectedListFromMwdi) == false) {
           try {
             result = await RequestForWriteListConnectedEquipmentIntoElasticSearch(newConnectedListFromMwdi);
+            console.log("Write new mount-name-list into ES, number of elements:" + newConnectedListFromMwdi['mount-name-list'].length);
           }
           catch (error) {
-            console.error('Error during updating operation of mount-name-list into db');
+            console.log('mount-name-list are not updated, no difference between old ES mount-name-list and MWDI mount-name-list currently read');
           }
+        }
+        else {
+          console.log("Write new mount-name-list, number of elements:" + newConnectedListFromMwdi['mount-name-list'].length);
         }
 
         if (listJsonDisconnectedEq != null) {
           listDisconnectedEq = listJsonDisconnectedEq["mount-name-list"];
-          console.log("Number of disconnected equipment = " + listDisconnectedEq.length + " => remove mac-address data from ES");
 
           //remove mac-address data in ES of equipment that are that are no longer connected  
           try {
@@ -610,7 +651,6 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
           headers: httpRequestHeaderAuth
         });
 
-        console.log("Number of connected devices = " + response.data['mount-name-list'].length);
         resolve(response.data);
       } catch (error) {
         reject(error);
@@ -1149,8 +1189,6 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
       operationKey
     );
 
-
-
     let fullUrl = finalUrl.replace("{mount-name}", mountName);
 
     var data = {
@@ -1357,10 +1395,10 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
         headers: headersAll
       });
       if (/^20[0-9]$/.test(response.status.toString()))   //bug @216
-        {
-        console.log("Writing (" +  mountName + ") data into Elastic Search ");
+      {
+        console.log("Writing (" + mountName + ") data into Elastic Search ");
         return (response.data);
-        }
+      }
       else {
         throw new Error("Writing operation into Elastic Search Failed (" + mountName + ")");
       }
