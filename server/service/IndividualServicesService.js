@@ -500,6 +500,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
           }
         }
       }
+      await refreshIndex();
       resolve(newConnectedListFromMwdi);
 
     }
