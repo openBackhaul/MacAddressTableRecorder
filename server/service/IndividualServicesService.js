@@ -400,7 +400,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
       let client = await elasticsearchService.getClient(false);
       let indexAlias = await getIndexAliasAsync();
       let result = await client.indices.refresh({ index: indexAlias });
-      console.log(`Index ${indexAlias} refreshed successfully`, result);
+      console.log(`Index ${indexAlias} refreshed successfully`);
     } catch (error) {
       console.error(`Error refreshing index ${indexAlias}:`, error);
     }
