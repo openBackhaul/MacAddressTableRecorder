@@ -889,17 +889,19 @@ function orderData(input) {
   return output;
 }
 
+
 const PromptForProvidingAllMacTablesCausesReadingFromElasticSearch = async function () {
   return new Promise(async function (resolve, reject) {
-
     let client = await elasticsearchService.getClient(false);
-
     let indexAlias = await getIndexAliasAsync();
+    const response = { 'application/json': [] };
 
     try {
+      // Inizialize scroll operation
       let res2 = await client.search({
         index: indexAlias,
         _source: 'mac-address',
+        scroll: '1m',  // Keep window scroll opened for 1 minute
         body: {
           query: {
             match: {
@@ -909,16 +911,28 @@ const PromptForProvidingAllMacTablesCausesReadingFromElasticSearch = async funct
         }
       });
 
-      const response = { 'application/json': [] };
+      let scrollId = res2.body._scroll_id;
+      let hits = res2.body.hits.hits;
 
-      const hits = res2.body.hits.hits;
-      for (const hit of hits) {
-        const source = hit._source['mac-address'];
+      // Continue to retrieve as long as there are documents.
+      while (hits.length > 0) {
+        for (const hit of hits) {
+          const source = hit._source['mac-address'];
 
-        for (const element of source) {
-          element["time-stamp-of-data"] = formatTimestamp(element["time-stamp-of-data"]);
-          response['application/json'].push(element);
+          for (const element of source) {
+            element["time-stamp-of-data"] = formatTimestamp(element["time-stamp-of-data"]);
+            response['application/json'].push(element);
+          }
         }
+
+        // Next scroll request
+        res2 = await client.scroll({
+          scroll_id: scrollId,
+          scroll: '1m'  
+        });
+
+        scrollId = res2.body._scroll_id;
+        hits = res2.body.hits.hits;
       }
 
       if (Object.keys(response).length > 0) {
@@ -931,6 +945,7 @@ const PromptForProvidingAllMacTablesCausesReadingFromElasticSearch = async funct
     }
   });
 };
+
 
 /**
  * Responses with a list of MAC tables of all connected devices.

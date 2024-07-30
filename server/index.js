@@ -26,9 +26,10 @@ var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/open
 var app = expressAppConfig.getApp();
 appCommons.setupExpressApp(app);
 
-//TO FIX!
-//global.databasePath ='d:/Working/VSCode/MacAddressTableRecorder/server/database/load.json'
+//TO REMOVE, ONLY FOR DEBUG
+//global.databasePath = 'D:/\VALE/\WorkindDoc/\MICROSERVIZI/\loadjson/\loadMATRRunning.json'
 global.databasePath = './database/load.json'
+
 
 prepareElasticsearch().catch(err => {
     console.error(`Error preparing Elasticsearch : ${err}`);
