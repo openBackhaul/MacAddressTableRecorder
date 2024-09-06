@@ -1459,8 +1459,8 @@ paths:
           $ref: "#/components/responses/responseForErroredServiceRequests"
         default:
           $ref: "#/components/responses/responseForErroredServiceRequests"
-  ? /v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation
-  : parameters:
+  /v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation:
+    parameters:
       - $ref: "#/components/parameters/user"
       - $ref: "#/components/parameters/originator"
       - $ref: "#/components/parameters/x-correlator"
@@ -1499,6 +1499,7 @@ paths:
                 input-value-list:
                   - field-name: "TargetMacAddress"
                     field-value: "01:01:01:01:01:01"
+                consequent-action-list:
       responses:
         "200":
           description: "List of network element interfaces, that lead to a certain MAC address are provided in generic representation."
