@@ -4,70 +4,70 @@ servers:
     own-oam:
       basic:
         - operation-name: /v1/register-yourself
-          uuid: matr-1-0-0-op-s-bm-000
+          uuid: matr-1-0-2-op-s-bm-000
         - operation-name: /v1/embed-yourself
-          uuid: matr-1-0-0-op-s-bm-001
+          uuid: matr-1-0-2-op-s-bm-001
         - operation-name: /v1/redirect-service-request-information
-          uuid: matr-1-0-0-op-s-bm-002
+          uuid: matr-1-0-2-op-s-bm-002
         - operation-name: /v1/redirect-oam-request-information
-          uuid: matr-1-0-0-op-s-bm-003
+          uuid: matr-1-0-2-op-s-bm-003
         - operation-name: /v1/end-subscription
-          uuid: matr-1-0-0-op-s-bm-004
+          uuid: matr-1-0-2-op-s-bm-004
         - operation-name: /v1/inquire-oam-request-approvals
-          uuid: matr-1-0-0-op-s-bm-005
+          uuid: matr-1-0-2-op-s-bm-005
         - operation-name: /v1/update-client
-          uuid: matr-1-0-0-op-s-bm-007
+          uuid: matr-1-0-2-op-s-bm-007
         - operation-name: /v1/list-ltps-and-fcs
-          uuid: matr-1-0-0-op-s-bm-008
+          uuid: matr-1-0-2-op-s-bm-008
         - operation-name: /v1/redirect-topology-change-information
-          uuid: matr-1-0-0-op-s-bm-009
+          uuid: matr-1-0-2-op-s-bm-009
         - operation-name: /v1/update-operation-key
-          uuid: matr-1-0-0-op-s-bm-010
+          uuid: matr-1-0-2-op-s-bm-010
         - operation-name: /v1/update-operation-client
-          uuid: matr-1-0-0-op-s-bm-011
+          uuid: matr-1-0-2-op-s-bm-011
       individual:
         - operation-name: /v1/bequeath-your-data-and-die
-          uuid: matr-1-0-0-op-s-im-000
+          uuid: matr-1-0-2-op-s-im-000
     service:
       basic:
         - operation-name: /v1/start-application-in-generic-representation
-          uuid: matr-1-0-0-op-s-bs-000
+          uuid: matr-1-0-2-op-s-bs-000
         - operation-name: /v1/inform-about-application
-          uuid: matr-1-0-0-op-s-bs-001
+          uuid: matr-1-0-2-op-s-bs-001
         - operation-name: /v1/inform-about-application-in-generic-representation
-          uuid: matr-1-0-0-op-s-bs-002
+          uuid: matr-1-0-2-op-s-bs-002
         - operation-name: /v1/inform-about-release-history
-          uuid: matr-1-0-0-op-s-bs-003
+          uuid: matr-1-0-2-op-s-bs-003
         - operation-name: /v1/inform-about-release-history-in-generic-representation
-          uuid: matr-1-0-0-op-s-bs-004
+          uuid: matr-1-0-2-op-s-bs-004
         - operation-name: /docs
-          uuid: matr-1-0-0-op-s-bs-005
+          uuid: matr-1-0-2-op-s-bs-005
       individual:
         - operation-name: /v1/provide-mac-table-of-all-devices
-          uuid: matr-1-0-0-op-s-is-000
+          uuid: matr-1-0-2-op-s-is-000
         - operation-name: /v1/provide-mac-table-of-specific-device
-          uuid: matr-1-0-0-op-s-is-001
+          uuid: matr-1-0-2-op-s-is-001
         - operation-name: /v1/read-current-mac-table-from-device
-          uuid: matr-1-0-0-op-s-is-002
+          uuid: matr-1-0-2-op-s-is-002
         - operation-name: /v1/provide-list-of-network-element-interfaces-on-path
-          uuid: matr-1-0-0-op-s-is-003
+          uuid: matr-1-0-2-op-s-is-003
         - operation-name: /v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation
-          uuid: matr-1-0-0-op-s-is-004
+          uuid: matr-1-0-2-op-s-is-004
   http-server:
     own-application-name: MacAddressTableRecorder
     own-release-number: 1.0.0
-    uuid: matr-1-0-0-http-s-000
+    uuid: matr-1-0-2-http-s-000
   tcp-server:
     - description: Without TLS layer
       local-protocol: http
-      own-ip-address: 1.1.4.5
+      own-ip-address: 127.0.0.1
       own-tcp-port: 4005
-      uuid: matr-1-0-0-tcp-s-000
+      uuid: matr-1-0-2-tcp-s-000
     - description: With TLS layer
       local-protocol: https
       own-ip-address: 1.2.4.5
       own-tcp-port: 4205
-      uuid: matr-1-0-0-tcp-s-001
+      uuid: matr-1-0-2-tcp-s-001
 
 
 clients:
@@ -75,30 +75,30 @@ clients:
   - http-client:
       application-name: ElasticSearch
       release-number: 1.0.0
-      uuid: matr-1-0-0-http-c-es-1-0-0-000
+      uuid: matr-1-0-2-http-c-es-1-0-0-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.15
       tcp-port: 3015
-      uuid: matr-1-0-0-tcp-c-es-1-0-0-000
+      uuid: matr-1-0-2-tcp-c-es-1-0-0-000
     elasticsearch-client:
-      uuid: matr-1-0-0-es-c-es-1-0-0-000
+      uuid: matr-1-0-2-es-c-es-1-0-0-000
       index-alias: 6
 
   - http-client:
       application-name: OldRelease
       release-number: 1.0.0
-      uuid: matr-1-0-0-http-c-or-1-0-0-000
+      uuid: matr-1-0-2-http-c-or-1-0-0-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.4.5
+      ip-address: 127.0.0.1
       tcp-port: 4005
-      uuid: matr-1-0-0-tcp-c-or-1-0-0-000
+      uuid: matr-1-0-2-tcp-c-or-1-0-0-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/bequeath-your-data-and-die
-            uuid: matr-1-0-0-op-c-bm-or-1-0-0-000
+            uuid: matr-1-0-2-op-c-bm-or-1-0-0-000
         individual:
       service:
         basic:
@@ -107,12 +107,12 @@ clients:
   - http-client:
       application-name: NewRelease
       release-number: 1.0.0
-      uuid: matr-1-0-0-http-c-nr-1-0-0-000
+      uuid: matr-1-0-2-http-c-nr-1-0-0-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.4.5
+      ip-address: 127.0.0.1
       tcp-port: 4005
-      uuid: matr-1-0-0-tcp-c-nr-1-0-0-000
+      uuid: matr-1-0-2-tcp-c-nr-1-0-0-000
     operation-clients:
       own-oam:
         basic:
@@ -124,39 +124,39 @@ clients:
   - http-client:
       application-name: RegistryOffice
       release-number: 2.0.1
-      uuid: matr-1-0-0-http-c-ro-2-0-1-000
+      uuid: matr-1-0-2-http-c-ro-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.8
       tcp-port: 3008
-      uuid: matr-1-0-0-tcp-c-ro-2-0-1-000
+      uuid: matr-1-0-2-tcp-c-ro-2-0-1-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/register-application
-            uuid: matr-1-0-0-op-c-bm-ro-2-0-1-000
+            uuid: matr-1-0-2-op-c-bm-ro-2-0-1-000
           - operation-name: /v1/relay-server-replacement
-            uuid: matr-1-0-0-op-c-bm-ro-2-0-1-001
+            uuid: matr-1-0-2-op-c-bm-ro-2-0-1-001
           - operation-name: /v1/deregister-application
-            uuid: matr-1-0-0-op-c-bm-ro-2-0-1-002
+            uuid: matr-1-0-2-op-c-bm-ro-2-0-1-002
           - operation-name: /v1/relay-operation-update
-            uuid: matr-1-0-0-op-c-bm-ro-2-0-1-003
+            uuid: matr-1-0-2-op-c-bm-ro-2-0-1-003
         individual:
       service:
         basic:
         individual:
           - operation-name: /v1/list-applications
-            uuid: matr-1-0-0-op-c-is-ro-2-0-1-000
+            uuid: matr-1-0-2-op-c-is-ro-2-0-1-000
 
   - http-client:
       application-name: TypeApprovalRegister
       release-number: 2.0.1
-      uuid: matr-1-0-0-http-c-tar-2-0-1-000
+      uuid: matr-1-0-2-http-c-tar-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.9
       tcp-port: 3009
-      uuid: matr-1-0-0-tcp-c-tar-2-0-1-000
+      uuid: matr-1-0-2-tcp-c-tar-2-0-1-000
     operation-clients:
       own-oam:
         basic:
@@ -168,17 +168,17 @@ clients:
   - http-client:
       application-name: ExecutionAndTraceLog
       release-number: 2.0.1
-      uuid: matr-1-0-0-http-c-eatl-2-0-1-000
+      uuid: matr-1-0-2-http-c-eatl-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.10
       tcp-port: 3010
-      uuid: matr-1-0-0-tcp-c-eatl-2-0-1-000
+      uuid: matr-1-0-2-tcp-c-eatl-2-0-1-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/record-service-request
-            uuid: matr-1-0-0-op-c-bs-eatl-2-0-1-000
+            uuid: matr-1-0-2-op-c-bs-eatl-2-0-1-000
         individual:
       service:
         basic:
@@ -187,17 +187,17 @@ clients:
   - http-client:
       application-name: OamLog
       release-number: 2.0.1
-      uuid: matr-1-0-0-http-c-ol-2-0-1-000
+      uuid: matr-1-0-2-http-c-ol-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.11
       tcp-port: 3011
-      uuid: matr-1-0-0-tcp-c-ol-2-0-1-000
+      uuid: matr-1-0-2-tcp-c-ol-2-0-1-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/record-oam-request
-            uuid: matr-1-0-0-op-c-bs-ol-2-0-1-000
+            uuid: matr-1-0-2-op-c-bs-ol-2-0-1-000
         individual:
       service:
         basic:
@@ -206,17 +206,17 @@ clients:
   - http-client:
       application-name: AdministratorAdministration
       release-number: 2.0.1
-      uuid: matr-1-0-0-http-c-aa-2-0-1-000
+      uuid: matr-1-0-2-http-c-aa-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.12
       tcp-port: 3012
-      uuid: matr-1-0-0-tcp-c-aa-2-0-1-000
+      uuid: matr-1-0-2-tcp-c-aa-2-0-1-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/approve-oam-request
-            uuid: matr-1-0-0-op-c-bs-aa-2-0-1-000
+            uuid: matr-1-0-2-op-c-bs-aa-2-0-1-000
         individual:
       service:
         basic:
@@ -225,27 +225,27 @@ clients:
   - http-client:
       application-name: ApplicationLayerTopology
       release-number: 2.0.1
-      uuid: matr-1-0-0-http-c-alt-2-0-1-000
+      uuid: matr-1-0-2-http-c-alt-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.13
       tcp-port: 3013
-      uuid: matr-1-0-0-tcp-c-alt-2-0-1-000
+      uuid: matr-1-0-2-tcp-c-alt-2-0-1-000
     operation-clients:
       own-oam:
         basic:
           - operation-name: /v1/update-all-ltps-and-fcs
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-000
+            uuid: matr-1-0-2-op-c-bm-alt-2-0-1-000
           - operation-name: /v1/update-ltp
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-001
+            uuid: matr-1-0-2-op-c-bm-alt-2-0-1-001
           - operation-name: /v1/delete-ltp-and-dependents
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-002
+            uuid: matr-1-0-2-op-c-bm-alt-2-0-1-002
           - operation-name: /v1/update-fc
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-003
+            uuid: matr-1-0-2-op-c-bm-alt-2-0-1-003
           - operation-name: /v1/update-fc-port
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-004
+            uuid: matr-1-0-2-op-c-bm-alt-2-0-1-004
           - operation-name: /v1/delete-fc-port
-            uuid: matr-1-0-0-op-c-bm-alt-2-0-1-005
+            uuid: matr-1-0-2-op-c-bm-alt-2-0-1-005
         individual:
       service:
         basic:
@@ -254,12 +254,12 @@ clients:
   - http-client:
       application-name: OperationKeyManagement
       release-number: 2.0.1
-      uuid: matr-1-0-0-http-c-okm-2-0-1-000
+      uuid: matr-1-0-2-http-c-okm-2-0-1-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.3.14
       tcp-port: 3014
-      uuid: matr-1-0-0-tcp-c-okm-2-0-1-000
+      uuid: matr-1-0-2-tcp-c-okm-2-0-1-000
     operation-clients:
       own-oam:
         basic:
@@ -271,12 +271,12 @@ clients:
   - http-client:
       application-name: MicroWaveDeviceInventory
       release-number: 1.0.0
-      uuid: matr-1-0-0-http-c-mwdi-1-0-0-000
+      uuid: matr-1-0-2-http-c-mwdi-1-0-0-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.4.4
       tcp-port: 4004
-      uuid: matr-1-0-0-tcp-c-mwdi-1-0-0-000
+      uuid: matr-1-0-2-tcp-c-mwdi-1-0-0-000
     operation-clients:
       own-oam:
         basic:
@@ -285,21 +285,21 @@ clients:
         basic:
         individual:
           - operation-name: /v1/provide-list-of-connected-devices
-            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-000
+            uuid: matr-1-0-2-op-c-is-mwdi-1-0-0-000
           - operation-name: /core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac
-            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-001
+            uuid: matr-1-0-2-op-c-is-mwdi-1-0-0-001
           - operation-name: /core-model-1-4:network-control-domain=cache/control-construct={mount-name}
-            uuid: matr-1-0-0-op-c-is-mwdi-1-0-0-002
+            uuid: matr-1-0-2-op-c-is-mwdi-1-0-0-002
 
   - http-client:
       application-name: MacAddressTableRecorder
       release-number: 1.0.0
-      uuid: matr-1-0-0-http-c-matr-1-0-0-000
+      uuid: matr-1-0-2-http-c-matr-1-0-2-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.4.5
+      ip-address: 127.0.0.1
       tcp-port: 4005
-      uuid: matr-1-0-0-tcp-c-matr-1-0-0-000
+      uuid: matr-1-0-2-tcp-c-matr-1-0-2-000
     operation-clients:
       own-oam:
         basic:
@@ -308,17 +308,17 @@ clients:
         basic:
         individual:
           - operation-name: /v1/read-current-mac-table-from-device
-            uuid: matr-1-0-0-op-c-is-matr-1-0-0-000
+            uuid: matr-1-0-2-op-c-is-matr-1-0-2-000
 
   - http-client:
       application-name: OpenDayLight
       release-number: 4.0.2
-      uuid: matr-1-0-0-http-c-odl-4-0-2-000
+      uuid: matr-1-0-2-http-c-odl-4-0-2-000
     tcp-client:
       remote-protocol: http
       ip-address: 1.1.1.1
       tcp-port: 1001
-      uuid: matr-1-0-0-tcp-c-odl-4-0-2-000
+      uuid: matr-1-0-2-tcp-c-odl-4-0-2-000
     operation-clients:
       own-oam:
         basic:
@@ -327,4 +327,4 @@ clients:
         basic:
         individual:
           - operation-name: /rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses
-            uuid: matr-1-0-0-op-c-is-odl-4-0-2-000
+            uuid: matr-1-0-2-op-c-is-odl-4-0-2-000
