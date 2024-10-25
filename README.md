@@ -36,5 +36,13 @@ This information is needed to compute topology information about the physical co
 ### Dependencies  
 - [MicroWaveDeviceInventory](https://github.com/openBackhaul/MicroWaveDeviceInventory)  
 
+### Latest Update
+
+The v1.0.2 release adds the following specification changes:  
+- update the specification to use the new ApplicationPattern release 2.1.2
+- operation client update for MWDI to the latest MWDI spec version 1.2.0
+
+There were no additions or changes to individual services.
+
 ### Comments  
 This application was specified during the ApplicationOwner training.  
