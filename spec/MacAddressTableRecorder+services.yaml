@@ -122,8 +122,8 @@ clients:
       uuid: matr-1-0-2-http-c-ro-2-1-2-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.3.8
-      tcp-port: 3008
+      ip-address: 127.0.01
+      tcp-port: 3031
       uuid: matr-1-0-2-tcp-c-ro-2-1-2-000
     operation-clients:
       own-oam:
@@ -149,8 +149,8 @@ clients:
       uuid: matr-1-0-2-http-c-tar-2-1-2-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.3.9
-      tcp-port: 3009
+      ip-address: 127.0.01
+      tcp-port: 3032
       uuid: matr-1-0-2-tcp-c-tar-2-1-2-000
     operation-clients:
       own-oam:
@@ -166,8 +166,8 @@ clients:
       uuid: matr-1-0-2-http-c-eatl-2-1-2-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.3.10
-      tcp-port: 3010
+      ip-address: 127.0.01
+      tcp-port: 3033
       uuid: matr-1-0-2-tcp-c-eatl-2-1-2-000
     operation-clients:
       own-oam:
@@ -185,8 +185,8 @@ clients:
       uuid: matr-1-0-2-http-c-ol-2-1-2-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.3.11
-      tcp-port: 3011
+      ip-address: 127.0.01
+      tcp-port: 3034
       uuid: matr-1-0-2-tcp-c-ol-2-1-2-000
     operation-clients:
       own-oam:
@@ -204,8 +204,8 @@ clients:
       uuid: matr-1-0-2-http-c-aa-2-1-2-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.3.12
-      tcp-port: 3012
+      ip-address: 127.0.01
+      tcp-port: 3035
       uuid: matr-1-0-2-tcp-c-aa-2-1-2-000
     operation-clients:
       own-oam:
@@ -223,8 +223,8 @@ clients:
       uuid: matr-1-0-2-http-c-alt-2-1-2-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.3.13
-      tcp-port: 3013
+      ip-address: 127.0.01
+      tcp-port: 3036
       uuid: matr-1-0-2-tcp-c-alt-2-1-2-000
     operation-clients:
       own-oam:
@@ -252,8 +252,8 @@ clients:
       uuid: matr-1-0-2-http-c-okm-2-1-2-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.3.14
-      tcp-port: 3014
+      ip-address: 127.0.01
+      tcp-port: 3037
       uuid: matr-1-0-2-tcp-c-okm-2-1-2-000
     operation-clients:
       own-oam:
