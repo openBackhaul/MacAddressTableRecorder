@@ -1,6 +1,25 @@
 forwardings:
 
   - forwarding-name: PromptForRegisteringCausesRegistrationRequest
+    uuid: matr-1-0-2-op-fc-bm-999
+    forwarding-type: InvariantProcessSnippet
+    management-requests:
+      operation-client-update:
+        - server-name: /v1/register-yourself
+          uuid: matr-1-0-2-op-s-bm-000
+      fc-port-update:
+        - server-name: /v1/register-yourself
+          uuid: matr-1-0-2-op-s-bm-000
+      fc-port-deletion:
+      operation-client-deletion:
+    initiating-requests:
+      - server-name: /v1/register-yourself
+        uuid: matr-1-0-2-op-s-bm-000
+    consequent-requests:
+      - client-name: RegistryOffice://v2/register-application
+        uuid: matr-1-0-2-op-c-bm-ro-2-1-2-000
+
+  - forwarding-name: PromptForRegisteringCausesRegistrationRequest2
     uuid: matr-1-0-2-op-fc-bm-000
     forwarding-type: InvariantProcessSnippet
     management-requests:
@@ -16,8 +35,9 @@ forwardings:
       - server-name: /v1/register-yourself
         uuid: matr-1-0-2-op-s-bm-000
     consequent-requests:
-      - client-name: RegistryOffice://v1/register-application
+      - client-name: RegistryOffice://v2/register-application
         uuid: matr-1-0-2-op-c-bm-ro-2-1-2-000
+
 
   - forwarding-name: PromptForEmbeddingCausesRequestForBequeathingData
     uuid: matr-1-0-2-op-fc-bm-001
@@ -118,6 +138,14 @@ forwardings:
         uuid: matr-1-0-2-op-s-bm-010
       - server-name: /v1/update-operation-client
         uuid: matr-1-0-2-op-s-bm-011
+      - server-name: /v1/inquire-basic-auth-approvals
+        uuid: matr-1-0-2-op-s-bm-012
+      - server-name: /v1/dispose-remainders-of-deregistered-application
+        uuid: matr-1-0-2-op-s-bm-013
+      - server-name: /v1/inform-about-preceding-release
+        uuid: matr-1-0-2-op-s-bm-014
+      - server-name: /v1/update-client-of-subsequent-release
+        uuid: matr-1-0-2-op-s-bm-015
       - server-name: /v1/bequeath-your-data-and-die
         uuid: matr-1-0-2-op-s-im-000
       - server-name: /v1/start-application-in-generic-representation
@@ -163,21 +191,26 @@ forwardings:
       - client-name: OamLog://v1/record-oam-request
         uuid: matr-1-0-2-op-c-bs-ol-2-1-2-000
 
-  - forwarding-name: OamRequestCausesInquiryForAuthentication
-    uuid: matr-1-0-2-op-fc-bm-004
+  - forwarding-name: BasicAuthRequestCausesInquiryForAuthentication
+    uuid: matr-1-0-2-op-fc-bm-005
     forwarding-type: InvariantProcessSnippet
     management-requests:
       operation-client-update:
+        - server-name: /v1/inquire-basic-auth-approvals
+          uuid: matr-1-0-2-op-s-bm-012
         - server-name: /v1/inquire-oam-request-approvals
           uuid: matr-1-0-2-op-s-bm-005
       fc-port-update:
+        - server-name: /v1/inquire-basic-auth-approvals
+          uuid: matr-1-0-2-op-s-bm-012
         - server-name: /v1/inquire-oam-request-approvals
           uuid: matr-1-0-2-op-s-bm-005
       fc-port-deletion:
       operation-client-deletion:
     initiating-requests:
+      # [all oam requests]
     consequent-requests:
-      - client-name: AccessAdministration://v1/approve-oam-request
+      - client-name: AccessAdministration://v1/approve-basic-auth-request
         uuid: matr-1-0-2-op-c-bs-aa-2-1-2-000
 
   - forwarding-name: PromptForBequeathingDataCausesRequestForBroadcastingInfoAboutServerReplacement
@@ -266,6 +299,10 @@ forwardings:
         uuid: matr-1-0-2-op-s-bm-009
       - server-name: /v1/update-operation-client
         uuid: matr-1-0-2-op-s-bm-011
+      - server-name: /v1/inquire-basic-auth-approvals
+        uuid: matr-1-0-2-op-s-bm-012
+      - server-name: /v1/update-client-of-subsequent-release
+        uuid: matr-1-0-2-op-s-bm-015
       - server-name: /v1/bequeath-your-data-and-die
         uuid: matr-1-0-2-op-s-im-000
     consequent-requests:
@@ -285,9 +322,13 @@ forwardings:
       fc-port-deletion:
       operation-client-deletion:
     initiating-requests:
+      - server-name: /v1/dispose-remainders-of-deregistered-application
+        uuid: matr-1-0-2-op-s-bm-013
+      ## TODO: All INDIVIDUAL service requests, which are deleting an LTP, to be complemented
     consequent-requests:
       - client-name: ApplicationLayerTopology://v1/delete-ltp-and-dependents
         uuid: matr-1-0-2-op-c-bm-alt-2-1-2-002
+
 
   - forwarding-name: ServiceRequestCausesFcUpdateRequest
     uuid: matr-1-0-2-op-fc-bm-008
