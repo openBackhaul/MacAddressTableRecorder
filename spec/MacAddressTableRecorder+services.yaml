@@ -199,7 +199,7 @@ clients:
         individual:
 
   - http-client:
-      application-name: AdministratorAdministration
+      application-name: AccessAdministration
       release-number: 2.1.2
       uuid: matr-1-0-2-http-c-aa-2-1-2-000
     tcp-client:
@@ -265,13 +265,13 @@ clients:
 
   - http-client:
       application-name: MicroWaveDeviceInventory
-      release-number: 1.0.0
-      uuid: matr-1-0-2-http-c-mwdi-1-0-0-000
+      release-number: 1.2.0
+      uuid: matr-1-0-2-http-c-mwdi-1-2-0-000
     tcp-client:
       remote-protocol: http
-      ip-address: 1.1.4.4
+      ip-address: 127.0.01
       tcp-port: 4004
-      uuid: matr-1-0-2-tcp-c-mwdi-1-0-0-000
+      uuid: matr-1-0-2-tcp-c-mwdi-1-2-0-000
     operation-clients:
       own-oam:
         basic:
@@ -280,11 +280,11 @@ clients:
         basic:
         individual:
           - operation-name: /v1/provide-list-of-connected-devices
-            uuid: matr-1-0-2-op-c-is-mwdi-1-0-0-000
+            uuid: matr-1-0-2-op-c-is-mwdi-1-2-0-000
           - operation-name: /core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac
-            uuid: matr-1-0-2-op-c-is-mwdi-1-0-0-001
+            uuid: matr-1-0-2-op-c-is-mwdi-1-2-0-001
           - operation-name: /core-model-1-4:network-control-domain=cache/control-construct={mount-name}
-            uuid: matr-1-0-2-op-c-is-mwdi-1-0-0-002
+            uuid: matr-1-0-2-op-c-is-mwdi-1-2-0-002
 
   - http-client:
       application-name: MacAddressTableRecorder

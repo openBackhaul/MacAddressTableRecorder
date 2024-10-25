@@ -65,7 +65,7 @@ forwardings:
         uuid: matr-1-0-2-op-s-bm-001
     consequent-requests:
       - client-name: MicroWaveDeviceInventory://v1/provide-list-of-connected-devices
-        uuid: matr-1-0-2-op-c-is-mwdi-1-0-0-000
+        uuid: matr-1-0-2-op-c-is-mwdi-1-2-0-000
 
   - forwarding-name: EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr
     uuid: matr-1-0-2-op-fc-is-002
@@ -177,7 +177,7 @@ forwardings:
       operation-client-deletion:
     initiating-requests:
     consequent-requests:
-      - client-name: AdministratorAdministration://v1/approve-oam-request
+      - client-name: AccessAdministration://v1/approve-oam-request
         uuid: matr-1-0-2-op-c-bs-aa-2-1-2-000
 
   - forwarding-name: PromptForBequeathingDataCausesRequestForBroadcastingInfoAboutServerReplacement
@@ -441,7 +441,7 @@ forwardings:
         uuid: matr-1-0-2-op-s-is-002
     consequent-requests:
       - client-name: MicroWaveDeviceInventory://core-model-1-4:network-control-domain=cache/control-construct={mount-name}?fields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))
-        uuid: matr-1-0-2-op-c-is-mwdi-1-0-0-002
+        uuid: matr-1-0-2-op-c-is-mwdi-1-2-0-002
 
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice
     uuid: matr-1-0-2-op-fc-is-022
@@ -471,7 +471,7 @@ forwardings:
         uuid: matr-1-0-2-op-s-is-002
     consequent-requests:
       - client-name: MicroWaveDeviceInventory://core-model-1-4:network-control-domain=cache/control-construct={mount-name}/logical-termination-point={uuid}/ltp-augment-1-0:ltp-augment-pac?fields=original-ltp-name
-        uuid: matr-1-0-2-op-c-is-mwdi-1-0-0-001
+        uuid: matr-1-0-2-op-c-is-mwdi-1-2-0-001
 
   - forwarding-name: PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     uuid: matr-1-0-2-op-fc-is-024

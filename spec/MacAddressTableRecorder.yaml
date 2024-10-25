@@ -881,7 +881,7 @@ paths:
           $ref: "#/components/responses/responseForErroredServiceRequests"
       callbacks:
         ? PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi
-        : url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-is-mwdi-1-0-0-002/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
+        : url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-is-mwdi-1-2-0-002/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
             get:
               parameters:
                 - $ref: "#/components/parameters/user"
@@ -1048,7 +1048,7 @@ paths:
                 default:
                   $ref: "#/components/responses/responseForErroredServiceRequests"
         ? PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi
-        : url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-is-mwdi-1-0-0-001/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
+        : url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-is-mwdi-1-2-0-001/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
             get:
               parameters:
                 - $ref: "#/components/parameters/user"
@@ -2272,7 +2272,7 @@ paths:
                           type: string
                           description: >
                             'Protocol for which the address of the MicroWaveDeviceInventory is needed
-                            from [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
+                            from [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
                       example:
                         required-protocol: "HTTP"
               responses:
@@ -2289,26 +2289,26 @@ paths:
                               type: string
                               description: >
                                 'Name of application
-                                filter response for application-name == [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-mwdi-1-0-0-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                                filter response for application-name == [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-mwdi-1-2-0-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
                             release-number:
                               type: string
                               description: >
                                 'Current release number of MicroWaveDeviceInventory
-                                to [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-mwdi-1-0-0-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
+                                to [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-mwdi-1-2-0-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
                             address:
                               type: string
                               description: >
                                 'Current address of MicroWaveDeviceInventory
-                                to [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]'
+                                to [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]'
                             port:
                               type: integer
                               description: >
                                 'Current TCP port of MicroWaveDeviceInventory
-                                to [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port]'
+                                to [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port]'
                         example:
                           - application-name: "MicroWaveDeviceInventory"
                             release-number: "1.0.0"
-                            address: "1.1.4.4"
+                            address: "127.0.01"
                             port: 4004
                   headers:
                     x-correlator:
@@ -2351,7 +2351,7 @@ paths:
                 default:
                   $ref: "#/components/responses/responseForErroredServiceRequests"
         EmbeddingCausesRequestForListOfDevicesAtMwdi:
-          url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-0-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-is-mwdi-1-0-0-000/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
+          url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-mwdi-1-2-0-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-is-mwdi-1-2-0-000/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
             post:
               parameters:
                 - $ref: "#/components/parameters/user"
@@ -3155,7 +3155,7 @@ paths:
                     'Port of application that shall approve the OaM requests
                     update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-aa-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port]'
               example:
-                oam-approval-application: "AdministratorAdministration"
+                oam-approval-application: "AccessAdministration"
                 oam-approval-application-release-number: "2.1.2"
                 oam-approval-operation: "/v1/approve-oam-request"
                 oam-approval-protocol: "HTTP"
@@ -3233,12 +3233,12 @@ paths:
                         application-name:
                           type: string
                           description: >
-                            'Own application name for the AdministratorAdministration to check, whether this application is part of the SDN at all
+                            'Own application name for the AccessAdministration to check, whether this application is part of the SDN at all
                             from [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/application-name]'
                         release-number:
                           type: string
                           description: >
-                            'Own application release number for the AdministratorAdministration to check, whether this application is part of the SDN at all
+                            'Own application release number for the AccessAdministration to check, whether this application is part of the SDN at all
                             from [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-number]'
                         Authorization:
                           type: string
