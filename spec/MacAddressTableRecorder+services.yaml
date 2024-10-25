@@ -25,6 +25,14 @@ servers:
           uuid: matr-1-0-2-op-s-bm-010
         - operation-name: /v1/update-operation-client
           uuid: matr-1-0-2-op-s-bm-011
+        - operation-name: /v1/inquire-basic-auth-approvals
+          uuid: matr-1-0-2-op-s-bm-012
+        - operation-name: /v1/dispose-remainders-of-deregistered-application
+          uuid: matr-1-0-2-op-s-bm-013
+        - operation-name: /v1/inform-about-preceding-release
+          uuid: matr-1-0-2-op-s-bm-014
+        - operation-name: /v1/update-client-of-subsequent-release
+          uuid: matr-1-0-2-op-s-bm-015
       individual:
         - operation-name: /v1/bequeath-your-data-and-die
           uuid: matr-1-0-2-op-s-im-000
