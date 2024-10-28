@@ -165,8 +165,8 @@ paths:
         default:
           $ref: "#/components/responses/responseForErroredServiceRequests"
       callbacks:
-        ? PromptForBequeathingDataCausesRequestForBroadcastingInfoAboutServerReplacement
-        : url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-bm-ro-2-1-2-001/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
+        PromptForBequeathingDataCausesRequestForBroadcastingInfoAboutServerReplacement:
+          url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-bm-ro-2-1-2-001/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
             post:
               parameters:
                 - $ref: "#/components/parameters/user"
@@ -363,8 +363,8 @@ paths:
                   $ref: "#/components/responses/responseForErroredServiceRequests"
                 default:
                   $ref: "#/components/responses/responseForErroredServiceRequests"
-        ? PromptingNewReleaseForUpdatingServerCausesRequestForBroadcastingInfoAboutBackwardCompatibleUpdateOfOperation
-        : url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-bm-ro-2-1-2-003/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
+        PromptingNewReleaseForUpdatingServerCausesRequestForBroadcastingInfoAboutBackwardCompatibleUpdateOfOperation:
+          url: #[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]://[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/domain-name or /core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address/ip-address/ipv-4-address]:[/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port][/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-bm-ro-2-1-2-003/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name]
             description: >
               'This callback belongs to the sequence of actions that have to be done during the bequeath-your-data-and-die process, despite the forwarding gets neither managed nor directly initiated by the /v1/bequeath-your-data-and-die request.
               After consuming applications have been redirected to the new release, the new release is triggered (this callback) to request the RegistryOffice for broadcasting information about backward compatible replacements of services.'
@@ -1603,7 +1603,7 @@ paths:
                       pattern: '^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{1,2})$'
                       description: >
                         'If body provided, release of RegistryOffice application
-                        update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-ro-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
+                        find or update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-ro-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
                     registration-operation:
                       type: string
                       minLength: 6
@@ -1663,57 +1663,21 @@ paths:
                               type: string
                               pattern: '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
                               description: >
-                                'If provided, own IPv4 address, which has to be documented (but not be directly used for formulating the callback) into the TcpServer with
-                                find [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-protocol] == http
-                                update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-address/ipv-4-address]'
+                                'If provided, own IPv4 address, which has to be documented (but not be directly used for formulating the callback)
+                                update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-000/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-address/ipv-4-address]'
                         domain-name:
                           type: string
                           pattern: '^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$'
                           description: >
-                            'If provided, own domain name, which has to be documented (but not be directly used for formulating the callback) into the TcpServer with
-                            find [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-protocol] == http
-                            update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-address/domain-name]'
+                            'If provided, own domain name, which has to be documented (but not be directly used for formulating the callback)
+                            update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-000/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-address/domain-name]'
                     http-port:
                       type: integer
                       minimum: 0
                       maximum: 65535
                       description: >
-                        'If provided, own TCP port, which has to be documented (but not be directly used for formulating the callback) into the TcpServer with
-                        find [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-protocol] == http
-                        update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-port]'
-                    https-address:
-                      type: object
-                      minProperties: 1
-                      maxProperties: 1
-                      additionalProperties: false
-                      properties:
-                        ip-address:
-                          type: object
-                          minProperties: 1
-                          additionalProperties: false
-                          properties:
-                            ipv-4-address:
-                              type: string
-                              pattern: '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
-                              description: >
-                                'If provided, own IPv4 address, which has to be documented (but not be directly used for formulating the callback) into the TcpServer with
-                                find [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-protocol] == https
-                                update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-address/ipv-4-address]'
-                        domain-name:
-                          type: string
-                          pattern: '^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$'
-                          description: >
-                            'If provided, own domain name, which has to be documented (but not be directly used for formulating the callback) into the TcpServer with
-                            find [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-protocol] == https
-                            update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-address/domain-name]'
-                    https-port:
-                      type: integer
-                      minimum: 0
-                      maximum: 65535
-                      description: >
-                        'If provided, own TCP port, which has to be documented (but not be directly used for formulating the callback) into the TcpServer with
-                        find [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-protocol] == https
-                        update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-*/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-port]'
+                        'If provided, own TCP port, which has to be documented (but not be directly used for formulating the callback)
+                        update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-s-000/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-port]'
                     preceding-application-name:
                       type: string
                       minLength: 3
@@ -1774,7 +1738,7 @@ paths:
                 example: "EXPERIMENTAL"
               description: >
                 'Life cycle state of the consumed service
-                find in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-000/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
+                from in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-000/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
         "400":
           $ref: "#/components/responses/responseForErroredServiceRequests"
         "401":
@@ -2105,9 +2069,6 @@ paths:
                 - registry-office-protocol
                 - registry-office-address
                 - registry-office-port
-                - old-release-protocol
-                - old-release-address
-                - old-release-port
               properties:
                 registry-office-application:
                   type: string
@@ -2262,7 +2223,7 @@ paths:
                 example: "EXPERIMENTAL"
               description: >
                 'Life cycle state of the consumed service
-                find in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-001/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
+                from in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-001/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
         "400":
           $ref: "#/components/responses/responseForErroredServiceRequests"
         "401":
@@ -2651,13 +2612,13 @@ paths:
                   type: string
                   description: >
                     'Name of application that shall record the service requests
-                    find [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-eatl-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                    find or update, but not at OldRelease or NewRelease, [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-eatl-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
                 service-log-application-release-number:
                   type: string
                   pattern: '^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{1,2})$'
                   description: >
                     'Release of application that shall record the service requests
-                    update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-eatl-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
+                    find or update, but not at OldRelease or NewRelease, [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-eatl-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
                 service-log-operation:
                   type: string
                   minLength: 6
@@ -2743,7 +2704,7 @@ paths:
                 example: "EXPERIMENTAL"
               description: >
                 'Life cycle state of the consumed service
-                find in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-002/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
+                from in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-002/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
         "400":
           $ref: "#/components/responses/responseForErroredServiceRequests"
         "401":
@@ -2781,6 +2742,7 @@ paths:
                         - release-number
                         - operation-name
                         - response-code
+                        - timestamp
                       properties:
                         x-correlator:
                           type: string
@@ -2815,6 +2777,12 @@ paths:
                         stringified-response:
                           type: string
                           description: "Stringified response sent from [application-name] to [originator]; only to be provided, if [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-c-bs-eatl-2-1-2-000/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/detailed-logging-is-on] == true"
+                        url:
+                          type: string
+                          description: 'Complete URL that has been addressed by the request; only to be provided, if the client is sending the record to EaTL, because the server could not be reached'
+                        exec-time:
+                          type: integer
+                          description: 'Total elapsed time for the execution of the request; value identical with responseHeaders.exec-time; only to be provided, if the server is sending the record to EaTL after processing the request'
                       example:
                         x-correlator: "550e8400-e29b-11d4-a716-446655440000"
                         trace-indicator: "1.1"
@@ -2902,13 +2870,13 @@ paths:
                   type: string
                   description: >
                     'Name of application that shall record the OaM requests
-                    find [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-ol-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                    find or update, but not at OldRelease or NewRelease, [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-ol-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
                 oam-log-application-release-number:
                   type: string
                   pattern: '^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{1,2})$'
                   description: >
                     'Release of application that shall record the OaM request
-                    update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-ol-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
+                    find or update, but not at OldRelease or NewRelease, [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-ol-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
                 oam-log-operation:
                   type: string
                   minLength: 6
@@ -2994,7 +2962,7 @@ paths:
                 example: "EXPERIMENTAL"
               description: >
                 'Life cycle state of the consumed service
-                find in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-003/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
+                from in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-003/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
         "400":
           $ref: "#/components/responses/responseForErroredServiceRequests"
         "401":
@@ -3191,7 +3159,7 @@ paths:
                 example: "EXPERIMENTAL"
               description: >
                 'Life cycle state of the consumed service
-                find in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-004/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
+                from in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-004/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
         "400":
           $ref: "#/components/responses/responseForErroredServiceRequests"
         "401":
@@ -3205,6 +3173,10 @@ paths:
         default:
           $ref: "#/components/responses/responseForErroredServiceRequests"
   /v1/inquire-oam-request-approvals:
+    description: >
+      'DEPRECATED
+      Service shall be deleted with AP v3.0.0
+      Starting from AP v2.1.0, /v1/inquire-basic-auth-approvals shall be applied as a backward compatible update'
     parameters:
       - $ref: "#/components/parameters/user"
       - $ref: "#/components/parameters/originator"
@@ -3236,13 +3208,13 @@ paths:
                   type: string
                   description: >
                     'Name of application that shall approve the OaM requests
-                    find [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-aa-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                    find or update, but not at OldRelease or NewRelease, [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-aa-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
                 oam-approval-application-release-number:
                   type: string
                   pattern: '^([0-9]{1,2})\.([0-9]{1,2})\.([0-9]{1,2})$'
                   description: >
                     'Release of application that shall approve the OaM requests
-                    update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-aa-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
+                    find or update, but not at OldRelease or NewRelease, [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-c-aa-2-1-2-000/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number]'
                 oam-approval-operation:
                   type: string
                   minLength: 6
@@ -3328,7 +3300,7 @@ paths:
                 example: "EXPERIMENTAL"
               description: >
                 'Life cycle state of the consumed service
-                find in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-005/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
+                from in [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-op-s-bm-005/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-configuration/life-cycle-state]'
         "400":
           $ref: "#/components/responses/responseForErroredServiceRequests"
         "401":

@@ -983,8 +983,7 @@
               "matr-1-0-2-op-s-is-004"
             ],
             "server-ltp": [
-              "matr-1-0-2-tcp-s-000",
-              "matr-1-0-2-tcp-s-001"
+              "matr-1-0-2-tcp-s-000"
             ],
             "layer-protocol": [
               {
@@ -1001,14 +1000,14 @@
                     "release-list": [
                       {
                         "local-id": "0",
-                        "release-number": "127.0.0.1",
+                        "release-number": "1.0.0",
                         "release-date": "01.07.2023",
                         "changes": "Initial version"
                       },
                       {
                         "local-id": "1",
-                        "release-number": "127.0.0.1",
-                        "release-date": "xx.xx.xxxx",
+                        "release-number": "1.0.1",
+                        "release-date": "22.08.2023",
                         "changes": "Fixed findings from 1.0.0 review"
                       },
                       {
@@ -1043,31 +1042,6 @@
                       "ipv-4-address": "127.0.0.1"
                     },
                     "local-port": 4005
-                  }
-                }
-              }
-            ]
-          },
-          {
-            "uuid": "matr-1-0-2-tcp-s-001",
-            "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SOURCE",
-            "client-ltp": [
-              "matr-1-0-2-http-s-000"
-            ],
-            "server-ltp": [
-            ],
-            "layer-protocol": [
-              {
-                "local-id": "0",
-                "layer-protocol-name": "tcp-server-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_TCP_LAYER",
-                "tcp-server-interface-1-0:tcp-server-interface-pac": {
-                  "tcp-server-interface-configuration": {
-                    "description": "With TLS layer",
-                    "local-protocol": "tcp-server-interface-1-0:PROTOCOL_TYPE_HTTPS",
-                    "local-address": {
-                      "ipv-4-address": "1.2.4.5"
-                    },
-                    "local-port": 4205
                   }
                 }
               }
