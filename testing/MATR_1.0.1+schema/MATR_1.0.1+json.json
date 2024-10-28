@@ -1,0 +1,164 @@
+{
+    "/v1/provide-mac-table-of-all-devices": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "mount-name": {
+                    "type": "string"
+                },
+                "own-mac-address": {
+                    "type": "string"
+                },
+                "egress-ltp-uuid": {
+                    "type": "string"
+                },
+                "original-ltp-name": {
+                    "type": "string"
+                },
+                "vlan-id": {
+                    "type": "integer"
+                },
+                "remote-mac-address": {
+                    "type": "string"
+                },
+                "time-stamp-of-data": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "/v1/provide-mac-table-of-specific-device": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "mount-name": {
+                    "type": "string"
+                },
+                "own-mac-address": {
+                    "type": "string"
+                },
+                "egress-ltp-uuid": {
+                    "type": "string"
+                },
+                "original-ltp-name": {
+                    "type": "string"
+                },
+                "vlan-id": {
+                    "type": "integer"
+                },
+                "remote-mac-address": {
+                    "type": "string"
+                },
+                "time-stamp-of-data": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "/v1/read-current-mac-table-from-device": {
+        "type": "object",
+        "required": [
+            "request-id"
+        ],
+        "properties": {
+            "request-id": {
+                "type": "string"
+            }
+        }
+    },
+    "/v1/provide-list-of-network-element-interfaces-on-path": {
+        "type": "array",
+        "items": {
+            "type": "object",
+            "properties": {
+                "target-mac-address": {
+                    "type": "string"
+                },
+                "mount-name": {
+                    "type": "string"
+                },
+                "original-ltp-name": {
+                    "type": "string"
+                },
+                "vlan-id": {
+                    "type": "integer"
+                },
+                "time-stamp-of-data": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "/v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation": {
+        "type": "object",
+        "required": [
+            "response-value-list",
+            "consequent-action-list"
+        ],
+        "properties": {
+            "response-value-list": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "field-name",
+                        "value",
+                        "datatype"
+                    ],
+                    "properties": {
+                        "field-name": {
+                            "type": "string"
+                        },
+                        "value": {
+                            "type": "string"
+                        },
+                        "datatype": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "consequent-action-list": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "required": [
+                        "label",
+                        "request",
+                        "display-in-new-browser-window"
+                    ],
+                    "properties": {
+                        "label": {
+                            "type": "string"
+                        },
+                        "request": {
+                            "type": "string"
+                        },
+                        "input-value-list": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "required": [
+                                    "field-name"
+                                ],
+                                "properties": {
+                                    "field-name": {
+                                        "type": "string"
+                                    },
+                                    "unit": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        },
+                        "display-in-new-browser-window": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

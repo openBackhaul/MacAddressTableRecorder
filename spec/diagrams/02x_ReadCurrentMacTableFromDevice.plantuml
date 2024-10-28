@@ -28,9 +28,9 @@ MwdiFd --> "MATR://v1/read-current-mac-table-from-device": {fdUuid, LayerProtoco
 "MATR://v1/read-current-mac-table-from-device" -> MwdiLtp: {MountName, egressLtpUUid} (apiKeyAuth)
 MwdiLtp --> "MATR://v1/read-current-mac-table-from-device": {originalLtpName}
 
-"MATR://v1/read-current-mac-table-from-device" -> "ElasticSearch": {MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc}
+"MATR://v1/read-current-mac-table-from-device" -> "ElasticSearch": {list-of(MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc)}
 
-[<-"MATR://v1/read-current-mac-table-from-device": {requestId, MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc} (no security)
+[<-"MATR://v1/read-current-mac-table-from-device": {requestId, list-of(MountName, macAddressCur, egressLtpUUid, originalLtpName, vlanId, macAddresses, timeStampOfRpc)} (no security)
 deactivate "MATR://v1/read-current-mac-table-from-device"
 
 @enduml

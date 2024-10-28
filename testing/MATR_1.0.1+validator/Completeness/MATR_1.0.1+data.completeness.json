@@ -1,0 +1,50 @@
+[
+	{
+		"mode": "debug",
+		"serverList": [
+			{
+				"serverName": "dummy",
+				"dummyUri": "ping.openBackhaul.com"
+			},
+			{
+				"serverName": "matr",
+				"server": "http://127.0.0.1:4005",
+				"pathToControlConstruct": "",
+				"authorizationCode": "Basic ????",
+				"operationKey": "Operation key not yet provided.",
+				"userName": "Thorsten Heinze",
+				"originator": "MATR_1.0.1+testcase.completeness",
+				"xCorrelator": "00000000-0000-0000-0000-000000000000",
+				"traceIndicator": "1",
+				"customerJourney": ""
+			},
+			{
+				"serverName": "matrSimulator",
+				"server": "http://localhost:3002",
+				"pathToControlConstruct": "",
+				"authorizationCode": "Basic ????",
+				"operationKey": "Operation key not yet provided.",
+				"userName": "Thorsten Heinze",
+				"originator": "MATR_1.0.1+testcase.completeness",
+				"xCorrelator": "00000000-0000-0000-0000-000000000000",
+				"traceIndicator": "1",
+				"customerJourney": ""
+			}
+		],
+		"collectionInputList": [
+			{
+				"collectionName": "MatrCompleteness_server",
+				"serverToBeApplied": "matr",
+				"mountName": "513250011",
+				"kindOfReference": "dynamic"
+			},
+			{
+				"collectionName": "MatrCompleteness_simulator",
+				"serverToBeApplied": "matrSimulator",
+				"mountName": "513250010",
+				"kindOfReference": "static",
+				"suffixUrlEncodingIsRequired": true
+			}
+		]
+	}
+]
