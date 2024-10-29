@@ -42,7 +42,12 @@ The v1.0.2 release adds the following specification changes:
 - update the specification to use the new ApplicationPattern release 2.1.2
 - operation client update for MWDI to the latest MWDI spec version 1.2.0
 
-There were no additions or changes to individual services.
+There were no additions or changes to individual services.  
+
+#### Open issues
+
+See issues [246](https://github.com/openBackhaul/MacAddressTableRecorder/issues/246) and [248](https://github.com/openBackhaul/MacAddressTableRecorder/issues/248).  
+There were small errors in the configFile, which have already been merged into develop branch. For v1.0.2_spec the configFile with those fixes should be used.
 
 ### Comments  
 This application was specified during the ApplicationOwner training.  
