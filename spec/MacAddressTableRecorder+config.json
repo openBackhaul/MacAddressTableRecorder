@@ -1090,7 +1090,7 @@
                 "http-client-interface-1-0:http-client-interface-pac": {
                   "http-client-interface-configuration": {
                     "application-name": "ElasticSearch",
-                    "release-number": "1.0.0"
+                    "release-number": "127.0.0.1"
                   }
                 }
               }
