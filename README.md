@@ -42,7 +42,7 @@ The v1.0.2 release adds the following specification changes:
 - update the specification to use the new ApplicationPattern release 2.1.2
 - operation client update for MWDI to the latest MWDI spec version 1.2.0
 
-There were no additions or changes to individual services or other bug fixes.
+There were no additions or changes to individual services.
 
 ### Comments  
 This application was specified during the ApplicationOwner training.  
