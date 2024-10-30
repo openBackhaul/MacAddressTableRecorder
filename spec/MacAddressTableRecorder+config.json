@@ -661,7 +661,7 @@
                 }
               }
             ]
-          }
+          },
           {
             "uuid": "matr-1-0-2-op-s-im-000",
             "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SOURCE",
@@ -1090,7 +1090,7 @@
                 "http-client-interface-1-0:http-client-interface-pac": {
                   "http-client-interface-configuration": {
                     "application-name": "ElasticSearch",
-                    "release-number": "127.0.0.1"
+                    "release-number": "1.0.0"
                   }
                 }
               }
@@ -1163,7 +1163,7 @@
                 "http-client-interface-1-0:http-client-interface-pac": {
                   "http-client-interface-configuration": {
                     "application-name": "OldRelease",
-                    "release-number": "127.0.0.1"
+                    "release-number": "1.0.1"
                   }
                 }
               }
@@ -1196,12 +1196,12 @@
             ]
           },
           {
-            "uuid": "matr-1-0-2-http-c-nr-1-0-0-000",
+            "uuid": "matr-1-0-2-http-c-nr-1-0-2-000",
             "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
             "client-ltp": [
             ],
             "server-ltp": [
-              "matr-1-0-2-tcp-c-nr-1-0-0-000"
+              "matr-1-0-2-tcp-c-nr-1-0-2-000"
             ],
             "layer-protocol": [
               {
@@ -1210,17 +1210,17 @@
                 "http-client-interface-1-0:http-client-interface-pac": {
                   "http-client-interface-configuration": {
                     "application-name": "NewRelease",
-                    "release-number": "127.0.0.1"
+                    "release-number": "1.0.2"
                   }
                 }
               }
             ]
           },
           {
-            "uuid": "matr-1-0-2-tcp-c-nr-1-0-0-000",
+            "uuid": "matr-1-0-2-tcp-c-nr-1-0-2-000",
             "ltp-direction": "core-model-1-4:TERMINATION_DIRECTION_SINK",
             "client-ltp": [
-              "matr-1-0-2-http-c-nr-1-0-0-000"
+              "matr-1-0-2-http-c-nr-1-0-2-000"
             ],
             "server-ltp": [
             ],
@@ -2029,7 +2029,7 @@
                 "http-client-interface-1-0:http-client-interface-pac": {
                   "http-client-interface-configuration": {
                     "application-name": "MicroWaveDeviceInventory",
-                    "release-number": "127.0.0.1"
+                    "release-number": "1.2.0"
                   }
                 }
               }
@@ -2102,7 +2102,7 @@
                 "http-client-interface-1-0:http-client-interface-pac": {
                   "http-client-interface-configuration": {
                     "application-name": "MacAddressTableRecorder",
-                    "release-number": "127.0.0.1"
+                    "release-number": "1.2.0"
                   }
                 }
               }
@@ -2238,7 +2238,7 @@
                   {
                     "local-id": "200",
                     "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
-                    "logical-termination-point": "matr-1-0-2-op-c-bm-ro-2-1-0-000"
+                    "logical-termination-point": "matr-1-0-2-op-c-bm-ro-2-1-2-000"
                   }
                 ]
               },
@@ -2268,7 +2268,7 @@
                   {
                     "local-id": "200",
                     "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
-                    "logical-termination-point": "matr-1-0-2-op-c-bm-ro-2-1-0-000"
+                    "logical-termination-point": "matr-1-0-2-op-c-bm-ro-2-1-2-000"
                   }
                 ]
               },
@@ -2613,7 +2613,7 @@
                   {
                     "local-id": "200",
                     "port-direction": "core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT",
-                    "logical-termination-point": "matr-1-0-2-op-c-bs-aa-2-1-0-000"
+                    "logical-termination-point": "matr-1-0-2-op-c-bs-aa-2-1-2-000"
                   }
                 ]
               },
