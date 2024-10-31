@@ -121,6 +121,26 @@ profile-instances:
   - profile-name: 'GenericResponseProfile'
     uuid: 'matr-1-0-2-response-p-008'
     capability:
+      operation-name: '/v1/inform-about-release-history-in-generic-representation'
+      field-name-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-list=1/release-number'
+      description: 'Represents the second entry in the list of releases'
+      datatype: string
+    configuration:
+      value-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-list=1/changes'
+
+  - profile-name: 'GenericResponseProfile'
+    uuid: 'matr-1-0-2-response-p-009'
+    capability:
+      operation-name: '/v1/inform-about-release-history-in-generic-representation'
+      field-name-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-list=2/release-number'
+      description: 'Represents the third entry in the list of releases'
+      datatype: string
+    configuration:
+      value-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-list=2/changes'
+
+  - profile-name: 'GenericResponseProfile'
+    uuid: 'matr-1-0-2-response-p-015'
+    capability:
       operation-name: '/v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation'
       static-field-name: 'listOfNetworkElementInterfacesOnPath'
       description: 'Calculated mount names and interfaces of devices on the path to the MAC address. Mount names and interfaces are separated by colons. Value pairs are are separated by semicolons.'
