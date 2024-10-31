@@ -119,7 +119,7 @@ profile-instances:
       value-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-list=0/changes'
 
   - profile-name: 'GenericResponseProfile'
-    uuid: 'matr-1-0-2-response-p-015'
+    uuid: 'matr-1-0-2-response-p-008'
     capability:
       operation-name: '/v1/inform-about-release-history-in-generic-representation'
       field-name-reference: '/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-list=1/release-number'
