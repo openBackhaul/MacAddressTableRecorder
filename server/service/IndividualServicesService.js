@@ -371,10 +371,6 @@ async function executeAfterWait() {
     await waitAsync(30000);
   } catch (error) {
     console.error('An error occurred during the wait:', error);
-    console.error('An error occurred during the wait:', error);
-    // Puoi gestire l'errore in modo appropriato, ad esempio, registrandolo o gestendolo in qualche altro modo.
-    console.error('An error occurred during the wait:', error);
-    // Puoi gestire l'errore in modo appropriato, ad esempio, registrandolo o gestendolo in qualche altro modo.
   }
 }
 
@@ -395,7 +391,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
     console.log(result);
   }
 
-  const refreshIndex = async () => {    
+  const refreshIndex = async () => {
     try {
       let client = await elasticsearchService.getClient(false);
       let indexAlias = await getIndexAliasAsync();
@@ -928,7 +924,7 @@ const PromptForProvidingAllMacTablesCausesReadingFromElasticSearch = async funct
         // Next scroll request
         res2 = await client.scroll({
           scroll_id: scrollId,
-          scroll: '1m'  
+          scroll: '1m'
         });
 
         scrollId = res2.body._scroll_id;
@@ -1159,9 +1155,15 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
         throw new Error(" Empty data from " + fullUrl);
       }
     } catch (error) {
+      console.log("***********catch axios try Error '404' for URL:", fullUrl)
+      console.log("*********** response status:", response.status)
+      console.log("*********** response messge:", response.data)
       throw error;
     }
   } catch (error) {
+      console.log("***********catch main try Error '404' for URL:", fullUrl)
+      console.log("*********** response status:", response.status)
+      console.log("*********** response messge:", response.data)
     throw error;
   }
 }
@@ -1376,6 +1378,9 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     if (body && body["mac-address"] && Array.isArray(body["mac-address"]) && body["mac-address"].length > 0 && body["mac-address"][0]["mount-name"]) {
       mountName = body["mac-address"][0]["mount-name"];
     } else {
+      console.log('********************************* Body *******************************************')
+      console.log(JSON.stringify(body))
+      console.log('**********************************************************************************')
       throw new Error("Writing operation into Elastic Search Failed : body structure is not correct");
     }
 

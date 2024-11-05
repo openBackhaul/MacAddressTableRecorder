@@ -393,7 +393,7 @@ async function MATRCycle(firstTime, logging_level) {
     maximumNumberOfRetries = await extractProfileConfiguration(prefix + "integer-p-002");
 
     try {
-        deviceListSyncPeriod = await extractProfileConfiguration(prefix + "integer-p-003");
+        //deviceListSyncPeriod = await extractProfileConfiguration(prefix + "integer-p-003");
 
         if (firstTime === false) {
             const now = new Date();
