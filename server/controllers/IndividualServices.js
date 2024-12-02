@@ -20,12 +20,15 @@ module.exports.bequeathYourDataAndDie = async function bequeathYourDataAndDie(re
       ResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
     })
     .catch(async function (responseBody) {
-      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
+      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url, -1);
       let sentResp = ResponseBuilder.buildResponse(res, undefined, responseBody, responseHeader);
       responseCode = sentResp.code;
       responseBodyToDocument = sentResp.body;
     });
-  executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument);
+    let execTime = await RestResponseHeader.executionTimeInMilliseconds(startTime);
+    if (!execTime) execTime = 0;
+    else execTime = Math.round(execTime);
+    executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument, execTime);
 };
 
 module.exports.provideListOfNetworkElementInterfacesOnPath = async function provideListOfNetworkElementInterfacesOnPath(req, res, next, body, user, originator, xCorrelator, traceIndicator, customerJourney) {
@@ -39,12 +42,15 @@ module.exports.provideListOfNetworkElementInterfacesOnPath = async function prov
       ResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
     })
     .catch(async function (responseBody) {
-      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
+      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url, -1);
       let sentResp = ResponseBuilder.buildResponse(res, undefined, responseBody, responseHeader);
       responseCode = sentResp.code;
       responseBodyToDocument = sentResp.body;
     });
-  executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument);
+    let execTime = await RestResponseHeader.executionTimeInMilliseconds(startTime);
+    if (!execTime) execTime = 0;
+    else execTime = Math.round(execTime);
+    executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument, execTime);
 
 };
 
@@ -59,12 +65,15 @@ module.exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentatio
       ResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
     })
     .catch(async function (responseBody) {
-      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
+      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url, -1);
       let sentResp = ResponseBuilder.buildResponse(res, undefined, responseBody, responseHeader);
       responseCode = sentResp.code;
       responseBodyToDocument = sentResp.body;
     });
-  executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument);
+    let execTime = await RestResponseHeader.executionTimeInMilliseconds(startTime);
+    if (!execTime) execTime = 0;
+    else execTime = Math.round(execTime);
+    executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument, execTime);
 };
 
 module.exports.provideMacTableOfAllDevices = async function provideMacTableOfAllDevices(req, res, next, user, originator, xCorrelator, traceIndicator, customerJourney) {
@@ -78,12 +87,15 @@ module.exports.provideMacTableOfAllDevices = async function provideMacTableOfAll
       ResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
     })
     .catch(async function (responseBody) {
-      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
+      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url, -1);
       let sentResp = ResponseBuilder.buildResponse(res, undefined, responseBody, responseHeader);
       responseCode = sentResp.code;
       responseBodyToDocument = sentResp.body;
     });
-  executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument);
+    let execTime = await RestResponseHeader.executionTimeInMilliseconds(startTime);
+    if (!execTime) execTime = 0;
+    else execTime = Math.round(execTime);
+    executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument, execTime);
 };
 
 
@@ -98,12 +110,15 @@ module.exports.provideMacTableOfSpecificDevice = async function provideMacTableO
       ResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
     })
     .catch(async function (responseBody) {
-      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
+      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url, -1);
       let sentResp = ResponseBuilder.buildResponse(res, undefined, responseBody, responseHeader);
       responseCode = sentResp.code;
       responseBodyToDocument = sentResp.body;
     });
-  executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument);
+    let execTime = await RestResponseHeader.executionTimeInMilliseconds(startTime);
+    if (!execTime) execTime = 0;
+    else execTime = Math.round(execTime);
+    executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument, execTime);
 };
 
 module.exports.readCurrentMacTableFromDevice = async function readCurrentMacTableFromDevice(req, res, next, body, user, originator, xCorrelator, traceIndicator, customerJourney) {
@@ -118,16 +133,14 @@ module.exports.readCurrentMacTableFromDevice = async function readCurrentMacTabl
       ResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
     })
     .catch(async function (responseBody) {
-      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
+      let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url, -1);
       let sentResp = ResponseBuilder.buildResponse(res, undefined, responseBody, responseHeader);
       responseCode = sentResp.code;
       responseBodyToDocument = sentResp.body;
     });
 
-  executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument);
+    let execTime = await RestResponseHeader.executionTimeInMilliseconds(startTime);
+    if (!execTime) execTime = 0;
+    else execTime = Math.round(execTime);
+    executionAndTraceService.recordServiceRequest(xCorrelator, traceIndicator, user, originator, req.url, responseCode, req.body, responseBodyToDocument, execTime);
 };
-
-
-
-
-
