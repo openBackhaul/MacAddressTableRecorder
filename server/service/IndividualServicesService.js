@@ -1378,9 +1378,9 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     if (body && body["mac-address"] && Array.isArray(body["mac-address"]) && body["mac-address"].length > 0 && body["mac-address"][0]["mount-name"]) {
       mountName = body["mac-address"][0]["mount-name"];
     } else {
-      console.log('********************************* Body *******************************************')
-      console.log(JSON.stringify(body))
-      console.log('**********************************************************************************')
+      console.error('********************************* Body *******************************************')
+      console.error(JSON.stringify(body))
+      console.error('**********************************************************************************')
       throw new Error("Writing operation into Elastic Search Failed : body structure is not correct");
     }
 
@@ -1739,9 +1739,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           macAddressArray.push(entry);
         });
 
-
         const macAddressDataDb = createMacAddressDataForDb("mac-address", macAddressArray);
-
 
         //STEP4
         try {

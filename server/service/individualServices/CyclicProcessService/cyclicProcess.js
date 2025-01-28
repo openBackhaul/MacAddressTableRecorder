@@ -302,7 +302,7 @@ async function requestMessage(index) {
 
         sendRequest(slidingWindow[index], user, originator, xCorrelator, traceIndicator, customerJourney).then(retObj => {
             if (retObj.ret.code != 200) {
-                //errore    
+                // Response error management
                 let elementIndex = checkDeviceExistsInSlidingWindow(retObj['node-id']);
                 if (elementIndex == DEVICE_NOT_PRESENT) {
                     printLog('Response from element ' + retObj['node-id'] + ' not more present in Sliding Window. Ignore that.', print_log_level >= 2);
