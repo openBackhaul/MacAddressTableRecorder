@@ -5,6 +5,7 @@ const { setTimeout } = require('timers');
 const path = require("path");
 const individualServices = require("./../../IndividualServicesService.js");
 const { elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
+const RequestHeader = require("onf-core-model-ap/applicationPattern/rest/client/RequestHeader");
 const onfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
 const onfAttributes = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfAttributes');
 const forwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
@@ -291,13 +292,13 @@ async function requestMessage(index) {
             return;
         }
 
-        //TO FIX  
-        let user = "User Name";
-        let originator = "Resolver";
-        let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
-        let traceIndicator = "1.3.1";
-        let customerJourney = "Unknown value";
-
+        // Use a dynamic header
+        let requestHeader = new RequestHeader("MacAddressTableRecorder", "MacAddressTableRecorder", undefined, "1");
+        let user = requestHeader.user;
+        let originator = requestHeader.originator;
+        let xCorrelator = requestHeader.xCorrelator;
+        let traceIndicator = requestHeader.traceIndicator;
+        let customerJourney = requestHeader.customerJourney;
 
         sendRequest(slidingWindow[index], user, originator, xCorrelator, traceIndicator, customerJourney).then(retObj => {
             if (retObj.ret.code != 200) {
