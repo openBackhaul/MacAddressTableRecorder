@@ -489,9 +489,9 @@ paths:
           $ref: "#/components/responses/responseForErroredServiceRequests"
 
 
-########################################################################################################################
-#   Generic Simulator (generic examples, but all response codes)
-########################################################################################################################
+  ########################################################################################################################
+  #   Generic Simulator (generic examples, but all response codes)
+  ########################################################################################################################
   /generic/v1/provide-mac-table-of-all-devices:
     parameters:
       - $ref: "#/components/parameters/user"
@@ -1445,4 +1445,3 @@ components:
     basicAuth:
       type: http
       scheme: basic
-      
