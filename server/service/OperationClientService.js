@@ -142,7 +142,7 @@ exports.getOperationClientOperationalState = function(uuid) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putOperationClientDetailedLoggingIsOn = function(body,uuid) {
+exports.putOperationClientDetailedLoggingIsOn = function(url, body, uuid) {
   return new Promise(async function (resolve, reject) {
     try {
       let isUpdated = await fileOperation.writeToDatabaseAsync(url, body, false);
@@ -150,6 +150,7 @@ exports.putOperationClientDetailedLoggingIsOn = function(body,uuid) {
         /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
           uuid
         );*/
+        //TODO to be verify when database async
         ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
           forwardingAutomationInputList
         );
