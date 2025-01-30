@@ -1378,9 +1378,9 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     if (body && body["mac-address"] && Array.isArray(body["mac-address"]) && body["mac-address"].length > 0 && body["mac-address"][0]["mount-name"]) {
       mountName = body["mac-address"][0]["mount-name"];
     } else {
-      console.log('********************************* Body *******************************************')
-      console.log(JSON.stringify(body))
-      console.log('**********************************************************************************')
+      console.error('********************************* Body *******************************************')
+      console.error(JSON.stringify(body))
+      console.error('**********************************************************************************')
       throw new Error("Writing operation into Elastic Search Failed : body structure is not correct");
     }
 
@@ -1648,10 +1648,12 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
           let uuid = 0;
           let macAddressCur = "00:00:00:00:00:00";
-          if (FDomainArray.length > 0) {
-            uuid = FDomainArray[0]['uuid'];
-            macAddressCur = FDomainArray[0]['mac-fd-1-0:mac-fd-pac']['mac-fd-status']['mac-address-cur'];
-          }
+
+          // Not correct behavior, could be multiple Forwarding domain
+          // if (FDomainArray.length > 0) {
+          //   uuid = FDomainArray[0]['uuid'];
+          //   macAddressCur = FDomainArray[0]['mac-fd-1-0:mac-fd-pac']['mac-fd-status']['mac-address-cur'];
+          // }
 
           const step2Data = new Set();
           let egressData = [];
@@ -1663,16 +1665,35 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
             Array.isArray(dataFromRequest["mac-fd-1-0:output"]["mac-table-entry-list"])
           ) {
             dataFromRequest["mac-fd-1-0:output"]["mac-table-entry-list"].forEach(entry => {
-              if ((FDomainArray.length > 0) && (entry["affected-mac-fd"] === uuid)) {
+              if (FDomainArray.length > 0) {
+                FDomainArray.forEach(entryFD => {
+                  uuid = entryFD["uuid"];
+                  macAddressCur = entryFD['mac-fd-1-0:mac-fd-pac']['mac-fd-status']['mac-address-cur'];
+                  if ((FDomainArray.length > 0) && (entry["affected-mac-fd"] === uuid)) {
+                    entry["own-mac-address"] = macAddressCur;
+                    step2Data.add(entry);
+                  }
+
+                });
+              } else {
                 entry["own-mac-address"] = macAddressCur;
                 step2Data.add(entry);
               }
-              else if (FDomainArray.length == 0) {
-                entry["own-mac-address"] = macAddressCur;
-                step2Data.add(entry);
-              }
+              // if ((FDomainArray.length > 0) && (entry["affected-mac-fd"] === uuid)) {
+              //   entry["own-mac-address"] = macAddressCur;
+              //   step2Data.add(entry);
+              // }
+              // else if (FDomainArray.length == 0) {
+              //   entry["own-mac-address"] = macAddressCur;
+              //   step2Data.add(entry);
+              // }
             });
 
+            if (step2Data.length == 0) {
+              console.warn("Step2Data is empty!");
+              console.warn("Forwarding domain: ", FDomainArray);
+              console.warn("Data from request:", dataFromRequest)
+            }
             step2DataArray = Array.from(step2Data);
 
             const eggressUniqSet = new Set();
@@ -1718,9 +1739,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           macAddressArray.push(entry);
         });
 
-
         const macAddressDataDb = createMacAddressDataForDb("mac-address", macAddressArray);
-
 
         //STEP4
         try {

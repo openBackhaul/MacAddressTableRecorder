@@ -184,7 +184,7 @@ profile-instances:
     uuid: 'matr-1-0-2-integer-p-003'
     capability:
       integer-name: 'deviceListSyncPeriod'
-      #description: 'Time period for the synchronization of the MATR cycle'
+      # description: 'Time period for the synchronization of the MATR cycle'
       unit: 'minutes'
       minimum: 1
       maximum: 120

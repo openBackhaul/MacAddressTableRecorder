@@ -208,7 +208,7 @@ forwardings:
       fc-port-deletion:
       operation-client-deletion:
     initiating-requests:
-      # [all oam requests]
+    # [all oam requests]
     consequent-requests:
       - client-name: AccessAdministration://v1/approve-basic-auth-request
         uuid: matr-1-0-2-op-c-bs-aa-2-1-2-000
@@ -324,7 +324,7 @@ forwardings:
     initiating-requests:
       - server-name: /v1/dispose-remainders-of-deregistered-application
         uuid: matr-1-0-2-op-s-bm-013
-      ## TODO: All INDIVIDUAL service requests, which are deleting an LTP, to be complemented
+    ## TODO: All INDIVIDUAL service requests, which are deleting an LTP, to be complemented
     consequent-requests:
       - client-name: ApplicationLayerTopology://v1/delete-ltp-and-dependents
         uuid: matr-1-0-2-op-c-bm-alt-2-1-2-002
