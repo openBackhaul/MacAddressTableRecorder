@@ -5964,6 +5964,7 @@ paths:
                               oneOf:
                                 - description: "action profile"
                                   type: object
+                                  additionalProperties: false
                                   required:
                                     - uuid
                                     - profile-name
