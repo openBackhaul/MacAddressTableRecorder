@@ -11831,12 +11831,12 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -13519,7 +13519,7 @@ paths:
                             value: core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET
                           - value-name: ForwardingName
                             value: OamRequestCausesLoggingRequest
-                          fc-port:
+                        fc-port:
                           - local-id: "000"
                             port-direction: core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT
                             logical-termination-point: ro-2-1-2-op-s-bm-003
@@ -13873,9 +13873,9 @@ paths:
                             port-direction:
                               type: string
                               enum:
-                              - core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT
-                              - core-model-1-4:PORT_DIRECTION_TYPE_INPUT
-                              - core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT
+                                - core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT
+                                - core-model-1-4:PORT_DIRECTION_TYPE_INPUT
+                                - core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT
                             logical-termination-point:
                               type: string
                       example:
@@ -20223,23 +20223,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpServer
     put:
       tags:
-      - TcpServer
+        - TcpServer
       summary: Documents Protocol of TcpServer
       operationId: putTcpServerLocalProtocol
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-s-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-tcp-s-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-s-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-tcp-s-000
       requestBody:
         content:
           application/json:
@@ -20286,24 +20286,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpServer
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-address
   : get:
       tags:
-      - TcpServer
+        - TcpServer
       summary: Returns address of the server
       operationId: getTcpServerLocalAddress
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-s-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-tcp-s-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-s-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-tcp-s-000
       responses:
         "200":
           description: Local address provided
@@ -20348,23 +20348,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpServer
     put:
       tags:
-      - TcpServer
+        - TcpServer
       summary: Documents address of the server
       operationId: putTcpServerLocalAddress
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-s-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-tcp-s-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-s-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-tcp-s-000
       requestBody:
         content:
           application/json:
@@ -20411,24 +20411,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpServer
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/tcp-server-interface-1-0:tcp-server-interface-pac/tcp-server-interface-configuration/local-port
   : get:
       tags:
-      - TcpServer
+        - TcpServer
       summary: Returns TCP port of the server
       operationId: getTcpServerLocalPort
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-s-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-tcp-s-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-s-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-tcp-s-000
       responses:
         "200":
           description: Local port provided
@@ -20473,23 +20473,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpServer
     put:
       tags:
-      - TcpServer
+        - TcpServer
       summary: Documents TCP port of the server
       operationId: putTcpServerLocalPort
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-s-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-tcp-s-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-s-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-tcp-s-000
       requestBody:
         content:
           application/json:
@@ -20536,24 +20536,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpServer
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-name
   : get:
       tags:
-      - OperationClient
+        - OperationClient
       summary: Returns operation name
       operationId: getOperationClientOperationName
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-op-c-bm-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-op-c-bm-or-1-0-1-000
       responses:
         "200":
           description: Operation name provided
@@ -20598,23 +20598,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: OperationClient
     put:
       tags:
-      - OperationClient
+        - OperationClient
       summary: Configures operation name
       operationId: putOperationClientOperationName
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-op-c-bm-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-op-c-bm-or-1-0-1-000
       requestBody:
         content:
           application/json:
@@ -20661,24 +20661,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: OperationClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/operation-key
   : get:
       tags:
-      - OperationClient
+        - OperationClient
       summary: Returns key used for connecting to server.
       operationId: getOperationClientOperationKey
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-op-c-bm-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-op-c-bm-or-1-0-1-000
       responses:
         "200":
           description: Operation key provided
@@ -20723,23 +20723,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: OperationClient
     put:
       tags:
-      - OperationClient
+        - OperationClient
       summary: Configures key used for connecting to server.
       operationId: putOperationClientOperationKey
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-op-c-bm-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-op-c-bm-or-1-0-1-000
       requestBody:
         content:
           application/json:
@@ -21347,7 +21347,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: ElasticsearchClient
     put:
       tags:
@@ -21721,7 +21721,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: HttpClient
     put:
       tags:
@@ -23725,11 +23725,11 @@ components:
       additionalProperties: false
     v1_updateclientofsubsequentrelease_body:
       required:
-      - address
-      - application-name
-      - port
-      - protocol
-      - release-number
+        - address
+        - application-name
+        - port
+        - protocol
+        - release-number
       type: object
       properties:
         application-name:
@@ -23746,8 +23746,8 @@ components:
           description: |
             'Protocol to be used during the bequeath-your-data-and-die process update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-nr-1-0-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
           enum:
-          - HTTP
-          - HTTPS
+            - HTTP
+            - HTTPS
         address:
           $ref: '#/components/schemas/v1updateclientofsubsequentrelease_address'
         port:
@@ -23766,8 +23766,8 @@ components:
         port: 3000
     inline_response_200_7:
       required:
-      - bequeath-your-data-and-die-operation
-      - data-transfer-operations-list
+        - bequeath-your-data-and-die-operation
+        - data-transfer-operations-list
       type: object
       properties:
         bequeath-your-data-and-die-operation:
@@ -23783,16 +23783,16 @@ components:
       example:
         bequeath-your-data-and-die-operation: /v1/bequeath-your-data-and-die
         data-transfer-operations-list:
-        - /v1/inquire-application-type-approvals
-        - /v1/notify-approvals
+          - /v1/inquire-application-type-approvals
+          - /v1/notify-approvals
     inline_response_200_8:
       required:
-      - application-name
-      - application-purpose
-      - data-update-period
-      - owner-email-address
-      - owner-name
-      - release-number
+        - application-name
+        - application-purpose
+        - data-update-period
+        - owner-email-address
+        - owner-name
+        - release-number
       type: object
       properties:
         application-name:
@@ -23811,10 +23811,10 @@ components:
           type: string
           description: "from [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/data-update-period]"
           enum:
-          - real-time
-          - 1h-period
-          - 24h-period
-          - manual
+            - real-time
+            - 1h-period
+            - 24h-period
+            - manual
         owner-name:
           type: string
           description: "from [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/owner-name]"
@@ -23830,9 +23830,9 @@ components:
         owner-email-address: Thorsten.Heinze@telefonica.com
     inline_response_200_9:
       required:
-      - changes
-      - release-date
-      - release-number
+        - changes
+        - release-date
+        - release-number
       type: object
       properties:
         release-number:
@@ -23846,7 +23846,7 @@ components:
           description: "from [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-http-s-000/layer-protocol=0/http-server-interface-1-0:http-server-interface-pac/http-server-interface-capability/release-list=*/changes]"
     inline_response_200_10:
       required:
-      - core-model-1-4:control-construct
+        - core-model-1-4:control-construct
       type: object
       properties:
         core-model-1-4:control-construct:
@@ -23855,332 +23855,332 @@ components:
         core-model-1-4:control-construct:
           profile-collection:
             profile:
-            - uuid: ro-2-1-2-integer-p-000
-              profile-name: integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
-              integer-profile-1-0:integer-profile-pac:
-                integer-profile-capability:
-                  integer-name: maximumNumberOfEntries
-                  unit: records
-                  minimum: 0
-                  maximum: 1000000
-                integer-profile-configuration:
-                  integer-value: 1000000
+              - uuid: ro-2-1-2-integer-p-000
+                profile-name: integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
+                integer-profile-1-0:integer-profile-pac:
+                  integer-profile-capability:
+                    integer-name: maximumNumberOfEntries
+                    unit: records
+                    minimum: 0
+                    maximum: 1000000
+                  integer-profile-configuration:
+                    integer-value: 1000000
           forwarding-domain:
-          - uuid: ro-2-1-2-op-fd-000
-            forwarding-construct:
-            - uuid: ro-2-1-2-op-fc-bm-003
-              name:
-              - value-name: ForwardingKind
-                value: core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET
-              - value-name: ForwardingName
-                value: OamRequestCausesLoggingRequest
-              fc-port:
-              - local-id: "000"
-                port-direction: core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT
-                logical-termination-point: ro-2-1-2-op-s-bm-003
-              - local-id: "200"
-                port-direction: core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT
-                logical-termination-point: ro-2-1-2-op-c-bs-ol-2-1-2-000
-            - uuid: ro-2-1-2-op-fc-bm-004
-              name:
-              - value-name: ForwardingKind
-                value: core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET
-              - value-name: ForwardingName
-                value: OamRequestCausesInquiryForAuthentication
-              fc-port:
-              - local-id: "000"
-                port-direction: core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT
-                logical-termination-point: ro-2-1-2-op-s-bm-005
-              - local-id: "200"
-                port-direction: core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT
-                logical-termination-point: ro-2-1-2-op-c-bs-aa-2-1-2-000
+            - uuid: ro-2-1-2-op-fd-000
+              forwarding-construct:
+              - uuid: ro-2-1-2-op-fc-bm-003
+                name:
+                - value-name: ForwardingKind
+                  value: core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET
+                - value-name: ForwardingName
+                  value: OamRequestCausesLoggingRequest
+                fc-port:
+                - local-id: "000"
+                  port-direction: core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT
+                  logical-termination-point: ro-2-1-2-op-s-bm-003
+                - local-id: "200"
+                  port-direction: core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT
+                  logical-termination-point: ro-2-1-2-op-c-bs-ol-2-1-2-000
+              - uuid: ro-2-1-2-op-fc-bm-004
+                name:
+                - value-name: ForwardingKind
+                  value: core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET
+                - value-name: ForwardingName
+                  value: OamRequestCausesInquiryForAuthentication
+                fc-port:
+                - local-id: "000"
+                  port-direction: core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT
+                  logical-termination-point: ro-2-1-2-op-s-bm-005
+                - local-id: "200"
+                  port-direction: core-model-1-4:PORT_DIRECTION_TYPE_OUTPUT
+                  logical-termination-point: ro-2-1-2-op-c-bs-aa-2-1-2-000
           logical-termination-point:
-          - uuid: ro-2-1-2-op-c-bm-ro-2-1-2-000
-            ltp-direction: core-model-1-4:TERMINATION_DIRECTION_SINK
-            client-ltp: []
-            server-ltp:
-            - ro-2-1-2-http-c-ro-2-1-2-000
-            layer-protocol:
-            - local-id: "0"
-              layer-protocol-name: operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER
-              operation-client-interface-1-0:operation-client-interface-pac:
-                operation-client-interface-configuration:
-                  operation-name: /v1/register-application
-                  operation-key: Operation key not yet provided.
-                operation-client-interface-status:
-                  operational-state: operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED
-                  life-cycle-state: operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED
-          - uuid: ro-2-1-2-http-c-ro-2-1-2-000
-            ltp-direction: core-model-1-4:TERMINATION_DIRECTION_SINK
-            client-ltp:
-            - ro-2-1-2-op-c-bm-ro-2-1-2-000
-            server-ltp:
-            - ro-2-1-2-tcp-c-ro-2-1-2-000
-            layer-protocol:
-            - local-id: "0"
-              layer-protocol-name: http-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_HTTP_LAYER
-              http-client-interface-1-0:http-client-interface-pac:
-                http-client-interface-configuration:
-                  application-name: RegistryOffice
-                  release-number: 2.1.2
+            - uuid: ro-2-1-2-op-c-bm-ro-2-1-2-000
+              ltp-direction: core-model-1-4:TERMINATION_DIRECTION_SINK
+              client-ltp: []
+              server-ltp:
+                - ro-2-1-2-http-c-ro-2-1-2-000
+              layer-protocol:
+                - local-id: "0"
+                  layer-protocol-name: operation-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_OPERATION_LAYER
+                  operation-client-interface-1-0:operation-client-interface-pac:
+                    operation-client-interface-configuration:
+                      operation-name: /v1/register-application
+                      operation-key: Operation key not yet provided.
+                    operation-client-interface-status:
+                      operational-state: operation-client-interface-1-0:OPERATIONAL_STATE_TYPE_NOT_YET_DEFINED
+                      life-cycle-state: operation-client-interface-1-0:LIFE_CYCLE_STATE_TYPE_NOT_YET_DEFINED
+            - uuid: ro-2-1-2-http-c-ro-2-1-2-000
+              ltp-direction: core-model-1-4:TERMINATION_DIRECTION_SINK
+              client-ltp:
+                - ro-2-1-2-op-c-bm-ro-2-1-2-000
+              server-ltp:
+                - ro-2-1-2-tcp-c-ro-2-1-2-000
+              layer-protocol:
+                - local-id: "0"
+                  layer-protocol-name: http-client-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_HTTP_LAYER
+                  http-client-interface-1-0:http-client-interface-pac:
+                    http-client-interface-configuration:
+                      application-name: RegistryOffice
+                      release-number: 2.1.2
           uuid: ro-2-1-2
     inline_response_200_11:
       required:
-      - core-model-1-4:profile
+        - core-model-1-4:profile
       type: object
       properties:
         core-model-1-4:profile:
           oneOf:
-          - required:
-            - action-profile-1-0:action-profile-pac
-            - profile-name
-            - uuid
-            type: object
-            properties:
-              uuid:
-                type: string
-              profile-name:
-                type: string
-                enum:
-                - action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE
-                - response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE
-                - file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE
-                - integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
-                - string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE
-              action-profile-1-0:action-profile-pac:
-                required:
-                - action-profile-capability
-                - action-profile-configuration
-                type: object
-                properties:
-                  action-profile-capability:
-                    required:
-                    - display-in-new-browser-window
-                    - label
-                    - operation-name
-                    type: object
-                    properties:
-                      operation-name:
-                        type: string
-                      label:
-                        type: string
-                      input-value-list:
-                        type: array
-                        items:
-                          required:
-                          - field-name
+            - required:
+              - action-profile-1-0:action-profile-pac
+              - profile-name
+              - uuid
+              type: object
+              properties:
+                uuid:
+                  type: string
+                profile-name:
+                  type: string
+                  enum:
+                  - action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE
+                  - response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE
+                  - file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE
+                  - integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
+                  - string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE
+                action-profile-1-0:action-profile-pac:
+                  required:
+                  - action-profile-capability
+                  - action-profile-configuration
+                  type: object
+                  properties:
+                    action-profile-capability:
+                      required:
+                      - display-in-new-browser-window
+                      - label
+                      - operation-name
+                      type: object
+                      properties:
+                        operation-name:
+                          type: string
+                        label:
+                          type: string
+                        input-value-list:
+                          type: array
+                          items:
+                            required:
+                            - field-name
+                            type: object
+                            properties:
+                              field-name:
+                                type: string
+                              unit:
+                                type: string
+                        display-in-new-browser-window:
+                          type: boolean
+                    action-profile-configuration:
+                      required:
+                      - consequent-operation-reference
+                      type: object
+                      properties:
+                        consequent-operation-reference:
+                          type: string
+              description: action profile
+            - required:
+              - profile-name
+              - response-profile-1-0:response-profile-pac
+              - uuid
+              type: object
+              properties:
+                uuid:
+                  type: string
+                profile-name:
+                  type: string
+                  enum:
+                  - action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE
+                  - response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE
+                  - file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE
+                  - integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
+                  - string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE
+                response-profile-1-0:response-profile-pac:
+                  required:
+                  - response-profile-capability
+                  - response-profile-configuration
+                  type: object
+                  properties:
+                    response-profile-capability:
+                      required:
+                      - datatype
+                      - field-name
+                      - operation-name
+                      type: object
+                      properties:
+                        operation-name:
+                          type: string
+                        field-name:
+                          maxProperties: 1
+                          minProperties: 1
                           type: object
                           properties:
-                            field-name:
+                            static-field-name:
                               type: string
-                            unit:
+                            field-name-reference:
                               type: string
-                      display-in-new-browser-window:
-                        type: boolean
-                  action-profile-configuration:
-                    required:
-                    - consequent-operation-reference
-                    type: object
-                    properties:
-                      consequent-operation-reference:
-                        type: string
-            description: action profile
-          - required:
-            - profile-name
-            - response-profile-1-0:response-profile-pac
-            - uuid
-            type: object
-            properties:
-              uuid:
-                type: string
-              profile-name:
-                type: string
-                enum:
-                - action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE
-                - response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE
-                - file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE
-                - integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
-                - string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE
-              response-profile-1-0:response-profile-pac:
-                required:
-                - response-profile-capability
-                - response-profile-configuration
-                type: object
-                properties:
-                  response-profile-capability:
-                    required:
-                    - datatype
-                    - field-name
-                    - operation-name
-                    type: object
-                    properties:
-                      operation-name:
-                        type: string
-                      field-name:
-                        maxProperties: 1
-                        minProperties: 1
-                        type: object
-                        properties:
-                          static-field-name:
-                            type: string
-                          field-name-reference:
-                            type: string
-                        additionalProperties: false
-                      description:
-                        type: string
-                      datatype:
-                        type: string
-                  response-profile-configuration:
-                    required:
-                    - value
-                    type: object
-                    properties:
-                      value:
-                        maxProperties: 1
-                        minProperties: 1
-                        type: object
-                        properties:
-                          static-value:
-                            type: string
-                          value-reference:
-                            type: string
-                        additionalProperties: false
-            description: generic response profile
-          - required:
-            - file-profile-1-0:file-profile-pac
-            - profile-name
-            - uuid
-            type: object
-            properties:
-              uuid:
-                type: string
-              profile-name:
-                type: string
-                enum:
-                - action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE
-                - response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE
-                - file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE
-                - integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
-                - string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE
-              file-profile-1-0:file-profile-pac:
-                required:
-                - file-profile-capability
-                - file-profile-configuration
-                type: object
-                properties:
-                  file-profile-capability:
-                    required:
-                    - file-description
-                    - file-identifier
-                    type: object
-                    properties:
-                      file-identifier:
-                        type: string
-                      file-description:
-                        type: string
-                  file-profile-configuration:
-                    required:
-                    - file-path
-                    type: object
-                    properties:
-                      file-path:
-                        type: string
-                      user-name:
-                        type: string
-                      password:
-                        type: string
-                      operation:
-                        type: string
-                        enum:
-                        - file-profile-1-0:OPERATION_TYPE_READ_ONLY
-                        - file-profile-1-0:OPERATION_TYPE_READ_WRITE
-                        - file-profile-1-0:OPERATION_TYPE_OFF
-                        - file-profile-1-0:OPERATION_TYPE_NOT_YET_DEFINED
-            description: file profile
-          - required:
-            - integer-profile-1-0:integer-profile-pac
-            - profile-name
-            - uuid
-            type: object
-            properties:
-              uuid:
-                type: string
-              profile-name:
-                type: string
-                enum:
-                - action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE
-                - response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE
-                - file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE
-                - integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
-                - string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE
-              integer-profile-1-0:integer-profile-pac:
-                required:
-                - integer-profile-capability
-                - integer-profile-configuration
-                type: object
-                properties:
-                  integer-profile-capability:
-                    required:
-                    - integer-name
-                    type: object
-                    properties:
-                      integer-name:
-                        type: string
-                      unit:
-                        type: string
-                      minimum:
-                        type: integer
-                      maximum:
-                        type: integer
-                  integer-profile-configuration:
-                    required:
-                    - integer-value
-                    type: object
-                    properties:
-                      integer-value:
-                        type: integer
-            description: integer profile
-          - required:
-            - profile-name
-            - string-profile-1-0:string-profile-pac
-            - uuid
-            type: object
-            properties:
-              uuid:
-                type: string
-              profile-name:
-                type: string
-                enum:
-                - action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE
-                - response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE
-                - file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE
-                - integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
-                - string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE
-              string-profile-1-0:string-profile-pac:
-                required:
-                - string-profile-capability
-                - string-profile-configuration
-                type: object
-                properties:
-                  string-profile-capability:
-                    required:
-                    - string-name
-                    type: object
-                    properties:
-                      string-name:
-                        type: string
-                      enumeration:
-                        type: string
-                      pattern:
-                        type: string
-                  string-profile-configuration:
-                    required:
-                    - string-value
-                    type: object
-                    properties:
-                      string-value:
-                        type: string
-            description: string profile
+                          additionalProperties: false
+                        description:
+                          type: string
+                        datatype:
+                          type: string
+                    response-profile-configuration:
+                      required:
+                      - value
+                      type: object
+                      properties:
+                        value:
+                          maxProperties: 1
+                          minProperties: 1
+                          type: object
+                          properties:
+                            static-value:
+                              type: string
+                            value-reference:
+                              type: string
+                          additionalProperties: false
+              description: generic response profile
+            - required:
+              - file-profile-1-0:file-profile-pac
+              - profile-name
+              - uuid
+              type: object
+              properties:
+                uuid:
+                  type: string
+                profile-name:
+                  type: string
+                  enum:
+                    - action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE
+                    - response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE
+                    - file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE
+                    - integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
+                    - string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE
+                file-profile-1-0:file-profile-pac:
+                  required:
+                    - file-profile-capability
+                    - file-profile-configuration
+                  type: object
+                  properties:
+                    file-profile-capability:
+                      required:
+                        - file-description
+                        - file-identifier
+                      type: object
+                      properties:
+                        file-identifier:
+                          type: string
+                        file-description:
+                          type: string
+                    file-profile-configuration:
+                      required:
+                        - file-path
+                      type: object
+                      properties:
+                        file-path:
+                          type: string
+                        user-name:
+                          type: string
+                        password:
+                          type: string
+                        operation:
+                          type: string
+                          enum:
+                            - file-profile-1-0:OPERATION_TYPE_READ_ONLY
+                            - file-profile-1-0:OPERATION_TYPE_READ_WRITE
+                            - file-profile-1-0:OPERATION_TYPE_OFF
+                            - file-profile-1-0:OPERATION_TYPE_NOT_YET_DEFINED
+              description: file profile
+            - required:
+              - integer-profile-1-0:integer-profile-pac
+              - profile-name
+              - uuid
+              type: object
+              properties:
+                uuid:
+                  type: string
+                profile-name:
+                  type: string
+                  enum:
+                    - action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE
+                    - response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE
+                    - file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE
+                    - integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
+                    - string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE
+                integer-profile-1-0:integer-profile-pac:
+                  required:
+                    - integer-profile-capability
+                    - integer-profile-configuration
+                  type: object
+                  properties:
+                    integer-profile-capability:
+                      required:
+                        - integer-name
+                      type: object
+                      properties:
+                        integer-name:
+                          type: string
+                        unit:
+                          type: string
+                        minimum:
+                          type: integer
+                        maximum:
+                          type: integer
+                    integer-profile-configuration:
+                      required:
+                        - integer-value
+                      type: object
+                      properties:
+                        integer-value:
+                          type: integer
+              description: integer profile
+            - required:
+              - profile-name
+              - string-profile-1-0:string-profile-pac
+              - uuid
+              type: object
+              properties:
+                uuid:
+                  type: string
+                profile-name:
+                  type: string
+                  enum:
+                    - action-profile-1-0:PROFILE_NAME_TYPE_ACTION_PROFILE
+                    - response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE
+                    - file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE
+                    - integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE
+                    - string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE
+                string-profile-1-0:string-profile-pac:
+                  required:
+                    - string-profile-capability
+                    - string-profile-configuration
+                  type: object
+                  properties:
+                    string-profile-capability:
+                      required:
+                        - string-name
+                      type: object
+                      properties:
+                        string-name:
+                          type: string
+                        enumeration:
+                          type: string
+                        pattern:
+                          type: string
+                    string-profile-configuration:
+                      required:
+                        - string-value
+                      type: object
+                      properties:
+                        string-value:
+                          type: string
+              description: string profile
       example:
         core-model-1-4:profile: ""
     inline_response_200_12:
