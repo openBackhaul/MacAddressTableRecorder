@@ -11406,7 +11406,7 @@ paths:
                   application/json:
                     schema:
                       required:
-                      - uuid
+                        - uuid
                       type: object
                       properties:
                         uuid:
@@ -11783,7 +11783,7 @@ paths:
                             value: core-model-1-4:FORWARDING_KIND_TYPE_INVARIANT_PROCESS_SNIPPET
                           - value-name: ForwardingName
                             value: OamRequestCausesLoggingRequest
-                          fc-port:
+                        fc-port:
                           - local-id: "000"
                             port-direction: core-model-1-4:PORT_DIRECTION_TYPE_MANAGEMENT
                             logical-termination-point: ro-2-1-2-op-s-bm-003
@@ -17108,12 +17108,12 @@ paths:
                 type: string
                 example: EXPERIMENTAL
                 enum:
-                - EXPERIMENTAL
-                - OPERATIONAL
-                - DEPRECATED
-                - OBSOLETE
-                - UNKNOWN
-                - NOT_YET_DEFINED
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
           content:
             application/json:
               schema:
@@ -18168,7 +18168,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: Core
   ? /core-model-1-4:control-construct/profile-collection/profile={uuid}/action-profile-1-0:action-profile-pac/action-profile-capability/operation-name
   : get:
@@ -20786,24 +20786,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: OperationClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-status/operational-state
   : get:
       tags:
-      - OperationClient
+        - OperationClient
       summary: Returns operational state of the operation
       operationId: getOperationClientOperationalState
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-op-c-bm-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-op-c-bm-or-1-0-1-000
       responses:
         "200":
           description: Operational state provided
@@ -20848,24 +20848,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: OperationClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-status/life-cycle-state
   : get:
       tags:
-      - OperationClient
+        - OperationClient
       summary: Returns life cycle state of the operation
       operationId: getOperationClientLifeCycleState
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-op-c-bm-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-([bi][ms])-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-op-c-bm-or-1-0-1-000
       responses:
         "200":
           description: Life cycle state provided
@@ -20910,24 +20910,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: OperationClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/operation-client-interface-1-0:operation-client-interface-pac/operation-client-interface-configuration/detailed-logging-is-on
   : get:
       tags:
-      - OperationClient
+        - OperationClient
       summary: Returns detailed logging configuration.
       operationId: getOperationClientDetailedLoggingIsOn
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-bs-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-op-c-bs-eatl-2-1-2-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-bs-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-op-c-bs-eatl-2-1-2-000
       responses:
         "200":
           description: Detailed logging configuration provided
@@ -20972,23 +20972,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: OperationClient
     put:
       tags:
-      - OperationClient
+        - OperationClient
       summary: Configures detailed logging on/off.
       operationId: putOperationClientDetailedLoggingIsOn
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-bs-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: ro-2-1-2-op-c-bs-eatl-2-1-2-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-op-c-bs-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: ro-2-1-2-op-c-bs-eatl-2-1-2-000
       requestBody:
         content:
           application/json:
@@ -21035,24 +21035,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: OperationClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/elasticsearch-client-interface-1-0:elasticsearch-client-interface-pac/elasticsearch-client-interface-configuration/auth/api-key
   : get:
       tags:
-      - ElasticsearchClient
+        - ElasticsearchClient
       summary: Returns API key
       operationId: getElasticsearchClientApiKey
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: eatl-2-1-2-es-c-es-1-0-0-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: eatl-2-1-2-es-c-es-1-0-0-000
       responses:
         "200":
           description: API key provided
@@ -21097,23 +21097,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: ElasticsearchClient
     put:
       tags:
-      - ElasticsearchClient
+        - ElasticsearchClient
       summary: Configures API key
       operationId: putElasticsearchClientApiKey
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: eatl-2-1-2-es-c-es-1-0-0-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: eatl-2-1-2-es-c-es-1-0-0-000
       requestBody:
         content:
           application/json:
@@ -21160,24 +21160,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: ElasticsearchClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/elasticsearch-client-interface-1-0:elasticsearch-client-interface-pac/elasticsearch-client-interface-configuration/index-alias
   : get:
       tags:
-      - ElasticsearchClient
+        - ElasticsearchClient
       summary: Returns index alias
       operationId: getElasticsearchClientIndexAlias
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: eatl-2-1-2-es-c-es-1-0-0-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: eatl-2-1-2-es-c-es-1-0-0-000
       responses:
         "200":
           description: Index alias provided
@@ -21222,23 +21222,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: ElasticsearchClient
     put:
       tags:
-      - ElasticsearchClient
+        - ElasticsearchClient
       summary: Configures index alias
       operationId: putElasticsearchClientIndexAlias
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: eatl-2-1-2-es-c-es-1-0-0-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: eatl-2-1-2-es-c-es-1-0-0-000
       requestBody:
         content:
           application/json:
@@ -21285,24 +21285,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: ElasticsearchClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/elasticsearch-client-interface-1-0:elasticsearch-client-interface-pac/elasticsearch-client-interface-configuration/service-records-policy
   : get:
       tags:
-      - ElasticsearchClient
+        - ElasticsearchClient
       summary: Returns service records policy
       operationId: getElasticsearchClientServiceRecordsPolicy
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: eatl-2-1-2-es-c-es-1-0-0-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: eatl-2-1-2-es-c-es-1-0-0-000
       responses:
         "200":
           description: Service records policy provided
@@ -21351,19 +21351,19 @@ paths:
       x-swagger-router-controller: ElasticsearchClient
     put:
       tags:
-      - ElasticsearchClient
+        - ElasticsearchClient
       summary: Configures service records policy
       operationId: putElasticsearchClientServiceRecordsPolicy
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: eatl-2-1-2-es-c-es-1-0-0-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: eatl-2-1-2-es-c-es-1-0-0-000
       requestBody:
         content:
           application/json:
@@ -21410,24 +21410,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: ElasticsearchClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/elasticsearch-client-interface-1-0:elasticsearch-client-interface-pac/elasticsearch-client-interface-status/operational-state
   : get:
       tags:
-      - ElasticsearchClient
+        - ElasticsearchClient
       summary: Returns operational state of the connection towards Elasticsearch
       operationId: getElasticsearchClientOperationalState
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: eatl-2-1-2-es-c-es-1-0-0-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: eatl-2-1-2-es-c-es-1-0-0-000
       responses:
         "200":
           description: Operational state provided
@@ -21472,24 +21472,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: ElasticsearchClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/elasticsearch-client-interface-1-0:elasticsearch-client-interface-pac/elasticsearch-client-interface-status/life-cycle-state
   : get:
       tags:
-      - ElasticsearchClient
+        - ElasticsearchClient
       summary: Returns life cycle state of the connection towards Elasticsearch
       operationId: getElasticsearchClientLifeCycleState
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
-          type: string
-          example: eatl-2-1-2-es-c-es-1-0-0-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-es-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{3})$"
+            type: string
+            example: eatl-2-1-2-es-c-es-1-0-0-000
       responses:
         "200":
           description: Life cycle state provided
@@ -21539,19 +21539,19 @@ paths:
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name
   : get:
       tags:
-      - HttpClient
+        - HttpClient
       summary: Returns name of application to be addressed
       operationId: getHttpClientApplicationName
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-http-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
-          type: string
-          example: ro-2-1-2-http-c-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-http-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
+            type: string
+            example: ro-2-1-2-http-c-or-1-0-1-000
       responses:
         "200":
           description: Addressed application provided
@@ -21600,19 +21600,19 @@ paths:
       x-swagger-router-controller: HttpClient
     put:
       tags:
-      - HttpClient
+        - HttpClient
       summary: Configures name of application to be addressed
       operationId: putHttpClientApplicationName
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-http-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
-          type: string
-          example: ro-2-1-2-http-c-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-http-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
+            type: string
+            example: ro-2-1-2-http-c-or-1-0-1-000
       requestBody:
         content:
           application/json:
@@ -21659,24 +21659,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: HttpClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/release-number
   : get:
       tags:
-      - HttpClient
+        - HttpClient
       summary: Returns release number of application to be addressed
       operationId: getHttpClientReleaseNumber
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-http-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
-          type: string
-          example: ro-2-1-2-http-c-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-http-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
+            type: string
+            example: ro-2-1-2-http-c-or-1-0-1-000
       responses:
         "200":
           description: Release number provided
@@ -21725,19 +21725,19 @@ paths:
       x-swagger-router-controller: HttpClient
     put:
       tags:
-      - HttpClient
+        - HttpClient
       summary: Configures release number of application to be addressed
       operationId: putHttpClientReleaseNumber
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-http-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
-          type: string
-          example: ro-2-1-2-http-c-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-http-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
+            type: string
+            example: ro-2-1-2-http-c-or-1-0-1-000
       requestBody:
         content:
           application/json:
@@ -21784,24 +21784,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: HttpClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol
   : get:
       tags:
-      - TcpClient
+        - TcpClient
       summary: Returns protocol for addressing remote side
       operationId: getTcpClientRemoteProtocol
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
-          type: string
-          example: ro-2-1-2-tcp-c-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
+            type: string
+            example: ro-2-1-2-tcp-c-or-1-0-1-000
       responses:
         "200":
           description: Protocol for addressing remote side provided
@@ -21846,23 +21846,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpClient
     put:
       tags:
-      - TcpClient
+        - TcpClient
       summary: Configures protocol for addressing remote side
       operationId: putTcpClientRemoteProtocol
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
-          type: string
-          example: ro-2-1-2-tcp-c-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
+            type: string
+            example: ro-2-1-2-tcp-c-or-1-0-1-000
       requestBody:
         content:
           application/json:
@@ -21909,24 +21909,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-address
   : get:
       tags:
-      - TcpClient
+        - TcpClient
       summary: Returns remote address
       operationId: getTcpClientRemoteAddress
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
-          type: string
-          example: ro-2-1-2-tcp-c-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
+            type: string
+            example: ro-2-1-2-tcp-c-or-1-0-1-000
       responses:
         "200":
           description: Remote address provided
@@ -21971,23 +21971,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpClient
     put:
       tags:
-      - TcpClient
+        - TcpClient
       summary: Configures remote address
       operationId: putTcpClientRemoteAddress
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
-          type: string
-          example: ro-2-1-2-tcp-c-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
+            type: string
+            example: ro-2-1-2-tcp-c-or-1-0-1-000
       requestBody:
         content:
           application/json:
@@ -22034,24 +22034,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-port
   : get:
       tags:
-      - TcpClient
+        - TcpClient
       summary: Returns target TCP port at server
       operationId: getTcpClientRemotePort
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
-          type: string
-          example: ro-2-1-2-tcp-c-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
+            type: string
+            example: ro-2-1-2-tcp-c-or-1-0-1-000
       responses:
         "200":
           description: Remote port provided
@@ -22096,23 +22096,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpClient
     put:
       tags:
-      - TcpClient
+        - TcpClient
       summary: Configures target TCP port at server
       operationId: putTcpClientRemotePort
       parameters:
-      - name: uuid
-        in: path
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
-          type: string
-          example: ro-2-1-2-tcp-c-or-1-0-1-000
+        - name: uuid
+          in: path
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-tcp-c-([a-z]{2,6})-([0-9]{1,2})-([0-9]{1,2})-([0-9]{1,2})-000$"
+            type: string
+            example: ro-2-1-2-tcp-c-or-1-0-1-000
       requestBody:
         content:
           application/json:
@@ -22159,14 +22159,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: TcpClient
 components:
   schemas:
     errorDescription:
       required:
-      - code
-      - message
+        - code
+        - message
       type: object
       properties:
         code:
@@ -22176,8 +22176,8 @@ components:
           type: string
     genericRepresentation:
       required:
-      - consequent-action-list
-      - response-value-list
+        - consequent-action-list
+        - response-value-list
       type: object
       properties:
         response-value-list:
@@ -22190,36 +22190,36 @@ components:
             $ref: '#/components/schemas/genericRepresentation_consequentactionlist'
       example:
         consequent-action-list:
-        - request: request
-          input-value-list:
-          - field-name: field-name
-            unit: unit
-          - field-name: field-name
-            unit: unit
-          display-in-new-browser-window: true
-          label: label
-        - request: request
-          input-value-list:
-          - field-name: field-name
-            unit: unit
-          - field-name: field-name
-            unit: unit
-          display-in-new-browser-window: true
-          label: label
+          - request: request
+            input-value-list:
+              - field-name: field-name
+                unit: unit
+              - field-name: field-name
+                unit: unit
+            display-in-new-browser-window: true
+            label: label
+          - request: request
+            input-value-list:
+              - field-name: field-name
+                unit: unit
+              - field-name: field-name
+                unit: unit
+            display-in-new-browser-window: true
+            label: label
         response-value-list:
-        - field-name: field-name
-          datatype: datatype
-          value: value
-        - field-name: field-name
-          datatype: datatype
-          value: value
+          - field-name: field-name
+            datatype: datatype
+            value: value
+          - field-name: field-name
+            datatype: datatype
+            value: value
     logicalTerminationPoint:
       required:
-      - client-ltp
-      - layer-protocol
-      - ltp-direction
-      - server-ltp
-      - uuid
+        - client-ltp
+        - layer-protocol
+        - ltp-direction
+        - server-ltp
+        - uuid
       type: object
       properties:
         uuid:
@@ -22254,20 +22254,20 @@ components:
                   type: string
                 operation-server-interface-1-0:operation-server-interface-pac:
                   required:
-                  - operation-server-interface-capability
-                  - operation-server-interface-configuration
+                    - operation-server-interface-capability
+                    - operation-server-interface-configuration
                   type: object
                   properties:
                     operation-server-interface-capability:
                       required:
-                      - operation-name
+                        - operation-name
                       type: object
                       properties:
                         operation-name:
                           type: string
                     operation-server-interface-configuration:
                       required:
-                      - life-cycle-state
+                        - life-cycle-state
                       type: object
                       properties:
                         life-cycle-state:
@@ -22285,14 +22285,14 @@ components:
                   type: string
                 http-server-interface-1-0:http-server-interface-pac:
                   required:
-                  - http-server-interface-capability
+                    - http-server-interface-capability
                   type: object
                   properties:
                     http-server-interface-capability:
                       required:
-                      - application-name
-                      - data-update-period
-                      - release-number
+                        - application-name
+                        - data-update-period
+                        - release-number
                       type: object
                       properties:
                         application-name:
@@ -22319,10 +22319,10 @@ components:
                   properties:
                     tcp-server-interface-configuration:
                       required:
-                      - description
-                      - local-address
-                      - local-port
-                      - local-protocol
+                        - description
+                        - local-address
+                        - local-port
+                        - local-protocol
                       type: object
                       properties:
                         description:
@@ -22351,21 +22351,21 @@ components:
                   type: string
                 operation-client-interface-1-0:operation-client-interface-pac:
                   required:
-                  - operation-client-interface-configuration
-                  - operation-client-interface-status
+                    - operation-client-interface-configuration
+                    - operation-client-interface-status
                   type: object
                   properties:
                     operation-client-interface-configuration:
                       required:
-                      - operation-name
+                        - operation-name
                       type: object
                       properties:
                         operation-name:
                           type: string
                     operation-client-interface-status:
                       required:
-                      - life-cycle-state
-                      - operational-state
+                        - life-cycle-state
+                        - operational-state
                       type: object
                       properties:
                         operational-state:
@@ -22385,21 +22385,21 @@ components:
                   type: string
                 elasticsearch-client-interface-1-0:elasticsearch-client-interface-pac:
                   required:
-                  - elasticsearch-client-interface-configuration
-                  - elasticsearch-client-interface-status
+                    - elasticsearch-client-interface-configuration
+                    - elasticsearch-client-interface-status
                   type: object
                   properties:
                     elasticsearch-client-interface-configuration:
                       required:
-                      - index-alias
+                        - index-alias
                       type: object
                       properties:
                         index-alias:
                           type: string
                     elasticsearch-client-interface-status:
                       required:
-                      - life-cycle-state
-                      - operational-state
+                        - life-cycle-state
+                        - operational-state
                       type: object
                       properties:
                         operational-state:
@@ -22419,13 +22419,13 @@ components:
                   type: string
                 http-client-interface-1-0:http-client-interface-pac:
                   required:
-                  - http-client-interface-configuration
+                    - http-client-interface-configuration
                   type: object
                   properties:
                     http-client-interface-configuration:
                       required:
-                      - application-name
-                      - release-number
+                        - application-name
+                        - release-number
                       type: object
                       properties:
                         application-name:
@@ -22445,14 +22445,14 @@ components:
                   type: string
                 tcp-client-interface-1-0:tcp-client-interface-pac:
                   required:
-                  - tcp-client-interface-configuration
+                    - tcp-client-interface-configuration
                   type: object
                   properties:
                     tcp-client-interface-configuration:
                       required:
-                      - remote-address
-                      - remote-port
-                      - remote-protocol
+                        - remote-address
+                        - remote-port
+                        - remote-protocol
                       type: object
                       properties:
                         remote-protocol:
@@ -22472,8 +22472,8 @@ components:
               description: tcp client
     forwardingDomain:
       required:
-      - forwarding-construct
-      - uuid
+        - forwarding-construct
+        - uuid
       type: object
       properties:
         uuid:
@@ -22507,11 +22507,11 @@ components:
       additionalProperties: false
     v1_bequeathyourdataanddie_body:
       required:
-      - new-application-address
-      - new-application-name
-      - new-application-port
-      - new-application-protocol
-      - new-application-release
+        - new-application-address
+        - new-application-name
+        - new-application-port
+        - new-application-protocol
+        - new-application-release
       type: object
       properties:
         new-application-name:
@@ -22528,8 +22528,8 @@ components:
           description: |
             'Protocol to be used for addressing the application that shall be target of the handover process update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-nr-1-0-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
           enum:
-          - HTTP
-          - HTTPS
+            - HTTP
+            - HTTPS
         new-application-address:
           $ref: '#/components/schemas/v1bequeathyourdataanddie_newapplicationaddress'
         new-application-port:
