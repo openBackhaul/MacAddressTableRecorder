@@ -1196,12 +1196,12 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -1523,31 +1523,31 @@ paths:
                 type: string
                 example: EXPERIMENTAL
                 enum:
-                - EXPERIMENTAL
-                - OPERATIONAL
-                - DEPRECATED
-                - OBSOLETE
-                - UNKNOWN
-                - NOT_YET_DEFINED
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
           content:
             application/json:
               schema:
                 type: array
                 example:
-                - mount-name: "305251234"
-                  own-mac-address: 00:00:00:00:00:00
-                  egress-ltp-uuid: 305251234+mac-inf-1234
-                  original-ltp-name: eth-1-0-3
-                  vlan-id: 17
-                  remote-mac-address: 01:01:01:01:01:01
-                  time-stamp-of-data: 2010-11-20T14:00:00+01:00
-                - mount-name: "30525999"
-                  own-mac-address: FF:00:11:00:00:00
-                  egress-ltp-uuid: 305251234+mac-inf-1234
-                  original-ltp-name: eth-1-0-3
-                  vlan-id: 17
-                  remote-mac-address: 01:01:01:01:01:01
-                  time-stamp-of-data: 2010-11-20T14:00:00+01:00
+                  - mount-name: "305251234"
+                    own-mac-address: 00:00:00:00:00:00
+                    egress-ltp-uuid: 305251234+mac-inf-1234
+                    original-ltp-name: eth-1-0-3
+                    vlan-id: 17
+                    remote-mac-address: 01:01:01:01:01:01
+                    time-stamp-of-data: 2010-11-20T14:00:00+01:00
+                  - mount-name: "30525999"
+                    own-mac-address: FF:00:11:00:00:00
+                    egress-ltp-uuid: 305251234+mac-inf-1234
+                    original-ltp-name: eth-1-0-3
+                    vlan-id: 17
+                    remote-mac-address: 01:01:01:01:01:01
+                    time-stamp-of-data: 2010-11-20T14:00:00+01:00
                 items:
                   $ref: '#/components/schemas/inline_response_200'
                 x-content-type: application/json
@@ -2123,69 +2123,69 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: []
       x-swagger-router-controller: IndividualServices
   /v1/read-current-mac-table-from-device:
     post:
       tags:
-      - IndividualServices
+        - IndividualServices
       summary: Responses with the current MAC table of a specific device.
       operationId: readCurrentMacTableFromDevice
       parameters:
-      - name: user
-        in: header
-        description: User identifier from the system starting the service call
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: User Name
-      - name: originator
-        in: header
-        description: |
-          'Identification for the system consuming the API, as defined in
-           [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-        required: true
-        style: simple
-        explode: false
-        schema:
-          minLength: 3
-          type: string
-          example: Resolver
-      - name: x-correlator
-        in: header
-        description: UUID for the service execution flow that allows to correlate
-          requests and responses
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 550e8400-e29b-11d4-a716-446655440000
-      - name: trace-indicator
-        in: header
-        description: Sequence of request numbers along the flow
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([0-9]+)(\\.([0-9]+))*$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 1.3.1
-      - name: customer-journey
-        in: header
-        description: Holds information supporting customer’s journey to which the
-          execution applies
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: Unknown value
+        - name: user
+          in: header
+          description: User identifier from the system starting the service call
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: User Name
+        - name: originator
+          in: header
+          description: |
+            'Identification for the system consuming the API, as defined in
+            [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minLength: 3
+            type: string
+            example: Resolver
+        - name: x-correlator
+          in: header
+          description: UUID for the service execution flow that allows to correlate
+            requests and responses
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 550e8400-e29b-11d4-a716-446655440000
+        - name: trace-indicator
+          in: header
+          description: Sequence of request numbers along the flow
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([0-9]+)(\\.([0-9]+))*$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 1.3.1
+        - name: customer-journey
+          in: header
+          description: Holds information supporting customer’s journey to which the
+            execution applies
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: Unknown value
       requestBody:
         content:
           application/json:
@@ -2234,12 +2234,12 @@ paths:
                 type: string
                 example: EXPERIMENTAL
                 enum:
-                - EXPERIMENTAL
-                - OPERATIONAL
-                - DEPRECATED
-                - OBSOLETE
-                - UNKNOWN
-                - NOT_YET_DEFINED
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
           content:
             application/json:
               schema:
@@ -2285,12 +2285,12 @@ paths:
                 type: string
                 example: EXPERIMENTAL
                 enum:
-                - EXPERIMENTAL
-                - OPERATIONAL
-                - DEPRECATED
-                - OBSOLETE
-                - UNKNOWN
-                - NOT_YET_DEFINED
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
         "400":
           description: Response in case of errored service requests
           headers:
@@ -2512,83 +2512,83 @@ paths:
           url:
             get:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
-              - name: mount-name
-                in: path
-                description: |
-                  'The mount-name of the device that is addressed by the request from {$request.body#mount-name}'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: "222250001"
-              - name: fields
-                in: query
-                description: "Filter for retrieving FdUuid, LayerProtocolName and\
-                  \ MacAddressCur"
-                required: true
-                style: form
-                explode: true
-                schema:
-                  type: string
-                  example: forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))
-                  enum:
-                  - forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
+                - name: mount-name
+                  in: path
+                  description: |
+                    'The mount-name of the device that is addressed by the request from {$request.body#mount-name}'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: "222250001"
+                - name: fields
+                  in: query
+                  description: "Filter for retrieving FdUuid, LayerProtocolName and\
+                    \ MacAddressCur"
+                  required: true
+                  style: form
+                  explode: true
+                  schema:
+                    type: string
+                    example: forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))
+                    enum:
+                      - forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))
               responses:
                 "200":
                   description: ControlConstruct provided from cache
@@ -2629,12 +2629,12 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                   content:
                     application/json:
                       schema:
@@ -2669,16 +2669,16 @@ paths:
                                           layer-protocol-name == LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER
                         example:
                           core-model-1-4:control-construct:
-                          - forwarding-domain:
-                            - uuid: 513250005-FD-VLAN-1234-1
-                              layer-protocol-name:
-                              - vlan-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_VLAN_LAYER
-                            - uuid: 513250005-FD-MAC-1234-2
-                              layer-protocol-name:
-                              - mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER
-                              mac-fd-1-0:mac-fd-pac:
-                                mac-fd-status:
-                                  mac-address-cur: 48:f8:db:79:7c:ce
+                            - forwarding-domain:
+                              - uuid: 513250005-FD-VLAN-1234-1
+                                layer-protocol-name:
+                                  - vlan-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_VLAN_LAYER
+                              - uuid: 513250005-FD-MAC-1234-2
+                                layer-protocol-name:
+                                  - mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER
+                                mac-fd-1-0:mac-fd-pac:
+                                  mac-fd-status:
+                                    mac-address-cur: 48:f8:db:79:7c:ce
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -2899,16 +2899,16 @@ paths:
           url:
             get:
               parameters:
-              - name: mount-name
-                in: path
-                description: |
-                  'The mount-name of the device that is addressed by the request from {$request.body#mount-name}'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: "222250001"
+                - name: mount-name
+                  in: path
+                  description: |
+                    'The mount-name of the device that is addressed by the request from {$request.body#mount-name}'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: "222250001"
               responses:
                 "200":
                   description: MAC address table provided
@@ -2943,14 +2943,14 @@ paths:
                                     address.
                         example:
                           mac-table-entry-list:
-                          - affected-mac-fd: mac-fd-1234
-                            mac-address: 00:00:00:00:00:01
-                            vlan-id: "17"
-                            egress-ltp: mac-if-1234
-                          - affected-mac-fd: mac-fd-1234
-                            mac-address: 00:00:00:00:00:03
-                            vlan-id: "17"
-                            egress-ltp: mac-if-1234
+                            - affected-mac-fd: mac-fd-1234
+                              mac-address: 00:00:00:00:00:01
+                              vlan-id: "17"
+                              egress-ltp: mac-if-1234
+                            - affected-mac-fd: mac-fd-1234
+                              mac-address: 00:00:00:00:00:03
+                              vlan-id: "17"
+                              egress-ltp: mac-if-1234
                 "4XX":
                   description: Response in case of errored service requests
                   headers:
@@ -3063,92 +3063,92 @@ paths:
           url:
             get:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
-              - name: mount-name
-                in: path
-                description: |
-                  'The mount-name of the device that is addressed by the request from {$request.body#mount-name}'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: "222250001"
-              - name: uuid
-                in: path
-                description: |
-                  'The UUID of the Equipment that is addressed by the request from {$PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice.response.body#mac-table-entry-list/egress-ltp}'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: LTP-MWPS-TTP-1-1
-              - name: fields
-                in: query
-                description: Filter for retrieving the OriginalLtpName
-                required: true
-                style: form
-                explode: true
-                schema:
-                  type: string
-                  example: original-ltp-name
-                  enum:
-                  - original-ltp-name
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
+                - name: mount-name
+                  in: path
+                  description: |
+                    'The mount-name of the device that is addressed by the request from {$request.body#mount-name}'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: "222250001"
+                - name: uuid
+                  in: path
+                  description: |
+                    'The UUID of the Equipment that is addressed by the request from {$PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice.response.body#mac-table-entry-list/egress-ltp}'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: LTP-MWPS-TTP-1-1
+                - name: fields
+                  in: query
+                  description: Filter for retrieving the OriginalLtpName
+                  required: true
+                  style: form
+                  explode: true
+                  schema:
+                    type: string
+                    example: original-ltp-name
+                    enum:
+                      - original-ltp-name
               responses:
                 "200":
                   description: Original-ltp-name read
@@ -3436,29 +3436,29 @@ paths:
                     schema:
                       type: array
                       example:
-                      - mount-name: "305251234"
-                        own-mac-address: 00:00:00:00:00:00
-                        egress-ltp-uuid: 305251234+mac-inf-1234
-                        original-ltp-name: eth-1-0-3
-                        vlan-id: 17
-                        remote-mac-address: 01:01:01:01:01:01
-                        time-stamp-of-data: 2010-11-20T14:00:00+01:00
-                      - mount-name: "305251234"
-                        own-mac-address: 00:00:00:00:00:00
-                        egress-ltp-uuid: 305251234+mac-inf-1234
-                        original-ltp-name: eth-1-0-3
-                        vlan-id: 17
-                        remote-mac-address: FF:01:01:01:01:01
-                        time-stamp-of-data: 2010-11-20T14:00:00+01:00
+                        - mount-name: "305251234"
+                          own-mac-address: 00:00:00:00:00:00
+                          egress-ltp-uuid: 305251234+mac-inf-1234
+                          original-ltp-name: eth-1-0-3
+                          vlan-id: 17
+                          remote-mac-address: 01:01:01:01:01:01
+                          time-stamp-of-data: 2010-11-20T14:00:00+01:00
+                        - mount-name: "305251234"
+                          own-mac-address: 00:00:00:00:00:00
+                          egress-ltp-uuid: 305251234+mac-inf-1234
+                          original-ltp-name: eth-1-0-3
+                          vlan-id: 17
+                          remote-mac-address: FF:01:01:01:01:01
+                          time-stamp-of-data: 2010-11-20T14:00:00+01:00
                       items:
                         required:
-                        - egress-ltp-uuid
-                        - mount-name
-                        - original-ltp-name
-                        - own-mac-address
-                        - remote-mac-address
-                        - time-stamp-of-data
-                        - vlan-id
+                          - egress-ltp-uuid
+                          - mount-name
+                          - original-ltp-name
+                          - own-mac-address
+                          - remote-mac-address
+                          - time-stamp-of-data
+                          - vlan-id
                         type: object
                         properties:
                           mount-name:
@@ -3604,61 +3604,61 @@ paths:
           url:
             post:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
               requestBody:
                 content:
                   application/json:
@@ -3667,24 +3667,24 @@ paths:
                       example:
                         request-id: 121251092-1721120567127
                         mac-address-data:
-                        - mount-name: "305251234"
-                          own-mac-address: 00:00:00:00:00:00
-                          egress-ltp-uuid: 305251234+mac-inf-1234
-                          original-ltp-name: eth-1-0-3
-                          vlan-id: 17
-                          remote-mac-address: 01:01:01:01:01:01
-                          time-stamp-of-data: 2010-11-20T14:00:00+01:00
-                        - mount-name: "305251234"
-                          own-mac-address: 00:00:00:00:00:00
-                          egress-ltp-uuid: 305251234+mac-inf-1234
-                          original-ltp-name: eth-1-0-3
-                          vlan-id: 17
-                          remote-mac-address: FF:01:01:01:01:01
-                          time-stamp-of-data: 2010-11-20T14:00:00+01:00
+                          - mount-name: "305251234"
+                            own-mac-address: 00:00:00:00:00:00
+                            egress-ltp-uuid: 305251234+mac-inf-1234
+                            original-ltp-name: eth-1-0-3
+                            vlan-id: 17
+                            remote-mac-address: 01:01:01:01:01:01
+                            time-stamp-of-data: 2010-11-20T14:00:00+01:00
+                          - mount-name: "305251234"
+                            own-mac-address: 00:00:00:00:00:00
+                            egress-ltp-uuid: 305251234+mac-inf-1234
+                            original-ltp-name: eth-1-0-3
+                            vlan-id: 17
+                            remote-mac-address: FF:01:01:01:01:01
+                            time-stamp-of-data: 2010-11-20T14:00:00+01:00
                       items:
                         required:
-                        - mac-address-data
-                        - request-id
+                          - mac-address-data
+                          - request-id
                         type: object
                         properties:
                           request-id:
@@ -3766,12 +3766,12 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -3989,70 +3989,70 @@ paths:
                       schema:
                         $ref: '#/components/schemas/errorDescription'
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: []
       x-swagger-router-controller: IndividualServices
   /v1/provide-list-of-network-element-interfaces-on-path:
     post:
       tags:
-      - IndividualServices
+        - IndividualServices
       summary: Provides unsorted list of network element interfaces on path to specific
         MAC address.
       operationId: provideListOfNetworkElementInterfacesOnPath
       parameters:
-      - name: user
-        in: header
-        description: User identifier from the system starting the service call
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: User Name
-      - name: originator
-        in: header
-        description: |
-          'Identification for the system consuming the API, as defined in
-           [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-        required: true
-        style: simple
-        explode: false
-        schema:
-          minLength: 3
-          type: string
-          example: Resolver
-      - name: x-correlator
-        in: header
-        description: UUID for the service execution flow that allows to correlate
-          requests and responses
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 550e8400-e29b-11d4-a716-446655440000
-      - name: trace-indicator
-        in: header
-        description: Sequence of request numbers along the flow
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([0-9]+)(\\.([0-9]+))*$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 1.3.1
-      - name: customer-journey
-        in: header
-        description: Holds information supporting customer’s journey to which the
-          execution applies
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: Unknown value
+        - name: user
+          in: header
+          description: User identifier from the system starting the service call
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: User Name
+        - name: originator
+          in: header
+          description: |
+            'Identification for the system consuming the API, as defined in
+            [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minLength: 3
+            type: string
+            example: Resolver
+        - name: x-correlator
+          in: header
+          description: UUID for the service execution flow that allows to correlate
+            requests and responses
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 550e8400-e29b-11d4-a716-446655440000
+        - name: trace-indicator
+          in: header
+          description: Sequence of request numbers along the flow
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([0-9]+)(\\.([0-9]+))*$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 1.3.1
+        - name: customer-journey
+          in: header
+          description: Holds information supporting customer’s journey to which the
+            execution applies
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: Unknown value
       requestBody:
         content:
           application/json:
@@ -4101,27 +4101,27 @@ paths:
                 type: string
                 example: EXPERIMENTAL
                 enum:
-                - EXPERIMENTAL
-                - OPERATIONAL
-                - DEPRECATED
-                - OBSOLETE
-                - UNKNOWN
-                - NOT_YET_DEFINED
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
           content:
             application/json:
               schema:
                 type: array
                 example:
-                - target-mac-address: 01:01:01:01:01:01
-                  mount-name: "305251234"
-                  original-ltp-name: eth-1-0-3
-                  vlan-id: 430
-                  time-stamp-of-data: 2010-11-20T14:00:00+01:00
-                - target-mac-address: 01:01:01:01:01:01
-                  mount-name: "305259999"
-                  original-ltp-name: eth-2-0-3
-                  vlan-id: 430
-                  time-stamp-of-data: 2010-11-20T14:30:00+01:00
+                  - target-mac-address: 01:01:01:01:01:01
+                    mount-name: "305251234"
+                    original-ltp-name: eth-1-0-3
+                    vlan-id: 430
+                    time-stamp-of-data: 2010-11-20T14:00:00+01:00
+                  - target-mac-address: 01:01:01:01:01:01
+                    mount-name: "305259999"
+                    original-ltp-name: eth-2-0-3
+                    vlan-id: 430
+                    time-stamp-of-data: 2010-11-20T14:30:00+01:00
                 items:
                   $ref: '#/components/schemas/inline_response_200_3'
                 x-content-type: application/json
@@ -4342,70 +4342,70 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: []
       x-swagger-router-controller: IndividualServices
   /v1/provide-list-of-network-element-interfaces-on-path-in-generic-representation:
     post:
       tags:
-      - IndividualServices
+        - IndividualServices
       summary: Provides unsorted list of network element interfaces on path to specific
         MAC address in generic representation.
       operationId: provideListOfNetworkElementInterfacesOnPathInGenericRepresentation
       parameters:
-      - name: user
-        in: header
-        description: User identifier from the system starting the service call
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: User Name
-      - name: originator
-        in: header
-        description: |
-          'Identification for the system consuming the API, as defined in
-           [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-        required: true
-        style: simple
-        explode: false
-        schema:
-          minLength: 3
-          type: string
-          example: Resolver
-      - name: x-correlator
-        in: header
-        description: UUID for the service execution flow that allows to correlate
-          requests and responses
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 550e8400-e29b-11d4-a716-446655440000
-      - name: trace-indicator
-        in: header
-        description: Sequence of request numbers along the flow
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([0-9]+)(\\.([0-9]+))*$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 1.3.1
-      - name: customer-journey
-        in: header
-        description: Holds information supporting customer’s journey to which the
-          execution applies
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: Unknown value
+        - name: user
+          in: header
+          description: User identifier from the system starting the service call
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: User Name
+        - name: originator
+          in: header
+          description: |
+            'Identification for the system consuming the API, as defined in
+            [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minLength: 3
+            type: string
+            example: Resolver
+        - name: x-correlator
+          in: header
+          description: UUID for the service execution flow that allows to correlate
+            requests and responses
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 550e8400-e29b-11d4-a716-446655440000
+        - name: trace-indicator
+          in: header
+          description: Sequence of request numbers along the flow
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([0-9]+)(\\.([0-9]+))*$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 1.3.1
+        - name: customer-journey
+          in: header
+          description: Holds information supporting customer’s journey to which the
+            execution applies
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: Unknown value
       requestBody:
         content:
           application/json:
@@ -4454,12 +4454,12 @@ paths:
                 type: string
                 example: EXPERIMENTAL
                 enum:
-                - EXPERIMENTAL
-                - OPERATIONAL
-                - DEPRECATED
-                - OBSOLETE
-                - UNKNOWN
-                - NOT_YET_DEFINED
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
           content:
             application/json:
               schema:
@@ -4684,66 +4684,66 @@ paths:
   /v1/register-yourself:
     post:
       tags:
-      - BasicServices
+        - BasicServices
       summary: Initiates registering at the currently active RegistryOffice
       description: Shall also automatically execute without receiving any request
         every time the application starts
       operationId: registerYourself
       parameters:
-      - name: user
-        in: header
-        description: User identifier from the system starting the service call
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: User Name
-      - name: originator
-        in: header
-        description: |
-          'Identification for the system consuming the API, as defined in
-           [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-        required: true
-        style: simple
-        explode: false
-        schema:
-          minLength: 3
-          type: string
-          example: Resolver
-      - name: x-correlator
-        in: header
-        description: UUID for the service execution flow that allows to correlate
-          requests and responses
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 550e8400-e29b-11d4-a716-446655440000
-      - name: trace-indicator
-        in: header
-        description: Sequence of request numbers along the flow
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([0-9]+)(\\.([0-9]+))*$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 1.3.1
-      - name: customer-journey
-        in: header
-        description: Holds information supporting customer’s journey to which the
-          execution applies
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: Unknown value
+        - name: user
+          in: header
+          description: User identifier from the system starting the service call
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: User Name
+        - name: originator
+          in: header
+          description: |
+            'Identification for the system consuming the API, as defined in
+            [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minLength: 3
+            type: string
+            example: Resolver
+        - name: x-correlator
+          in: header
+          description: UUID for the service execution flow that allows to correlate
+            requests and responses
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 550e8400-e29b-11d4-a716-446655440000
+        - name: trace-indicator
+          in: header
+          description: Sequence of request numbers along the flow
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([0-9]+)(\\.([0-9]+))*$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 1.3.1
+        - name: customer-journey
+          in: header
+          description: Holds information supporting customer’s journey to which the
+            execution applies
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: Unknown value
       requestBody:
         content:
           application/json:
@@ -4806,12 +4806,12 @@ paths:
                 type: string
                 example: EXPERIMENTAL
                 enum:
-                - EXPERIMENTAL
-                - OPERATIONAL
-                - DEPRECATED
-                - OBSOLETE
-                - UNKNOWN
-                - NOT_YET_DEFINED
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
         "400":
           description: Response in case of errored service requests
           headers:
@@ -5035,75 +5035,75 @@ paths:
               'Starting from RO v2.1.0, PromptForRegisteringCausesRegistrationRequest2 shall be executed first, only if HTTP response code different from 204 PromptForRegisteringCausesRegistrationRequest shall be executed, too.'
             post:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
               requestBody:
                 content:
                   application/json:
                     schema:
                       required:
-                      - application-name
-                      - client-update-operation
-                      - dispose-remainders-operation
-                      - embedding-operation
-                      - operation-client-update-operation
-                      - preceding-release-operation
-                      - release-number
-                      - subsequent-release-operation
-                      - tcp-server
+                        - application-name
+                        - client-update-operation
+                        - dispose-remainders-operation
+                        - embedding-operation
+                        - operation-client-update-operation
+                        - preceding-release-operation
+                        - release-number
+                        - subsequent-release-operation
+                        - tcp-server
                       type: object
                       properties:
                         application-name:
@@ -5212,12 +5212,12 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -5404,72 +5404,72 @@ paths:
               'DEPRECATED - Callback shall be deleted with RO v3.0.0'
             post:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
               requestBody:
                 content:
                   application/json:
                     schema:
                       required:
-                      - application-name
-                      - client-update-operation
-                      - embedding-operation
-                      - operation-client-update-operation
-                      - release-number
-                      - tcp-server-list
+                        - application-name
+                        - client-update-operation
+                        - embedding-operation
+                        - operation-client-update-operation
+                        - release-number
+                        - tcp-server-list
                       type: object
                       properties:
                         application-name:
@@ -5504,9 +5504,9 @@ paths:
                           type: array
                           items:
                             required:
-                            - address
-                            - port
-                            - protocol
+                              - address
+                              - port
+                              - protocol
                             type: object
                             properties:
                               protocol:
@@ -5572,12 +5572,12 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -5759,69 +5759,69 @@ paths:
                       schema:
                         $ref: '#/components/schemas/errorDescription'
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: []
       x-swagger-router-controller: BasicServices
   /v1/embed-yourself:
     post:
       tags:
-      - BasicServices
+        - BasicServices
       summary: Embed yourself into the MBH SDN application layer
       operationId: embedYourself
       parameters:
-      - name: user
-        in: header
-        description: User identifier from the system starting the service call
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: User Name
-      - name: originator
-        in: header
-        description: |
-          'Identification for the system consuming the API, as defined in
-           [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-        required: true
-        style: simple
-        explode: false
-        schema:
-          minLength: 3
-          type: string
-          example: Resolver
-      - name: x-correlator
-        in: header
-        description: UUID for the service execution flow that allows to correlate
-          requests and responses
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 550e8400-e29b-11d4-a716-446655440000
-      - name: trace-indicator
-        in: header
-        description: Sequence of request numbers along the flow
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([0-9]+)(\\.([0-9]+))*$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 1.3.1
-      - name: customer-journey
-        in: header
-        description: Holds information supporting customer’s journey to which the
-          execution applies
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: Unknown value
+        - name: user
+          in: header
+          description: User identifier from the system starting the service call
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: User Name
+        - name: originator
+          in: header
+          description: |
+            'Identification for the system consuming the API, as defined in
+            [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minLength: 3
+            type: string
+            example: Resolver
+        - name: x-correlator
+          in: header
+          description: UUID for the service execution flow that allows to correlate
+            requests and responses
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 550e8400-e29b-11d4-a716-446655440000
+        - name: trace-indicator
+          in: header
+          description: Sequence of request numbers along the flow
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([0-9]+)(\\.([0-9]+))*$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 1.3.1
+        - name: customer-journey
+          in: header
+          description: Holds information supporting customer’s journey to which the
+            execution applies
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: Unknown value
       requestBody:
         content:
           application/json:
@@ -5869,12 +5869,12 @@ paths:
                 type: string
                 example: EXPERIMENTAL
                 enum:
-                - EXPERIMENTAL
-                - OPERATIONAL
-                - DEPRECATED
-                - OBSOLETE
-                - UNKNOWN
-                - NOT_YET_DEFINED
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
         "400":
           description: Response in case of errored service requests
           headers:
@@ -6096,71 +6096,71 @@ paths:
           url:
             post:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
               requestBody:
                 content:
                   application/json:
                     schema:
                       required:
-                      - new-application-address
-                      - new-application-name
-                      - new-application-port
-                      - new-application-protocol
-                      - new-application-release
+                        - new-application-address
+                        - new-application-name
+                        - new-application-port
+                        - new-application-protocol
+                        - new-application-release
                       type: object
                       properties:
                         new-application-name:
@@ -6243,12 +6243,12 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -6469,61 +6469,61 @@ paths:
           url:
             post:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
               requestBody:
                 content:
                   application/json:
@@ -6576,21 +6576,21 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                   content:
                     application/json:
                       schema:
                         type: array
                         example:
-                        - application-name: MicroWaveDeviceInventory
-                          release-number: 1.0.0
-                          address: 127.0.01
-                          port: 4004
+                          - application-name: MicroWaveDeviceInventory
+                            release-number: 1.0.0
+                            address: 127.0.01
+                            port: 4004
                         items:
                           type: object
                           properties:
@@ -6830,61 +6830,61 @@ paths:
           url:
             post:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
               responses:
                 "200":
                   description: List of connected devices provided
@@ -6925,17 +6925,17 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                   content:
                     application/json:
                       schema:
                         required:
-                        - mount-name-list
+                          - mount-name-list
                         type: object
                         properties:
                           mount-name-list:
@@ -6946,8 +6946,8 @@ paths:
                                 'MountName of devices in connected state at the Controller from {$RequestForListOfConnectedDevicesCausesReadingFromCache.response.body#/core-model-1-4:control-construct/uuid}'
                       example:
                         mount-name-list:
-                        - "305251234"
-                        - "105258888"
+                          - "305251234"
+                          - "105258888"
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -7168,61 +7168,61 @@ paths:
           url:
             post:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
               requestBody:
                 content:
                   application/json:
@@ -7276,12 +7276,12 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -7499,69 +7499,69 @@ paths:
                       schema:
                         $ref: '#/components/schemas/errorDescription'
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: []
       x-swagger-router-controller: BasicServices
   /v1/redirect-service-request-information:
     post:
       tags:
-      - BasicServices
+        - BasicServices
       summary: Offers configuring the client side for sending service request information
       operationId: redirectServiceRequestInformation
       parameters:
-      - name: user
-        in: header
-        description: User identifier from the system starting the service call
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: User Name
-      - name: originator
-        in: header
-        description: |
-          'Identification for the system consuming the API, as defined in
-           [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-        required: true
-        style: simple
-        explode: false
-        schema:
-          minLength: 3
-          type: string
-          example: Resolver
-      - name: x-correlator
-        in: header
-        description: UUID for the service execution flow that allows to correlate
-          requests and responses
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 550e8400-e29b-11d4-a716-446655440000
-      - name: trace-indicator
-        in: header
-        description: Sequence of request numbers along the flow
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([0-9]+)(\\.([0-9]+))*$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 1.3.1
-      - name: customer-journey
-        in: header
-        description: Holds information supporting customer’s journey to which the
-          execution applies
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: Unknown value
+        - name: user
+          in: header
+          description: User identifier from the system starting the service call
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: User Name
+        - name: originator
+          in: header
+          description: |
+            'Identification for the system consuming the API, as defined in
+            [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minLength: 3
+            type: string
+            example: Resolver
+        - name: x-correlator
+          in: header
+          description: UUID for the service execution flow that allows to correlate
+            requests and responses
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 550e8400-e29b-11d4-a716-446655440000
+        - name: trace-indicator
+          in: header
+          description: Sequence of request numbers along the flow
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([0-9]+)(\\.([0-9]+))*$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 1.3.1
+        - name: customer-journey
+          in: header
+          description: Holds information supporting customer’s journey to which the
+            execution applies
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: Unknown value
       requestBody:
         content:
           application/json:
@@ -7610,12 +7610,12 @@ paths:
                 type: string
                 example: EXPERIMENTAL
                 enum:
-                - EXPERIMENTAL
-                - OPERATIONAL
-                - DEPRECATED
-                - OBSOLETE
-                - UNKNOWN
-                - NOT_YET_DEFINED
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
         "400":
           description: Response in case of errored service requests
           headers:
@@ -7837,75 +7837,75 @@ paths:
           url:
             post:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
               requestBody:
                 content:
                   application/json:
                     schema:
                       required:
-                      - application-name
-                      - operation-name
-                      - originator
-                      - release-number
-                      - response-code
-                      - timestamp
-                      - trace-indicator
-                      - user
-                      - x-correlator
+                        - application-name
+                        - operation-name
+                        - originator
+                        - release-number
+                        - response-code
+                        - timestamp
+                        - trace-indicator
+                        - user
+                        - x-correlator
                       type: object
                       properties:
                         x-correlator:
@@ -8019,12 +8019,12 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -8242,69 +8242,69 @@ paths:
                       schema:
                         $ref: '#/components/schemas/errorDescription'
       security:
-      - apiKeyAuth: []
+        - apiKeyAuth: []
       x-swagger-router-controller: BasicServices
   /v1/redirect-oam-request-information:
     post:
       tags:
-      - BasicServices
+        - BasicServices
       summary: Offers configuring the client side for sending OaM request information
       operationId: redirectOamRequestInformation
       parameters:
-      - name: user
-        in: header
-        description: User identifier from the system starting the service call
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: User Name
-      - name: originator
-        in: header
-        description: |
-          'Identification for the system consuming the API, as defined in
-           [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-        required: true
-        style: simple
-        explode: false
-        schema:
-          minLength: 3
-          type: string
-          example: Resolver
-      - name: x-correlator
-        in: header
-        description: UUID for the service execution flow that allows to correlate
-          requests and responses
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 550e8400-e29b-11d4-a716-446655440000
-      - name: trace-indicator
-        in: header
-        description: Sequence of request numbers along the flow
-        required: true
-        style: simple
-        explode: false
-        schema:
-          pattern: "^([0-9]+)(\\.([0-9]+))*$"
-          type: string
-          description: Empty string accepted from external applications.
-          example: 1.3.1
-      - name: customer-journey
-        in: header
-        description: Holds information supporting customer’s journey to which the
-          execution applies
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          example: Unknown value
+        - name: user
+          in: header
+          description: User identifier from the system starting the service call
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: User Name
+        - name: originator
+          in: header
+          description: |
+            'Identification for the system consuming the API, as defined in
+            [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+          required: true
+          style: simple
+          explode: false
+          schema:
+            minLength: 3
+            type: string
+            example: Resolver
+        - name: x-correlator
+          in: header
+          description: UUID for the service execution flow that allows to correlate
+            requests and responses
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 550e8400-e29b-11d4-a716-446655440000
+        - name: trace-indicator
+          in: header
+          description: Sequence of request numbers along the flow
+          required: true
+          style: simple
+          explode: false
+          schema:
+            pattern: "^([0-9]+)(\\.([0-9]+))*$"
+            type: string
+            description: Empty string accepted from external applications.
+            example: 1.3.1
+        - name: customer-journey
+          in: header
+          description: Holds information supporting customer’s journey to which the
+            execution applies
+          required: true
+          style: simple
+          explode: false
+          schema:
+            type: string
+            example: Unknown value
       requestBody:
         content:
           application/json:
@@ -8352,12 +8352,12 @@ paths:
                 type: string
                 example: EXPERIMENTAL
                 enum:
-                - EXPERIMENTAL
-                - OPERATIONAL
-                - DEPRECATED
-                - OBSOLETE
-                - UNKNOWN
-                - NOT_YET_DEFINED
+                  - EXPERIMENTAL
+                  - OPERATIONAL
+                  - DEPRECATED
+                  - OBSOLETE
+                  - UNKNOWN
+                  - NOT_YET_DEFINED
         "400":
           description: Response in case of errored service requests
           headers:
@@ -8579,74 +8579,74 @@ paths:
           url:
             post:
               parameters:
-              - name: user
-                in: header
-                description: User identifier from the system starting the service
-                  call
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: User Name
-              - name: originator
-                in: header
-                description: |
-                  'Identification for the system consuming the API, as defined in
-                   [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  minLength: 3
-                  type: string
-                  example: Resolver
-              - name: x-correlator
-                in: header
-                description: UUID for the service execution flow that allows to correlate
-                  requests and responses
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 550e8400-e29b-11d4-a716-446655440000
-              - name: trace-indicator
-                in: header
-                description: Sequence of request numbers along the flow
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  pattern: "^([0-9]+)(\\.([0-9]+))*$"
-                  type: string
-                  description: Empty string accepted from external applications.
-                  example: 1.3.1
-              - name: customer-journey
-                in: header
-                description: Holds information supporting customer’s journey to which
-                  the execution applies
-                required: true
-                style: simple
-                explode: false
-                schema:
-                  type: string
-                  example: Unknown value
+                - name: user
+                  in: header
+                  description: User identifier from the system starting the service
+                    call
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: User Name
+                - name: originator
+                  in: header
+                  description: |
+                    'Identification for the system consuming the API, as defined in
+                    [/core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name]'
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    minLength: 3
+                    type: string
+                    example: Resolver
+                - name: x-correlator
+                  in: header
+                  description: UUID for the service execution flow that allows to correlate
+                    requests and responses
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^[0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12}$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 550e8400-e29b-11d4-a716-446655440000
+                - name: trace-indicator
+                  in: header
+                  description: Sequence of request numbers along the flow
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    pattern: "^([0-9]+)(\\.([0-9]+))*$"
+                    type: string
+                    description: Empty string accepted from external applications.
+                    example: 1.3.1
+                - name: customer-journey
+                  in: header
+                  description: Holds information supporting customer’s journey to which
+                    the execution applies
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                    type: string
+                    example: Unknown value
               requestBody:
                 content:
                   application/json:
                     schema:
                       required:
-                      - application-name
-                      - method
-                      - release-number
-                      - resource
-                      - response-code
-                      - stringified-body
-                      - timestamp
-                      - user-name
+                        - application-name
+                        - method
+                        - release-number
+                        - resource
+                        - response-code
+                        - stringified-body
+                        - timestamp
+                        - user-name
                       type: object
                       properties:
                         application-name:
@@ -8732,12 +8732,12 @@ paths:
                         type: string
                         example: EXPERIMENTAL
                         enum:
-                        - EXPERIMENTAL
-                        - OPERATIONAL
-                        - DEPRECATED
-                        - OBSOLETE
-                        - UNKNOWN
-                        - NOT_YET_DEFINED
+                          - EXPERIMENTAL
+                          - OPERATIONAL
+                          - DEPRECATED
+                          - OBSOLETE
+                          - UNKNOWN
+                          - NOT_YET_DEFINED
                 "400":
                   description: Response in case of errored service requests
                   headers:
