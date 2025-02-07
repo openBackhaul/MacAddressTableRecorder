@@ -2670,15 +2670,15 @@ paths:
                         example:
                           core-model-1-4:control-construct:
                             - forwarding-domain:
-                              - uuid: 513250005-FD-VLAN-1234-1
-                                layer-protocol-name:
-                                  - vlan-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_VLAN_LAYER
-                              - uuid: 513250005-FD-MAC-1234-2
-                                layer-protocol-name:
-                                  - mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER
-                                mac-fd-1-0:mac-fd-pac:
-                                  mac-fd-status:
-                                    mac-address-cur: 48:f8:db:79:7c:ce
+                                - uuid: 513250005-FD-VLAN-1234-1
+                                  layer-protocol-name:
+                                    - vlan-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_VLAN_LAYER
+                                - uuid: 513250005-FD-MAC-1234-2
+                                  layer-protocol-name:
+                                    - mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER
+                                  mac-fd-1-0:mac-fd-pac:
+                                    mac-fd-status:
+                                      mac-address-cur: 48:f8:db:79:7c:ce
                 "400":
                   description: Response in case of errored service requests
                   headers:
@@ -21534,7 +21534,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: ElasticsearchClient
   ? /core-model-1-4:control-construct/logical-termination-point={uuid}/layer-protocol=0/http-client-interface-1-0:http-client-interface-pac/http-client-interface-configuration/application-name
   : get:
@@ -21596,7 +21596,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorDescription'
       security:
-      - basicAuth: []
+        - basicAuth: []
       x-swagger-router-controller: HttpClient
     put:
       tags:
@@ -22242,234 +22242,234 @@ components:
           type: array
           items:
             oneOf:
-            - required:
-              - layer-protocol-name
-              - local-id
-              - operation-server-interface-1-0:operation-server-interface-pac
-              type: object
-              properties:
-                local-id:
-                  type: string
-                layer-protocol-name:
-                  type: string
-                operation-server-interface-1-0:operation-server-interface-pac:
-                  required:
-                    - operation-server-interface-capability
-                    - operation-server-interface-configuration
-                  type: object
-                  properties:
-                    operation-server-interface-capability:
-                      required:
-                        - operation-name
-                      type: object
-                      properties:
-                        operation-name:
-                          type: string
-                    operation-server-interface-configuration:
-                      required:
-                        - life-cycle-state
-                      type: object
-                      properties:
-                        life-cycle-state:
-                          type: string
-              description: operation server
-            - required:
-              - http-server-interface-1-0:http-server-interface-pac
-              - layer-protocol-name
-              - local-id
-              type: object
-              properties:
-                local-id:
-                  type: string
-                layer-protocol-name:
-                  type: string
-                http-server-interface-1-0:http-server-interface-pac:
-                  required:
-                    - http-server-interface-capability
-                  type: object
-                  properties:
-                    http-server-interface-capability:
-                      required:
-                        - application-name
-                        - data-update-period
-                        - release-number
-                      type: object
-                      properties:
-                        application-name:
-                          type: string
-                        release-number:
-                          type: string
-                        data-update-period:
-                          type: string
-              description: http server
-            - required:
-              - layer-protocol-name
-              - local-id
-              - tcp-server-interface-1-0:tcp-server-interface-pac
-              type: object
-              properties:
-                local-id:
-                  type: string
-                layer-protocol-name:
-                  type: string
-                tcp-server-interface-1-0:tcp-server-interface-pac:
-                  required:
-                  - tcp-server-interface-configuration
-                  type: object
-                  properties:
-                    tcp-server-interface-configuration:
-                      required:
-                        - description
-                        - local-address
-                        - local-port
-                        - local-protocol
-                      type: object
-                      properties:
-                        description:
-                          type: string
-                        local-protocol:
-                          type: string
-                        local-address:
-                          type: object
-                          properties:
-                            ipv-4-address:
-                              type: string
-                            domain-name:
-                              type: string
-                        local-port:
-                          type: integer
-              description: tcp server
-            - required:
-              - layer-protocol-name
-              - local-id
-              - operation-client-interface-1-0:operation-client-interface-pac
-              type: object
-              properties:
-                local-id:
-                  type: string
-                layer-protocol-name:
-                  type: string
-                operation-client-interface-1-0:operation-client-interface-pac:
-                  required:
-                    - operation-client-interface-configuration
-                    - operation-client-interface-status
-                  type: object
-                  properties:
-                    operation-client-interface-configuration:
-                      required:
-                        - operation-name
-                      type: object
-                      properties:
-                        operation-name:
-                          type: string
-                    operation-client-interface-status:
-                      required:
-                        - life-cycle-state
-                        - operational-state
-                      type: object
-                      properties:
-                        operational-state:
-                          type: string
-                        life-cycle-state:
-                          type: string
-              description: operation client
-            - required:
-              - elasticsearch-client-interface-1-0:elasticsearch-client-interface-pac
-              - layer-protocol-name
-              - local-id
-              type: object
-              properties:
-                local-id:
-                  type: string
-                layer-protocol-name:
-                  type: string
-                elasticsearch-client-interface-1-0:elasticsearch-client-interface-pac:
-                  required:
-                    - elasticsearch-client-interface-configuration
-                    - elasticsearch-client-interface-status
-                  type: object
-                  properties:
-                    elasticsearch-client-interface-configuration:
-                      required:
-                        - index-alias
-                      type: object
-                      properties:
-                        index-alias:
-                          type: string
-                    elasticsearch-client-interface-status:
-                      required:
-                        - life-cycle-state
-                        - operational-state
-                      type: object
-                      properties:
-                        operational-state:
-                          type: string
-                        life-cycle-state:
-                          type: string
-              description: elasticsearch client
-            - required:
-              - http-client-interface-1-0:http-client-interface-pac
-              - layer-protocol-name
-              - local-id
-              type: object
-              properties:
-                local-id:
-                  type: string
-                layer-protocol-name:
-                  type: string
-                http-client-interface-1-0:http-client-interface-pac:
-                  required:
-                    - http-client-interface-configuration
-                  type: object
-                  properties:
-                    http-client-interface-configuration:
-                      required:
-                        - application-name
-                        - release-number
-                      type: object
-                      properties:
-                        application-name:
-                          type: string
-                        release-number:
-                          type: string
-              description: http client
-            - required:
-              - layer-protocol-name
-              - local-id
-              - tcp-client-interface-1-0:tcp-client-interface-pac
-              type: object
-              properties:
-                local-id:
-                  type: string
-                layer-protocol-name:
-                  type: string
-                tcp-client-interface-1-0:tcp-client-interface-pac:
-                  required:
-                    - tcp-client-interface-configuration
-                  type: object
-                  properties:
-                    tcp-client-interface-configuration:
-                      required:
-                        - remote-address
-                        - remote-port
-                        - remote-protocol
-                      type: object
-                      properties:
-                        remote-protocol:
-                          type: string
-                        remote-address:
-                          type: object
-                          properties:
-                            ip-address:
-                              type: object
-                              properties:
-                                ipv-4-address:
-                                  type: string
-                            domain-name:
-                              type: string
-                        remote-port:
-                          type: integer
-              description: tcp client
+              - required:
+                  - layer-protocol-name
+                  - local-id
+                  - operation-server-interface-1-0:operation-server-interface-pac
+                type: object
+                properties:
+                  local-id:
+                    type: string
+                  layer-protocol-name:
+                    type: string
+                  operation-server-interface-1-0:operation-server-interface-pac:
+                    required:
+                      - operation-server-interface-capability
+                      - operation-server-interface-configuration
+                    type: object
+                    properties:
+                      operation-server-interface-capability:
+                        required:
+                          - operation-name
+                        type: object
+                        properties:
+                          operation-name:
+                            type: string
+                      operation-server-interface-configuration:
+                        required:
+                          - life-cycle-state
+                        type: object
+                        properties:
+                          life-cycle-state:
+                            type: string
+                description: operation server
+              - required:
+                  - http-server-interface-1-0:http-server-interface-pac
+                  - layer-protocol-name
+                  - local-id
+                type: object
+                properties:
+                  local-id:
+                    type: string
+                  layer-protocol-name:
+                    type: string
+                  http-server-interface-1-0:http-server-interface-pac:
+                    required:
+                      - http-server-interface-capability
+                    type: object
+                    properties:
+                      http-server-interface-capability:
+                        required:
+                          - application-name
+                          - data-update-period
+                          - release-number
+                        type: object
+                        properties:
+                          application-name:
+                            type: string
+                          release-number:
+                            type: string
+                          data-update-period:
+                            type: string
+                description: http server
+              - required:
+                  - layer-protocol-name
+                  - local-id
+                  - tcp-server-interface-1-0:tcp-server-interface-pac
+                type: object
+                properties:
+                  local-id:
+                    type: string
+                  layer-protocol-name:
+                    type: string
+                  tcp-server-interface-1-0:tcp-server-interface-pac:
+                    required:
+                      - tcp-server-interface-configuration
+                    type: object
+                    properties:
+                      tcp-server-interface-configuration:
+                        required:
+                          - description
+                          - local-address
+                          - local-port
+                          - local-protocol
+                        type: object
+                        properties:
+                          description:
+                            type: string
+                          local-protocol:
+                            type: string
+                          local-address:
+                            type: object
+                            properties:
+                              ipv-4-address:
+                                type: string
+                              domain-name:
+                                type: string
+                          local-port:
+                            type: integer
+                description: tcp server
+              - required:
+                  - layer-protocol-name
+                  - local-id
+                  - operation-client-interface-1-0:operation-client-interface-pac
+                type: object
+                properties:
+                  local-id:
+                    type: string
+                  layer-protocol-name:
+                    type: string
+                  operation-client-interface-1-0:operation-client-interface-pac:
+                    required:
+                      - operation-client-interface-configuration
+                      - operation-client-interface-status
+                    type: object
+                    properties:
+                      operation-client-interface-configuration:
+                        required:
+                          - operation-name
+                        type: object
+                        properties:
+                          operation-name:
+                            type: string
+                      operation-client-interface-status:
+                        required:
+                          - life-cycle-state
+                          - operational-state
+                        type: object
+                        properties:
+                          operational-state:
+                            type: string
+                          life-cycle-state:
+                            type: string
+                description: operation client
+              - required:
+                  - elasticsearch-client-interface-1-0:elasticsearch-client-interface-pac
+                  - layer-protocol-name
+                  - local-id
+                type: object
+                properties:
+                  local-id:
+                    type: string
+                  layer-protocol-name:
+                    type: string
+                  elasticsearch-client-interface-1-0:elasticsearch-client-interface-pac:
+                    required:
+                      - elasticsearch-client-interface-configuration
+                      - elasticsearch-client-interface-status
+                    type: object
+                    properties:
+                      elasticsearch-client-interface-configuration:
+                        required:
+                          - index-alias
+                        type: object
+                        properties:
+                          index-alias:
+                            type: string
+                      elasticsearch-client-interface-status:
+                        required:
+                          - life-cycle-state
+                          - operational-state
+                        type: object
+                        properties:
+                          operational-state:
+                            type: string
+                          life-cycle-state:
+                            type: string
+                description: elasticsearch client
+              - required:
+                  - http-client-interface-1-0:http-client-interface-pac
+                  - layer-protocol-name
+                  - local-id
+                type: object
+                properties:
+                  local-id:
+                    type: string
+                  layer-protocol-name:
+                    type: string
+                  http-client-interface-1-0:http-client-interface-pac:
+                    required:
+                      - http-client-interface-configuration
+                    type: object
+                    properties:
+                      http-client-interface-configuration:
+                        required:
+                          - application-name
+                          - release-number
+                        type: object
+                        properties:
+                          application-name:
+                            type: string
+                          release-number:
+                            type: string
+                description: http client
+              - required:
+                  - layer-protocol-name
+                  - local-id
+                  - tcp-client-interface-1-0:tcp-client-interface-pac
+                type: object
+                properties:
+                  local-id:
+                    type: string
+                  layer-protocol-name:
+                    type: string
+                  tcp-client-interface-1-0:tcp-client-interface-pac:
+                    required:
+                      - tcp-client-interface-configuration
+                    type: object
+                    properties:
+                      tcp-client-interface-configuration:
+                        required:
+                          - remote-address
+                          - remote-port
+                          - remote-protocol
+                        type: object
+                        properties:
+                          remote-protocol:
+                            type: string
+                          remote-address:
+                            type: object
+                            properties:
+                              ip-address:
+                                type: object
+                                properties:
+                                  ipv-4-address:
+                                    type: string
+                              domain-name:
+                                type: string
+                          remote-port:
+                            type: integer
+                description: tcp client
     forwardingDomain:
       required:
         - forwarding-construct
@@ -22653,7 +22653,7 @@ components:
         requestor-receive-operation: /v1/receive-requested-mac-address-table
       anyOf:
       - required:
-        - mount-name
+          - mount-name
         type: object
         properties:
           mount-name:
@@ -22664,11 +22664,11 @@ components:
         example:
           mount-name: "305251234"
       - required:
-        - mount-name
-        - requestor-address
-        - requestor-port
-        - requestor-protocol
-        - requestor-receive-operation
+          - mount-name
+          - requestor-address
+          - requestor-port
+          - requestor-protocol
+          - requestor-receive-operation
         type: object
         properties:
           mount-name:
@@ -22680,8 +22680,8 @@ components:
             description: |
               'HTTP or HTTPs protocol for sending the response to the requestor'
             enum:
-            - HTTP
-            - HTTPS
+              - HTTP
+              - HTTPS
           requestor-address:
             $ref: '#/components/schemas/v1readcurrentmactablefromdevice_requestoraddress'
           requestor-port:
@@ -22694,7 +22694,7 @@ components:
         description: update of elasticsearch and response to the requestor
     inline_response_200_2:
       required:
-      - request-id
+        - request-id
       type: object
       properties:
         request-id:
@@ -22704,7 +22704,7 @@ components:
         request-id: 305251234-101120-1400
     v1_providelistofnetworkelementinterfacesonpath_body:
       required:
-      - target-mac-address
+        - target-mac-address
       type: object
       properties:
         target-mac-address:
@@ -22739,8 +22739,8 @@ components:
             'Date and time when the data has been retrieved from the device from elasticsearch filtered for remote-mac-address == {$request.body#target-mac-address}'
     v1providelistofnetworkelementinterfacesonpathingenericrepresentation_inputvaluelist:
       required:
-      - field-name
-      - field-value
+        - field-name
+        - field-value
       type: object
       properties:
         field-name:
@@ -22759,8 +22759,8 @@ components:
             $ref: '#/components/schemas/v1providelistofnetworkelementinterfacesonpathingenericrepresentation_inputvaluelist'
       example:
         input-value-list:
-        - field-name: TargetMacAddress
-          field-value: 01:01:01:01:01:01
+          - field-name: TargetMacAddress
+            field-value: 01:01:01:01:01:01
     v1registeryourself_registryofficeaddress_ipaddress:
       minProperties: 1
       type: object
@@ -22813,12 +22813,12 @@ components:
         type: object
         description: use existing configuration
       - required:
-        - registration-operation
-        - registry-office-address
-        - registry-office-application
-        - registry-office-application-release-number
-        - registry-office-port
-        - registry-office-protocol
+          - registration-operation
+          - registry-office-address
+          - registry-office-application
+          - registry-office-application-release-number
+          - registry-office-port
+          - registry-office-protocol
         type: object
         properties:
           registry-office-application:
@@ -22841,8 +22841,8 @@ components:
             description: |
               'If body provided, protocol for addressing the RegistryOffice application update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ro-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
             enum:
-            - HTTP
-            - HTTPS
+              - HTTP
+              - HTTPS
           registry-office-address:
             $ref: '#/components/schemas/v1registeryourself_registryofficeaddress'
           registry-office-port:
@@ -22918,14 +22918,14 @@ components:
       additionalProperties: false
     v1_embedyourself_body:
       required:
-      - deregistration-operation
-      - registry-office-address
-      - registry-office-application
-      - registry-office-application-release-number
-      - registry-office-port
-      - registry-office-protocol
-      - relay-operation-update-operation
-      - relay-server-replacement-operation
+        - deregistration-operation
+        - registry-office-address
+        - registry-office-application
+        - registry-office-application-release-number
+        - registry-office-port
+        - registry-office-protocol
+        - relay-operation-update-operation
+        - relay-server-replacement-operation
       type: object
       properties:
         registry-office-application:
@@ -22972,8 +22972,8 @@ components:
           description: |
             'Protocol for addressing the currently running old release of the same application update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-or-1-0-1-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
           enum:
-          - HTTP
-          - HTTPS
+            - HTTP
+            - HTTPS
         old-release-address:
           $ref: '#/components/schemas/v1embedyourself_oldreleaseaddress'
         old-release-port:
@@ -23023,12 +23023,12 @@ components:
       additionalProperties: false
     v1_redirectservicerequestinformation_body:
       required:
-      - service-log-address
-      - service-log-application
-      - service-log-application-release-number
-      - service-log-operation
-      - service-log-port
-      - service-log-protocol
+        - service-log-address
+        - service-log-application
+        - service-log-application-release-number
+        - service-log-operation
+        - service-log-port
+        - service-log-protocol
       type: object
       properties:
         service-log-application:
@@ -23050,8 +23050,8 @@ components:
           description: |
             'Protocol to be used for addressing the application that shall record the service requests update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-eatl-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
           enum:
-          - HTTP
-          - HTTPS
+            - HTTP
+            - HTTPS
         service-log-address:
           $ref: '#/components/schemas/v1redirectservicerequestinformation_servicelogaddress'
         service-log-port:
@@ -23121,8 +23121,8 @@ components:
           description: |
             'Protocol to be used for addressing the application that shall record the OaM requests update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-ol-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
           enum:
-          - HTTP
-          - HTTPS
+            - HTTP
+            - HTTPS
         oam-log-address:
           $ref: '#/components/schemas/v1redirectoamrequestinformation_oamlogaddress'
         oam-log-port:
@@ -23142,9 +23142,9 @@ components:
         oam-log-port: 3034
     v1_endsubscription_body:
       required:
-      - subscriber-application
-      - subscriber-release-number
-      - subscription
+        - subscriber-application
+        - subscriber-release-number
+        - subscription
       type: object
       properties:
         subscriber-application:
@@ -23190,12 +23190,12 @@ components:
       additionalProperties: false
     v1_inquireoamrequestapprovals_body:
       required:
-      - oam-approval-address
-      - oam-approval-application
-      - oam-approval-application-release-number
-      - oam-approval-operation
-      - oam-approval-port
-      - oam-approval-protocol
+        - oam-approval-address
+        - oam-approval-application
+        - oam-approval-application-release-number
+        - oam-approval-operation
+        - oam-approval-port
+        - oam-approval-protocol
       type: object
       properties:
         oam-approval-application:
@@ -23217,8 +23217,8 @@ components:
           description: |
             'Protocol to be used for addressing the application that shall approve the OaM requests update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-aa-2-1-2-000/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
           enum:
-          - HTTP
-          - HTTPS
+            - HTTP
+            - HTTPS
         oam-approval-address:
           $ref: '#/components/schemas/v1inquireoamrequestapprovals_oamapprovaladdress'
         oam-approval-port:
@@ -23261,13 +23261,13 @@ components:
       additionalProperties: false
     v1_updateclient_body:
       required:
-      - current-application-name
-      - current-release-number
-      - future-address
-      - future-application-name
-      - future-port
-      - future-protocol
-      - future-release-number
+        - current-application-name
+        - current-release-number
+        - future-address
+        - future-application-name
+        - future-port
+        - future-protocol
+        - future-release-number
       type: object
       properties:
         current-application-name:
@@ -23293,8 +23293,8 @@ components:
           description: |
             'Protocol to be used in future for addressing the application that has updated connection data update [/core-model-1-4:control-construct/logical-termination-point=matr-1-0-2-tcp-c-*/layer-protocol=0/tcp-client-interface-1-0:tcp-client-interface-pac/tcp-client-interface-configuration/remote-protocol]'
           enum:
-          - HTTP
-          - HTTPS
+            - HTTP
+            - HTTPS
         future-address:
           $ref: '#/components/schemas/v1updateclient_futureaddress'
         future-port:
@@ -23315,7 +23315,7 @@ components:
         future-port: 3031
     inline_response_200_4:
       required:
-      - core-model-1-4:control-construct
+        - core-model-1-4:control-construct
       type: object
       properties:
         core-model-1-4:control-construct:
