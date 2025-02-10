@@ -850,7 +850,6 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
         arrayMountNameInterface.forEach(entry => {
           result.push({
             "value": entry,
-            "datatype": "string",
             "field-name": responseValueList[0]["fieldName"]
           });
         });
