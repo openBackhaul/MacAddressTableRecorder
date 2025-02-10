@@ -1490,6 +1490,13 @@ async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor
     operationKey
   );
 
+  if (body instanceof Array) {
+    console.log("Body is already an array, is OK")
+  } else {
+    body = [body];
+  }
+
+
   httpRequestHeaderRequestor = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
 
   console.log('Send data to Requestor:' + requestorUrl);
