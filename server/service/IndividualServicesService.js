@@ -1616,7 +1616,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
       //STEP1
       //"/core-model-1-4:network-control-domain=cache/control-construct={mount-name}?fields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))",
       try {
-        console.log("Step 1");
         const data = await PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(mountName, user, originator, xCorrelator, traceIndicator, customerJourney);
 
         if (
@@ -1653,7 +1652,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
       //"/rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses" 
       if (FDomainArray.length >= 0) {
         try {
-          console.log("Step2");
           const dataFromRequest = await PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(mountName, user, originator, xCorrelator, traceIndicator, customerJourney);
 
           let uuid = 0;
@@ -1725,7 +1723,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
         //STEP3
         try {
-          console.log("Step3");
           const originalLtpNamePromises = eggressUniqArray.map(egressData => {
             return PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(mountName, egressData, user, originator, xCorrelator, traceIndicator, customerJourney);
           });
@@ -1751,7 +1748,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
         });
 
         const macAddressDataDb = createMacAddressDataForDb("mac-address", macAddressArray);
-        console.log("Step4");
+
         //STEP4
         try {
           const writingResultPromise = await PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(macAddressDataDb, user, originator, xCorrelator, traceIndicator, customerJourney);
@@ -1760,7 +1757,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           throw error;
         }
 
-        console.log("After Step4");
         result['application/json'] = {
           "request-id": reqId
         };
@@ -1772,7 +1768,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           bodyRequestor['application/json'] = {
             transformedArray
           };
-          console.log("before sending to axios");
+
           if (urlRequestor != null) {
             try {
               await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(transformedArray, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
