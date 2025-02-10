@@ -1479,42 +1479,38 @@ function getOriginalLtpName(jsonArray, egressLtp) {
 async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(body, user, originator, xCorrelator, traceIndicator, customerJourney, requestorUrl) {
   let httpRequestHeaderRequestor;
 
-  let operationKey = 'Operation key not yet provided.'
-
   let httpRequestHeader = new RequestHeader(
     user,
     originator,
     xCorrelator,
     traceIndicator,
     customerJourney,
-    operationKey
   );
 
   if (body instanceof Array) {
-    console.log("Body is already an array, is OK");
+    console.log("Body is already an array, sending to POST");
   } else {
-    console.log("Body is not an array");
+    console.warn("Body is not an array");
     body = [body];
   }
-
-  console.log(JSON.stringify(body));
 
   httpRequestHeaderRequestor = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
 
   console.log('Send data to Requestor:' + requestorUrl);
 
   // uncomment if you do not want to validate security e.g. operation-key, basic auth, etc
-  appCommons.openApiValidatorOptions.validateSecurity = false;
+  // TODO @ll Also that should be avoided
+  // appCommons.openApiValidatorOptions.validateSecurity = false;
 
   try {
     let response = await axios.post(requestorUrl, body, {
       headers: httpRequestHeaderRequestor
     });
-    appCommons.openApiValidatorOptions.validateSecurity = true;
+    // appCommons.openApiValidatorOptions.validateSecurity = true;
     return true;
   }
   catch (error) {
-    appCommons.openApiValidatorOptions.validateSecurity = true;
+    // appCommons.openApiValidatorOptions.validateSecurity = true;
     throw error;
   }
 }
@@ -1605,8 +1601,8 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
       urlRequestor = getRequestorPath(body);
       if (urlRequestor != null) {
         try {
-          // await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(bodyRequestor, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
-          console.log("Skipping the first attempt");
+          // In my opinon that should be removed. Keep at end of the routine
+          await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(bodyRequestor, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
         }
         catch (error) {
           throw ("Failed send data to requestor: " + error.message);
