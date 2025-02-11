@@ -1444,7 +1444,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor
   if (body instanceof Array) {
     console.log("Body is already an array, sending to POST");
   } else {
-    console.warn("Body is not an array");
+    console.error("Body is not an array");
     body = [body];
   }
 
@@ -1546,22 +1546,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
     const mountName = body['mount-name'];
 
     try {
-      let reqId = generateRequestId(mountName);
-
-      bodyRequestor['application/json'] = {
-        "request-id": "{" + reqId + "}"
-      };
-
-      urlRequestor = getRequestorPath(body);
-      if (urlRequestor != null) {
-        try {
-          // In my opinon that should be removed. Keep at end of the routine
-          await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(bodyRequestor, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
-        }
-        catch (error) {
-          throw ("Failed send data to requestor: " + error.message);
-        }
-      }
 
       //STEP1
       //"/core-model-1-4:network-control-domain=cache/control-construct={mount-name}?fields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))",
@@ -1670,7 +1654,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           throw (error.message);
         }
 
-
         //STEP3
         try {
           const originalLtpNamePromises = eggressUniqArray.map(egressData => {
@@ -1707,26 +1690,30 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           throw error;
         }
 
+        let reqId = generateRequestId(mountName);
+        // Result that return API
         result['application/json'] = {
           "request-id": reqId
         };
 
+        // Retrieve url requestor from body
+        urlRequestor = getRequestorPath(body);
 
         if (urlRequestor != null) {
           const transformedArray = transformArray(reqId, macAddressArray);
 
+          // Body to send to requestor
           bodyRequestor['application/json'] = {
             transformedArray
           };
 
-          if (urlRequestor != null) {
-            try {
-              await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(transformedArray, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
-            }
-            catch (error) {
-              throw ("Failed send data to requestor: " + error.message);
-            }
+          try {
+            await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(transformedArray, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
           }
+          catch (error) {
+            throw ("Failed send data to requestor: " + error.message);
+          }
+
         }
         resolve(result['application/json']);
       }
