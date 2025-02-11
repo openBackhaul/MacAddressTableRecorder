@@ -1427,12 +1427,18 @@ function getOriginalLtpName(jsonArray, egressLtp) {
 async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(body, user, originator, xCorrelator, traceIndicator, customerJourney, requestorUrl) {
   let httpRequestHeaderRequestor;
 
+  // let operationNameAndOperationKey =
+  //     await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor');
+  
+  const operationKey = "Operation key not yet provided." // operationNameAndOperationKey.operationKey;
+  
   let httpRequestHeader = new RequestHeader(
     user,
     originator,
     xCorrelator,
     traceIndicator,
     customerJourney,
+    operationKey
   );
 
   if (body instanceof Array) {
