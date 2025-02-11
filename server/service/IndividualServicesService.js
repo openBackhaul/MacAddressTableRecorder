@@ -113,58 +113,6 @@ async function resolveApplicationNameAndHttpClientLtpUuidFromForwardingName(forw
   };
 }
 
-async function resolveOperationNameAndOperationKeyFromForwardingName(forwardingName) {
-  const forwardingConstruct = await ForwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
-  if (forwardingConstruct === undefined) {
-    return null;
-  }
-
-  let fcPortOutputDirectionLogicalTerminationPointList = [];
-  const fcPortList = forwardingConstruct[onfAttributes.FORWARDING_CONSTRUCT.FC_PORT];
-  for (const fcPort of fcPortList) {
-    const portDirection = fcPort[onfAttributes.FC_PORT.PORT_DIRECTION];
-    if (FcPort.portDirectionEnum.OUTPUT === portDirection) {
-      fcPortOutputDirectionLogicalTerminationPointList.push(fcPort[onfAttributes.FC_PORT.LOGICAL_TERMINATION_POINT]);
-    }
-  }
-
-  if (fcPortOutputDirectionLogicalTerminationPointList.length !== 1) {
-    return null;
-  }
-
-  const opLtpUuid = fcPortOutputDirectionLogicalTerminationPointList[0];
-  const logicalTerminationPointLayer = await LogicalTerminationPointC.getLayerLtpListAsync(opLtpUuid);
-
-  let clientPac;
-  let pacConfiguration;
-  let operationName;
-  let operationKey;
-  for (const layer of logicalTerminationPointLayer) {
-    let layerProtocolName = layer[onfAttributes.LAYER_PROTOCOL.LAYER_PROTOCOL_NAME];
-    if (LayerProtocol.layerProtocolNameEnum.OPERATION_CLIENT === layerProtocolName) {
-      clientPac = layer[onfAttributes.LAYER_PROTOCOL.OPERATION_CLIENT_INTERFACE_PAC];
-      pacConfiguration = clientPac[onfAttributes.OPERATION_CLIENT.CONFIGURATION];
-      operationName = pacConfiguration[onfAttributes.OPERATION_CLIENT.OPERATION_NAME];
-      operationKey = pacConfiguration[onfAttributes.OPERATION_CLIENT.OPERATION_KEY];
-    }
-    else if (LayerProtocol.layerProtocolNameEnum.ES_CLIENT == layerProtocolName) {
-      clientPac = layer[onfAttributes.LAYER_PROTOCOL.ES_CLIENT_INTERFACE_PAC];
-      pacConfiguration = clientPac[onfAttributes.ES_CLIENT.CONFIGURATION];
-      operationName = pacConfiguration[onfAttributes.ES_CLIENT.AUTH];
-      operationKey = pacConfiguration[onfAttributes.ES_CLIENT.INDEX_ALIAS];
-    }
-  }
-
-  return operationName === undefined ? {
-    operationName: null,
-    operationKey
-  } : {
-    operationName,
-    operationKey
-  };
-}
-
-
 
 /**
  * Initiates process of embedding a new release
@@ -1479,8 +1427,11 @@ function getOriginalLtpName(jsonArray, egressLtp) {
 async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(body, user, originator, xCorrelator, traceIndicator, customerJourney, requestorUrl) {
   let httpRequestHeaderRequestor;
 
-  let operationKey = 'Operation key not yet provided.'
-
+  // let operationNameAndOperationKey =
+  //     await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor');
+  
+  const operationKey = "Operation key not yet provided." // operationNameAndOperationKey.operationKey;
+  
   let httpRequestHeader = new RequestHeader(
     user,
     originator,
@@ -1490,22 +1441,30 @@ async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor
     operationKey
   );
 
+  if (body instanceof Array) {
+    console.log("Body is already an array, sending to POST");
+  } else {
+    console.error("Body is not an array");
+    body = [body];
+  }
+
   httpRequestHeaderRequestor = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
 
   console.log('Send data to Requestor:' + requestorUrl);
 
   // uncomment if you do not want to validate security e.g. operation-key, basic auth, etc
-  appCommons.openApiValidatorOptions.validateSecurity = false;
+  // TODO @ll Also that should be avoided
+  // appCommons.openApiValidatorOptions.validateSecurity = false;
 
   try {
     let response = await axios.post(requestorUrl, body, {
       headers: httpRequestHeaderRequestor
     });
-    appCommons.openApiValidatorOptions.validateSecurity = true;
+    // appCommons.openApiValidatorOptions.validateSecurity = true;
     return true;
   }
   catch (error) {
-    appCommons.openApiValidatorOptions.validateSecurity = true;
+    // appCommons.openApiValidatorOptions.validateSecurity = true;
     throw error;
   }
 }
@@ -1587,26 +1546,10 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
     const mountName = body['mount-name'];
 
     try {
-      let reqId = generateRequestId(mountName);
-
-      bodyRequestor['application/json'] = {
-        "request-id": "{" + reqId + "}"
-      };
-
-      urlRequestor = getRequestorPath(body);
-      if (urlRequestor != null) {
-        try {
-          await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(bodyRequestor, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
-        }
-        catch (error) {
-          throw ("Failed send data to requestor: " + error.message);
-        }
-      }
 
       //STEP1
       //"/core-model-1-4:network-control-domain=cache/control-construct={mount-name}?fields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))",
       try {
-
         const data = await PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(mountName, user, originator, xCorrelator, traceIndicator, customerJourney);
 
         if (
@@ -1711,7 +1654,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           throw (error.message);
         }
 
-
         //STEP3
         try {
           const originalLtpNamePromises = eggressUniqArray.map(egressData => {
@@ -1748,27 +1690,30 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           throw error;
         }
 
-
+        let reqId = generateRequestId(mountName);
+        // Result that return API
         result['application/json'] = {
           "request-id": reqId
         };
 
+        // Retrieve url requestor from body
+        urlRequestor = getRequestorPath(body);
 
         if (urlRequestor != null) {
           const transformedArray = transformArray(reqId, macAddressArray);
 
+          // Body to send to requestor
           bodyRequestor['application/json'] = {
             transformedArray
           };
 
-          if (urlRequestor != null) {
-            try {
-              await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(transformedArray, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
-            }
-            catch (error) {
-              throw ("Failed send data to requestor: " + error.message);
-            }
+          try {
+            await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(transformedArray, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
           }
+          catch (error) {
+            throw ("Failed send data to requestor: " + error.message);
+          }
+
         }
         resolve(result['application/json']);
       }
