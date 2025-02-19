@@ -1430,7 +1430,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor
   // let operationNameAndOperationKey =
   //     await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor');
   
-  const operationKey = "Operation key not yet provided." // operationNameAndOperationKey.operationKey;
+  const operationKey = "Operation key not yet provided."
   
   let httpRequestHeader = new RequestHeader(
     user,
@@ -1448,23 +1448,16 @@ async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor
     body = [body];
   }
 
-  httpRequestHeaderRequestor = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
+  httpRequestHeaderRequestor = onfAttributeFormatter.modifyKebabCaseToLowerCamelCase(httpRequestHeader);
 
   console.log('Send data to Requestor:' + requestorUrl);
-
-  // uncomment if you do not want to validate security e.g. operation-key, basic auth, etc
-  // TODO @ll Also that should be avoided
-  // appCommons.openApiValidatorOptions.validateSecurity = false;
 
   try {
     let response = await axios.post(requestorUrl, body, {
       headers: httpRequestHeaderRequestor
     });
-    // appCommons.openApiValidatorOptions.validateSecurity = true;
     return true;
-  }
-  catch (error) {
-    // appCommons.openApiValidatorOptions.validateSecurity = true;
+  } catch (error) {
     throw error;
   }
 }
