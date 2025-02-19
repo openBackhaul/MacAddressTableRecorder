@@ -78,10 +78,6 @@ paths:
           headers:
             x-correlator:
               description: UUID for the service execution flow that allows to correlate
-                requests and responses. Its value must be identical at the response
-                compared with its corresponding request
-              style: simple
-              explode: false
               schema:
                 type: string
                 example: 550e8400-e29b-11d4-a716-446655440000
