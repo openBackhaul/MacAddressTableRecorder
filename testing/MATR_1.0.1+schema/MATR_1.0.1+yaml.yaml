@@ -105,4 +105,3 @@
                   type: string
           display-in-new-browser-window:
             type: boolean
-

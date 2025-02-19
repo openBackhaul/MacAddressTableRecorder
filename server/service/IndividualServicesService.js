@@ -113,58 +113,6 @@ async function resolveApplicationNameAndHttpClientLtpUuidFromForwardingName(forw
   };
 }
 
-async function resolveOperationNameAndOperationKeyFromForwardingName(forwardingName) {
-  const forwardingConstruct = await ForwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
-  if (forwardingConstruct === undefined) {
-    return null;
-  }
-
-  let fcPortOutputDirectionLogicalTerminationPointList = [];
-  const fcPortList = forwardingConstruct[onfAttributes.FORWARDING_CONSTRUCT.FC_PORT];
-  for (const fcPort of fcPortList) {
-    const portDirection = fcPort[onfAttributes.FC_PORT.PORT_DIRECTION];
-    if (FcPort.portDirectionEnum.OUTPUT === portDirection) {
-      fcPortOutputDirectionLogicalTerminationPointList.push(fcPort[onfAttributes.FC_PORT.LOGICAL_TERMINATION_POINT]);
-    }
-  }
-
-  if (fcPortOutputDirectionLogicalTerminationPointList.length !== 1) {
-    return null;
-  }
-
-  const opLtpUuid = fcPortOutputDirectionLogicalTerminationPointList[0];
-  const logicalTerminationPointLayer = await LogicalTerminationPointC.getLayerLtpListAsync(opLtpUuid);
-
-  let clientPac;
-  let pacConfiguration;
-  let operationName;
-  let operationKey;
-  for (const layer of logicalTerminationPointLayer) {
-    let layerProtocolName = layer[onfAttributes.LAYER_PROTOCOL.LAYER_PROTOCOL_NAME];
-    if (LayerProtocol.layerProtocolNameEnum.OPERATION_CLIENT === layerProtocolName) {
-      clientPac = layer[onfAttributes.LAYER_PROTOCOL.OPERATION_CLIENT_INTERFACE_PAC];
-      pacConfiguration = clientPac[onfAttributes.OPERATION_CLIENT.CONFIGURATION];
-      operationName = pacConfiguration[onfAttributes.OPERATION_CLIENT.OPERATION_NAME];
-      operationKey = pacConfiguration[onfAttributes.OPERATION_CLIENT.OPERATION_KEY];
-    }
-    else if (LayerProtocol.layerProtocolNameEnum.ES_CLIENT == layerProtocolName) {
-      clientPac = layer[onfAttributes.LAYER_PROTOCOL.ES_CLIENT_INTERFACE_PAC];
-      pacConfiguration = clientPac[onfAttributes.ES_CLIENT.CONFIGURATION];
-      operationName = pacConfiguration[onfAttributes.ES_CLIENT.AUTH];
-      operationKey = pacConfiguration[onfAttributes.ES_CLIENT.INDEX_ALIAS];
-    }
-  }
-
-  return operationName === undefined ? {
-    operationName: null,
-    operationKey
-  } : {
-    operationName,
-    operationKey
-  };
-}
-
-
 
 /**
  * Initiates process of embedding a new release
@@ -371,10 +319,6 @@ async function executeAfterWait() {
     await waitAsync(30000);
   } catch (error) {
     console.error('An error occurred during the wait:', error);
-    console.error('An error occurred during the wait:', error);
-    // Puoi gestire l'errore in modo appropriato, ad esempio, registrandolo o gestendolo in qualche altro modo.
-    console.error('An error occurred during the wait:', error);
-    // Puoi gestire l'errore in modo appropriato, ad esempio, registrandolo o gestendolo in qualche altro modo.
   }
 }
 
@@ -395,7 +339,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
     console.log(result);
   }
 
-  const refreshIndex = async () => {    
+  const refreshIndex = async () => {
     try {
       let client = await elasticsearchService.getClient(false);
       let indexAlias = await getIndexAliasAsync();
@@ -854,7 +798,6 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
         arrayMountNameInterface.forEach(entry => {
           result.push({
             "value": entry,
-            "datatype": "string",
             "field-name": responseValueList[0]["fieldName"]
           });
         });
@@ -928,7 +871,7 @@ const PromptForProvidingAllMacTablesCausesReadingFromElasticSearch = async funct
         // Next scroll request
         res2 = await client.scroll({
           scroll_id: scrollId,
-          scroll: '1m'  
+          scroll: '1m'
         });
 
         scrollId = res2.body._scroll_id;
@@ -1159,9 +1102,15 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
         throw new Error(" Empty data from " + fullUrl);
       }
     } catch (error) {
+      console.log("***********catch axios try Error '404' for URL:", fullUrl)
+      console.log("*********** response status:", response.status)
+      console.log("*********** response messge:", response.data)
       throw error;
     }
   } catch (error) {
+      console.log("***********catch main try Error '404' for URL:", fullUrl)
+      console.log("*********** response status:", response.status)
+      console.log("*********** response messge:", response.data)
     throw error;
   }
 }
@@ -1376,6 +1325,9 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     if (body && body["mac-address"] && Array.isArray(body["mac-address"]) && body["mac-address"].length > 0 && body["mac-address"][0]["mount-name"]) {
       mountName = body["mac-address"][0]["mount-name"];
     } else {
+      console.error('********************************* Body *******************************************')
+      console.error(JSON.stringify(body))
+      console.error('**********************************************************************************')
       throw new Error("Writing operation into Elastic Search Failed : body structure is not correct");
     }
 
@@ -1475,8 +1427,11 @@ function getOriginalLtpName(jsonArray, egressLtp) {
 async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(body, user, originator, xCorrelator, traceIndicator, customerJourney, requestorUrl) {
   let httpRequestHeaderRequestor;
 
-  let operationKey = 'Operation key not yet provided.'
-
+  // let operationNameAndOperationKey =
+  //     await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor');
+  
+  const operationKey = "Operation key not yet provided." // operationNameAndOperationKey.operationKey;
+  
   let httpRequestHeader = new RequestHeader(
     user,
     originator,
@@ -1486,22 +1441,30 @@ async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor
     operationKey
   );
 
+  if (body instanceof Array) {
+    console.log("Body is already an array, sending to POST");
+  } else {
+    console.error("Body is not an array");
+    body = [body];
+  }
+
   httpRequestHeaderRequestor = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
 
   console.log('Send data to Requestor:' + requestorUrl);
 
   // uncomment if you do not want to validate security e.g. operation-key, basic auth, etc
-  appCommons.openApiValidatorOptions.validateSecurity = false;
+  // TODO @ll Also that should be avoided
+  // appCommons.openApiValidatorOptions.validateSecurity = false;
 
   try {
     let response = await axios.post(requestorUrl, body, {
       headers: httpRequestHeaderRequestor
     });
-    appCommons.openApiValidatorOptions.validateSecurity = true;
+    // appCommons.openApiValidatorOptions.validateSecurity = true;
     return true;
   }
   catch (error) {
-    appCommons.openApiValidatorOptions.validateSecurity = true;
+    // appCommons.openApiValidatorOptions.validateSecurity = true;
     throw error;
   }
 }
@@ -1583,26 +1546,10 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
     const mountName = body['mount-name'];
 
     try {
-      let reqId = generateRequestId(mountName);
-
-      bodyRequestor['application/json'] = {
-        "request-id": "{" + reqId + "}"
-      };
-
-      urlRequestor = getRequestorPath(body);
-      if (urlRequestor != null) {
-        try {
-          await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(bodyRequestor, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
-        }
-        catch (error) {
-          throw ("Failed send data to requestor: " + error.message);
-        }
-      }
 
       //STEP1
       //"/core-model-1-4:network-control-domain=cache/control-construct={mount-name}?fields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))",
       try {
-
         const data = await PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(mountName, user, originator, xCorrelator, traceIndicator, customerJourney);
 
         if (
@@ -1643,10 +1590,12 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
           let uuid = 0;
           let macAddressCur = "00:00:00:00:00:00";
-          if (FDomainArray.length > 0) {
-            uuid = FDomainArray[0]['uuid'];
-            macAddressCur = FDomainArray[0]['mac-fd-1-0:mac-fd-pac']['mac-fd-status']['mac-address-cur'];
-          }
+
+          // Not correct behavior, could be multiple Forwarding domain
+          // if (FDomainArray.length > 0) {
+          //   uuid = FDomainArray[0]['uuid'];
+          //   macAddressCur = FDomainArray[0]['mac-fd-1-0:mac-fd-pac']['mac-fd-status']['mac-address-cur'];
+          // }
 
           const step2Data = new Set();
           let egressData = [];
@@ -1658,16 +1607,35 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
             Array.isArray(dataFromRequest["mac-fd-1-0:output"]["mac-table-entry-list"])
           ) {
             dataFromRequest["mac-fd-1-0:output"]["mac-table-entry-list"].forEach(entry => {
-              if ((FDomainArray.length > 0) && (entry["affected-mac-fd"] === uuid)) {
+              if (FDomainArray.length > 0) {
+                FDomainArray.forEach(entryFD => {
+                  uuid = entryFD["uuid"];
+                  macAddressCur = entryFD['mac-fd-1-0:mac-fd-pac']['mac-fd-status']['mac-address-cur'];
+                  if ((FDomainArray.length > 0) && (entry["affected-mac-fd"] === uuid)) {
+                    entry["own-mac-address"] = macAddressCur;
+                    step2Data.add(entry);
+                  }
+
+                });
+              } else {
                 entry["own-mac-address"] = macAddressCur;
                 step2Data.add(entry);
               }
-              else if (FDomainArray.length == 0) {
-                entry["own-mac-address"] = macAddressCur;
-                step2Data.add(entry);
-              }
+              // if ((FDomainArray.length > 0) && (entry["affected-mac-fd"] === uuid)) {
+              //   entry["own-mac-address"] = macAddressCur;
+              //   step2Data.add(entry);
+              // }
+              // else if (FDomainArray.length == 0) {
+              //   entry["own-mac-address"] = macAddressCur;
+              //   step2Data.add(entry);
+              // }
             });
 
+            if (step2Data.length == 0) {
+              console.warn("Step2Data is empty!");
+              console.warn("Forwarding domain: ", FDomainArray);
+              console.warn("Data from request:", dataFromRequest)
+            }
             step2DataArray = Array.from(step2Data);
 
             const eggressUniqSet = new Set();
@@ -1685,7 +1653,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
         catch (error) {
           throw (error.message);
         }
-
 
         //STEP3
         try {
@@ -1713,9 +1680,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           macAddressArray.push(entry);
         });
 
-
         const macAddressDataDb = createMacAddressDataForDb("mac-address", macAddressArray);
-
 
         //STEP4
         try {
@@ -1725,27 +1690,30 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           throw error;
         }
 
-
+        let reqId = generateRequestId(mountName);
+        // Result that return API
         result['application/json'] = {
           "request-id": reqId
         };
 
+        // Retrieve url requestor from body
+        urlRequestor = getRequestorPath(body);
 
         if (urlRequestor != null) {
           const transformedArray = transformArray(reqId, macAddressArray);
 
+          // Body to send to requestor
           bodyRequestor['application/json'] = {
             transformedArray
           };
 
-          if (urlRequestor != null) {
-            try {
-              await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(transformedArray, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
-            }
-            catch (error) {
-              throw ("Failed send data to requestor: " + error.message);
-            }
+          try {
+            await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(transformedArray, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
           }
+          catch (error) {
+            throw ("Failed send data to requestor: " + error.message);
+          }
+
         }
         resolve(result['application/json']);
       }
