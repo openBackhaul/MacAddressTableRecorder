@@ -1174,7 +1174,6 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
 
     httpRequestHeaderAuth = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
 
-
     try {
       let response = await axios.post(fullUrl, data, {
         headers: httpRequestHeaderAuth
@@ -1424,13 +1423,13 @@ function getOriginalLtpName(jsonArray, egressLtp) {
   return "Undefined";
 }
 
-async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(body, user, originator, xCorrelator, traceIndicator, customerJourney, requestorUrl) {
+async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(data, user, originator, xCorrelator, traceIndicator, customerJourney, requestorUrl) {
   let httpRequestHeaderRequestor;
 
   // let operationNameAndOperationKey =
   //     await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor');
   
-  const operationKey = "Operation key not yet provided."
+  const operationKey = "Operation key not yet provided.";
   
   let httpRequestHeader = new RequestHeader(
     user,
@@ -1441,19 +1440,13 @@ async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor
     operationKey
   );
 
-  if (body instanceof Array) {
-    console.log("Body is already an array, sending to POST");
-  } else {
-    console.error("Body is not an array");
-    body = [body];
-  }
-
-  httpRequestHeaderRequestor = onfAttributeFormatter.modifyKebabCaseToLowerCamelCase(httpRequestHeader);
+  httpRequestHeaderRequestor = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
+  let result = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(data);
 
   console.log('Send data to Requestor:' + requestorUrl);
 
   try {
-    let response = await axios.post(requestorUrl, body, {
+    let response = await axios.post(requestorUrl, data, {
       headers: httpRequestHeaderRequestor
     });
     return true;
@@ -1492,35 +1485,34 @@ function getRequestorPath(body) {
 }
 
 
-
-// Funzione per trasformare l'array
+// Transforming array to be compliant with specifiction
 function transformArray(reqId, inputArray) {
-  const result = [];
+  let returnValue = [];
+  let resultArr = [];
 
-  // Itera attraverso l'array fornito
+  // Iterate through array
   inputArray.forEach(item => {
-    // Crea un oggetto con le informazioni richieste
-    const transformedObject = {
-      requestId: reqId,  // Sostituisci con il valore corretto
-      mountName: item["mount-name"],  // Sostituisci con il valore corretto
-      macAddressCur: item["own-mac-address"],
-      egressLtpUUid: item["egress-ltp-uuid"],
-      originalLtpName: item["original-ltp-name"],
-      vlanId: item["vlan-id"],
-      macAddresses: [item["remote-mac-address"]],  // Inizializza con un array contenente il singolo indirizzo MAC
-      timeStampOfRpc: item["time-stamp-of-data"]  // Aggiunge il timestamp corrente in formato ISO
+    // Create object with requested information
+    let transformedObject= {
+      "mount-name": item["mount-name"],
+      "own-mac-address": item["own-mac-address"],
+      "egress-ltp-uuid": item["egress-ltp-uuid"],
+      "original-ltp-name": item["original-ltp-name"],
+      "vlan-id": item["vlan-id"],
+      "remote-mac-address": item["remote-mac-address"],
+      "time-stamp-of-data": new Date(item["time-stamp-of-data"]).toISOString()  // Add formatted time stamp
     };
 
-    // Verifica se esiste già un oggetto con lo stesso VLAN ID, se sì, aggiungi l'indirizzo MAC all'array
-    const existingObject = result.find(obj => obj.vlanId === transformedObject.vlanId);
-    if (existingObject) {
-      existingObject.macAddresses.push(transformedObject.macAddresses.at(0));
-    } else {
-      result.push(transformedObject);
-    }
+    onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(transformedObject);
+    resultArr.push(transformedObject);
   });
 
-  return result;
+  returnValue.push({
+    "request-id": reqId,
+    "mac-address-data": resultArr
+  });
+
+  return returnValue;
 }
 
 
@@ -1530,7 +1522,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
   let step3DataArray = [];
   let macAddressArray = [];
   let eggressUniqArray = [];
-  let bodyRequestor = {};
   let urlRequestor;
 
   return new Promise(async function (resolve, reject) {
@@ -1694,11 +1685,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
         if (urlRequestor != null) {
           const transformedArray = transformArray(reqId, macAddressArray);
-
-          // Body to send to requestor
-          bodyRequestor['application/json'] = {
-            transformedArray
-          };
 
           try {
             await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(transformedArray, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
