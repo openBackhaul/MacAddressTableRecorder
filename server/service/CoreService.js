@@ -10,19 +10,16 @@ const { elasticsearchService } = require('onf-core-model-ap/applicationPattern/s
 exports.getControlConstruct = function () {
   return new Promise(async function (resolve, reject) {
     let value = await fileOperation.readFromDatabaseAsync("core-model-1-4:control-construct");
-    let response = {};
-
-    response['application/json'] = {
+    let response = {
       "core-model-1-4:control-construct": value
     };
+
     if (Object.keys(response).length > 0) {
       resolve(response[Object.keys(response)[0]]);
     } else {
       resolve();
     }
   });
-
-
 
 
   /*let client1 = await elasticsearchService.getClient(false);
