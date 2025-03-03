@@ -25157,7 +25157,6 @@ components:
           example: 1000
     genericRepresentation_responsevaluelist:
       required:
-      - datatype
       - field-name
       - value
       type: object
