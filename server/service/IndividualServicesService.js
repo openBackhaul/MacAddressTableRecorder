@@ -753,15 +753,15 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
     let operationServerName = req;
 
     if (inputValueList && inputValueList.length > 0) {
-      // Crea un vettore per memorizzare i valori "field-value"
+-      // Build an array with "field-value" values
       fieldValues = inputValueList.map(item => item["field-value"]);
     }
 
     for (const inputValue of body["input-value-list"]) {
-      // Estrarre il campo "field-value" dall'input
+      // Extract "field-value" frpm input value
       const fieldValue = inputValue["field-value"];
 
-      // Creare un nuovo oggetto nel formato desiderato e aggiungerlo all'array risultante
+      // Pushing data in return array
       fieldValueFinal.push({
         "target-mac-address": fieldValue
       });
