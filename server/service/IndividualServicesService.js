@@ -753,7 +753,7 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
     let operationServerName = req;
 
     if (inputValueList && inputValueList.length > 0) {
--      // Build an array with "field-value" values
+      // Build an array with "field-value" values
       fieldValues = inputValueList.map(item => item["field-value"]);
     }
 
