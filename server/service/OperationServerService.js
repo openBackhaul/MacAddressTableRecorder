@@ -14,11 +14,12 @@ const operationServerInterface = require('onf-core-model-ap/applicationPattern/o
 exports.getOperationServerLifeCycleState = function(url) {
   return new Promise(async function (resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "operation-server-interface-1-0:life-cycle-state": value
       };
+
       if (Object.keys(response).length > 0) {
         resolve(response[Object.keys(response)[0]]);
       } else {
@@ -40,11 +41,12 @@ exports.getOperationServerLifeCycleState = function(url) {
 exports.getOperationServerOperationKey = function(url) {
   return new Promise(async function (resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "operation-server-interface-1-0:operation-key": value
       };
+
       if (Object.keys(response).length > 0) {
         resolve(response[Object.keys(response)[0]]);
       } else {
@@ -67,11 +69,12 @@ exports.getOperationServerOperationKey = function(url) {
 exports.getOperationServerOperationName = function(url) {
   return new Promise(async function (resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "operation-server-interface-1-0:operation-name": value
       };
+
       if (Object.keys(response).length > 0) {
         resolve(response[Object.keys(response)[0]]);
       } else {
