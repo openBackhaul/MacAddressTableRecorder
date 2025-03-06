@@ -6,7 +6,7 @@ var responseCodeEnum = require('onf-core-model-ap/applicationPattern/rest/server
 var Core = require('../service/CoreService');
 var oamLogService = require('onf-core-model-ap/applicationPattern/services/OamLogService');
 
-module.exports.getControlConstruct = async function getControlConstruct(req, res, next, pippo, pluto, topolino) {
+module.exports.getControlConstruct = async function getControlConstruct(req, res, next) {
   let responseCode = responseCodeEnum.code.OK;
   await Core.getControlConstruct()
     .then(function (response) {
