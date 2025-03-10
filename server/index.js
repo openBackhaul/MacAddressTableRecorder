@@ -27,7 +27,6 @@ var app = expressAppConfig.getApp();
 appCommons.setupExpressApp(app);
 
 //TO REMOVE, ONLY FOR DEBUG
-//global.databasePath = 'D:/\VALE/\WorkindDoc/\MICROSERVIZI/\loadjson/\loadMATRRunning.json'
 global.databasePath = './database/load.json'
 
 
