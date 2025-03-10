@@ -1017,7 +1017,6 @@ exports.decodeAuthorizationCodeAndExtractUserName = function (authorizationCode)
     let base64BufferObject = Buffer.from(base64EncodedString, "base64");
     let base64DecodedString = base64BufferObject.toString("utf8");
     let userName = base64DecodedString.split(":")[0];
-    console.log(`decoded user name: ${userName}`);
     return userName;
   } catch (error) {
     console.error(`Could not decode authorization code "${authorizationCode}". Got ${error}.`);
@@ -1688,12 +1687,15 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
           try {
             await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(transformedArray, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
-          }
-          catch (error) {
+            result['application/json'] = {
+              "request-id": transformedArray[0]["request-id"],
+              "mac-address-data": transformedArray[0]["mac-address-data"]
+            }
+          } catch (error) {
             throw ("Failed send data to requestor: " + error.message);
           }
-
         }
+
         resolve(result['application/json']);
       }
       else {
