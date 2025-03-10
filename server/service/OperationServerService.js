@@ -94,7 +94,7 @@ exports.getOperationServerOperationName = function(url) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putOperationServerLifeCycleState = function(body,uuid) {
+exports.putOperationServerLifeCycleState = function(body, uuid) {
   return new Promise(async function (resolve, reject) {
     try {
       let isUpdated = await fileOperation.writeToDatabaseAsync(url, body, false);
@@ -121,7 +121,7 @@ exports.putOperationServerLifeCycleState = function(body,uuid) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putOperationServerOperationKey = function(body,uuid) {
+exports.putOperationServerOperationKey = function(body, uuid) {
   return new Promise(async function (resolve, reject) {
     try {
       let isUpdated = await operationServerInterface.setOperationKeyAsync(uuid, body["operation-server-interface-1-0:operation-key"]);
