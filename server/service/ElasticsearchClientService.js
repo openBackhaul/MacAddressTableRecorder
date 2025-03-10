@@ -10,7 +10,7 @@ const { elasticsearchService, getApiKeyAsync, getIndexAliasAsync } = require('on
  * uuid String 
  * returns inline_response_200_44
  **/
-exports.getElasticsearchClientApiKey = async function (uuid) {
+exports.getElasticsearchClientApiKey = async function (url) {
   let value = await fileOperation.readFromDatabaseAsync(url);
   let response = {
     "elasticsearch-client-interface-1-0:api-key": value
@@ -41,7 +41,7 @@ exports.getElasticsearchClientIndexAlias = async function (url) {
  * uuid String 
  * returns inline_response_200_48
  **/
-exports.getElasticsearchClientLifeCycleState = async function (uuid) {
+exports.getElasticsearchClientLifeCycleState = async function (url) {
   let value = await fileOperation.readFromDatabaseAsync(url);
   let response = {
     "elasticsearch-client-interface-1-0:life-cycle-state": value
