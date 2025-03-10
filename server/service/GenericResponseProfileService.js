@@ -11,8 +11,8 @@ var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver
 exports.getGenericResponseProfileDatatype = function (url) {
   return new Promise(async function (resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "response-profile-1-0:datatype": value
       };
@@ -34,11 +34,11 @@ exports.getGenericResponseProfileDatatype = function (url) {
  * uuid String 
  * returns inline_response_200_17
  **/
-exports.getGenericResponseProfileDescription = function (uuid) {
+exports.getGenericResponseProfileDescription = function (url) {
   return new Promise(async function (resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "response-profile-1-0:description": value
       };
@@ -60,11 +60,11 @@ exports.getGenericResponseProfileDescription = function (uuid) {
  * uuid String 
  * returns inline_response_200_16
  **/
-exports.getGenericResponseProfileFieldName = function (uuid) {
+exports.getGenericResponseProfileFieldName = function (url) {
   return new Promise(async function (resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "response-profile-1-0:field-name": value
       };
@@ -86,11 +86,11 @@ exports.getGenericResponseProfileFieldName = function (uuid) {
  * uuid String 
  * returns inline_response_200_15
  **/
-exports.getGenericResponseProfileOperationName = function (uuid) {
+exports.getGenericResponseProfileOperationName = function (url) {
   return new Promise(async function (resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "response-profile-1-0:operation-name": value
       };
@@ -112,11 +112,11 @@ exports.getGenericResponseProfileOperationName = function (uuid) {
  * uuid String 
  * returns inline_response_200_19
  **/
-exports.getGenericResponseProfileValue = function (uuid) {
+exports.getGenericResponseProfileValue = function (url) {
   return new Promise(async function (resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "response-profile-1-0:value": value
       };
@@ -139,7 +139,7 @@ exports.getGenericResponseProfileValue = function (uuid) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putGenericResponseProfileValue = function (body, uuid) {
+exports.putGenericResponseProfileValue = function (url, body) {
   return new Promise(async function (resolve, reject) {
     try {
       await fileOperation.writeToDatabaseAsync(url, body, false);
