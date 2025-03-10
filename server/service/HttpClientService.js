@@ -1,6 +1,6 @@
 'use strict';
 var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
-//const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
+const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
 const ForwardingAutomationService = require('onf-core-model-ap/applicationPattern/onfModel/services/ForwardingConstructAutomationServices');
 const httpClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/HttpClientInterface');
 
@@ -69,9 +69,9 @@ exports.putHttpClientApplicationName = function (body, uuid) {
     try {
       let isUpdated = await httpClientInterface.setApplicationNameAsync(uuid, body["http-client-interface-1-0:application-name"]);
       if (isUpdated) {
-        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+        let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
           uuid
-        );*/
+        );
         ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
           forwardingAutomationInputList
         );
@@ -96,9 +96,9 @@ exports.putHttpClientReleaseNumber = function (body, uuid) {
     try {
       let isUpdated = await httpClientInterface.setReleaseNumberAsync(uuid, body["http-client-interface-1-0:release-number"]);
       if (isUpdated) {
-        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+        let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
           uuid
-        );*/
+        );
         ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
           forwardingAutomationInputList
         );
