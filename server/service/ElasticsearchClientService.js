@@ -11,21 +11,11 @@ const { elasticsearchService, getApiKeyAsync, getIndexAliasAsync } = require('on
  * returns inline_response_200_44
  **/
 exports.getElasticsearchClientApiKey = async function (uuid) {
-  /*return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "elasticsearch-client-interface-1-0:api-key" : "YWRtaW46MTIzNDU2"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });*/
-  var value = await fileOperation.readFromDatabaseAsync(url);
-  var response = {
+  let value = await fileOperation.readFromDatabaseAsync(url);
+  let response = {
     "elasticsearch-client-interface-1-0:api-key": value
   };
+
   return response;
 }
 
@@ -37,8 +27,8 @@ exports.getElasticsearchClientApiKey = async function (uuid) {
  * returns inline_response_200_45
  **/
 exports.getElasticsearchClientIndexAlias = async function (url) {
-  var value = await fileOperation.readFromDatabaseAsync(url);
-  var response = {
+  let value = await fileOperation.readFromDatabaseAsync(url);
+  let response = {
     "elasticsearch-client-interface-1-0:index-alias": value
   };
   return response;
@@ -52,8 +42,8 @@ exports.getElasticsearchClientIndexAlias = async function (url) {
  * returns inline_response_200_48
  **/
 exports.getElasticsearchClientLifeCycleState = async function (uuid) {
-  var value = await fileOperation.readFromDatabaseAsync(url);
-  var response = {
+  let value = await fileOperation.readFromDatabaseAsync(url);
+  let response = {
     "elasticsearch-client-interface-1-0:life-cycle-state": value
   };
   return response;
@@ -68,7 +58,7 @@ exports.getElasticsearchClientLifeCycleState = async function (uuid) {
  **/
 exports.getElasticsearchClientOperationalState = async function (uuid) {
   let value = await elasticsearchService.getElasticsearchClientOperationalStateAsync(uuid);
-  var response = {
+  let response = {
     "elasticsearch-client-interface-1-0:operational-state": value
   };
   return response;
@@ -82,8 +72,8 @@ exports.getElasticsearchClientOperationalState = async function (uuid) {
  * returns inline_response_200_46
  **/
 exports.getElasticsearchClientServiceRecordsPolicy = async function (uuid) {
-  var value = await elasticsearchService.getElasticsearchClientServiceRecordsPolicyAsync(uuid);
-  var response = {
+  let value = await elasticsearchService.getElasticsearchClientServiceRecordsPolicyAsync(uuid);
+  let response = {
     "elasticsearch-client-interface-1-0:service-records-policy": value
   };
   return response;
