@@ -16,8 +16,8 @@ exports.getActionProfileConsequentOperationReference = function (url) {
   "action-profile-1-0:consequent-operation-reference" : "/core-model-1-4:control-construct/logical-termination-point=ro-1-0-0-op-s-bs-002/layer-protocol=0/operation-server-interface-1-0:operation-server-interface-pac/operation-server-interface-capability/operation-name"
     };*/
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "action-profile-1-0:consequent-operation-reference": value
       };
@@ -48,8 +48,8 @@ exports.getActionProfileDisplayInNewBrowserWindow = function (url) {
 
 
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "action-profile-1-0:display-in-new-browser-window": value
       };
@@ -84,8 +84,8 @@ exports.getActionProfileInputValueListt = function (url) {
       }]
     };*/
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "action-profile-1-0:input-value-list": value
       };
@@ -114,8 +114,8 @@ exports.getActionProfileLabel = function (url) {
       "action-profile-1-0:label": "Inform about Application"
     };*/
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "action-profile-1-0:label": value
       };
@@ -144,8 +144,8 @@ exports.getActionProfileOperationName = function (url) {
       "action-profile-1-0:operation-name": "/v1/start-application-in-generic-representation"
     };*/
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "action-profile-1-0:operation-name" : value
       };
@@ -168,7 +168,7 @@ exports.getActionProfileOperationName = function (url) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putActionProfileConsequentOperationReference = function (body, url) {
+exports.putActionProfileConsequentOperationReference = function (url, body) {
   return new Promise(async function (resolve, reject) {
     try {
       await fileOperation.writeToDatabaseAsync(url, body, false);

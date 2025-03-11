@@ -10723,7 +10723,6 @@ components:
             required:
               - field-name
               - value
-              - datatype
             properties:
               field-name:
                 type: string

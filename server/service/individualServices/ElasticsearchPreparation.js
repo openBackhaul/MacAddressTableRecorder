@@ -14,15 +14,15 @@ const { elasticsearchService, getIndexAliasAsync, operationalStateEnum } = requi
  * @returns {Promise<void>}
  */
 module.exports = async function prepareElasticsearch() {
-    console.log("Configuring Elasticsearch...");
-    let ping = await elasticsearchService.getElasticsearchClientOperationalStateAsync();
-    if (ping === operationalStateEnum.UNAVAILABLE) {
-        console.error(`Elasticsearch unavailable. Skipping Elasticsearch configuration.`);
-        return;
-    }
-    await createIndexTemplate();
-    await elasticsearchService.createAlias();
-    console.log('Elasticsearch is properly configured!');
+  console.log("Configuring Elasticsearch...");
+  let ping = await elasticsearchService.getElasticsearchClientOperationalStateAsync();
+  if (ping === operationalStateEnum.UNAVAILABLE) {
+    console.error(`Elasticsearch unavailable. Skipping Elasticsearch configuration.`);
+    return;
+  }
+  await createIndexTemplate();
+  await elasticsearchService.createAlias();
+  console.log('Elasticsearch is properly configured!');
 }
 
 /**
@@ -41,50 +41,50 @@ module.exports = async function prepareElasticsearch() {
  * @returns {Promise<void>}
  */
 async function createIndexTemplate() {
-    let indexAlias = await getIndexAliasAsync();
-    let client = await elasticsearchService.getClient(false);
-    // disable creation of index, if it's not yet created by the app
-    await client.cluster.putSettings({
-        body: {
-            persistent: {
-                "action.auto_create_index": "false"
-            }
-        }
-    });
-    let found = await elasticsearchService.getExistingIndexTemplate();
-    let iTemplate = found ? found : {
-        name: 'matr-index-template',
-        body: {
-            index_patterns: `${indexAlias}-*`,
-            template: {
-                settings: {
-                    'index.lifecycle.rollover_alias': indexAlias
-                }
-            }
-        }
+  let indexAlias = await getIndexAliasAsync();
+  let client = await elasticsearchService.getClient(false);
+  // disable creation of index, if it's not yet created by the app
+  await client.cluster.putSettings({
+    body: {
+      persistent: {
+        "action.auto_create_index": "false"
+      }
     }
-    await client.cluster.putComponentTemplate({
-        name: 'matr-mappings',
-        body: {
-            template: {
-                mappings: {
-                    properties: {
-                        'x-correlator': { type: 'keyword' },
-                        'trace-indicator': { type: 'text' },
-                        'user': { type: 'text' },
-                        'originator': { type: 'text' },
-                        'application-name': { type: 'text' },
-                        'release-number': { type: 'text' },
-                        'operation-name': { type: 'text' },
-                        'response-code': { type: 'integer' },
-                        'timestamp': { type: 'date' },
-                        'stringified-body': { type: 'text' },
-                        'stringified-response': { type: 'text' }
-                    }
-                }
-            }
+  });
+  let found = await elasticsearchService.getExistingIndexTemplate();
+  let iTemplate = found ? found : {
+    name: 'matr-index-template',
+    body: {
+      index_patterns: `${indexAlias}-*`,
+      template: {
+        settings: {
+          'index.lifecycle.rollover_alias': indexAlias
         }
-    });
-    iTemplate.body.composed_of = ['matr-mappings'];
-    await client.indices.putIndexTemplate(iTemplate);
+      }
+    }
+  }
+  await client.cluster.putComponentTemplate({
+    name: 'matr-mappings',
+    body: {
+      template: {
+        mappings: {
+          properties: {
+            'x-correlator': { type: 'keyword' },
+            'trace-indicator': { type: 'text' },
+            'user': { type: 'text' },
+            'originator': { type: 'text' },
+            'application-name': { type: 'text' },
+            'release-number': { type: 'text' },
+            'operation-name': { type: 'text' },
+            'response-code': { type: 'integer' },
+            'timestamp': { type: 'date' },
+            'stringified-body': { type: 'text' },
+            'stringified-response': { type: 'text' }
+          }
+        }
+      }
+    }
+  });
+  iTemplate.body.composed_of = ['matr-mappings'];
+  await client.indices.putIndexTemplate(iTemplate);
 }

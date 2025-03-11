@@ -1,6 +1,6 @@
 'use strict';
 var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
-//const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
+const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
 const ForwardingAutomationService = require('onf-core-model-ap/applicationPattern/onfModel/services/ForwardingConstructAutomationServices');
 const tcpServerInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/TcpServerInterface');
 
@@ -15,8 +15,8 @@ const tcpServerInterface = require('onf-core-model-ap/applicationPattern/onfMode
 exports.getTcpServerDescription = function(url) {
   return new Promise(async function(resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "tcp-server-interface-1-0:description" : value
       };
@@ -41,8 +41,8 @@ exports.getTcpServerDescription = function(url) {
 exports.getTcpServerLocalAddress = function(url) {
   return new Promise(async function (resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "tcp-server-interface-1-0:local-address": value
       };
@@ -67,8 +67,8 @@ exports.getTcpServerLocalAddress = function(url) {
 exports.getTcpServerLocalPort = function(url) {
   return new Promise(async function (resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "tcp-server-interface-1-0:local-port": value
       };
@@ -93,8 +93,8 @@ exports.getTcpServerLocalPort = function(url) {
 exports.getTcpServerLocalProtocol = function(url) {
   return new Promise(async function(resolve, reject) {
     try {
-      var value = await fileOperation.readFromDatabaseAsync(url);
-      var response = {};
+      let value = await fileOperation.readFromDatabaseAsync(url);
+      let response = {};
       response['application/json'] = {
         "tcp-server-interface-1-0:local-protocol" : value
       };
@@ -122,9 +122,9 @@ exports.putTcpServerDescription = function(url, body, uuid) {
     try {
       let isUpdated = await fileOperation.writeToDatabaseAsync(url, body, false);
       if (isUpdated) {
-        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+        let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
           uuid
-        );*/
+        );
         ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
           forwardingAutomationInputList
         );
@@ -144,14 +144,14 @@ exports.putTcpServerDescription = function(url, body, uuid) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putTcpServerLocalAddress = function(body,uuid) {
+exports.putTcpServerLocalAddress = function(body, uuid) {
   return new Promise(async function (resolve, reject) {
     try {
       let isUpdated = await tcpServerInterface.setLocalAddressAsync(uuid, body["tcp-server-interface-1-0:local-address"]);
       if (isUpdated) {
-        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+        let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
           uuid
-        );*/
+        );
         ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
           forwardingAutomationInputList
         );
@@ -171,14 +171,14 @@ exports.putTcpServerLocalAddress = function(body,uuid) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putTcpServerLocalPort = function(body,uuid) {
+exports.putTcpServerLocalPort = function(body, uuid) {
   return new Promise(async function (resolve, reject) {
     try {
       let isUpdated = await tcpServerInterface.setLocalPortAsync(uuid, body["tcp-server-interface-1-0:local-port"]);
       if (isUpdated) {
-        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+        let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
           uuid
-        );*/
+        );
         ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
           forwardingAutomationInputList
         );
@@ -198,14 +198,14 @@ exports.putTcpServerLocalPort = function(body,uuid) {
  * uuid String 
  * no response value expected for this operation
  **/
-exports.putTcpServerLocalProtocol = function(url, body,uuid) {
+exports.putTcpServerLocalProtocol = function(url, body, uuid) {
   return new Promise(async function (resolve, reject) {
     try {
       let isUpdated = await fileOperation.writeToDatabaseAsync(url, body, false);
       if (isUpdated) {
-        /*let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
+        let forwardingAutomationInputList = await prepareForwardingAutomation.OAMLayerRequest(
           uuid
-        );*/
+        );
         ForwardingAutomationService.automateForwardingConstructWithoutInputAsync(
           forwardingAutomationInputList
         );
