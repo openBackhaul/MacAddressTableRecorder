@@ -1687,10 +1687,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
           try {
             await PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor(transformedArray, user, originator, xCorrelator, traceIndicator, customerJourney, urlRequestor);
-            result['application/json'] = {
-              "request-id": transformedArray[0]["request-id"],
-              "mac-address-data": transformedArray[0]["mac-address-data"]
-            }
           } catch (error) {
             throw ("Failed send data to requestor: " + error.message);
           }
