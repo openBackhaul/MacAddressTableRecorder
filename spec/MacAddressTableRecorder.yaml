@@ -1281,23 +1281,23 @@ paths:
                                   pattern: '^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[\+\-]\d{2}:\d{2})$'
                                   description: >
                                     'Date and time when the data has been retrieved from the device'
-                      example:
-                        request-id: "121251092-1721120567127"
-                        mac-address-data:
-                          - mount-name: "305251234"
-                            own-mac-address: "00:00:00:00:00:00"
-                            egress-ltp-uuid: "305251234+mac-inf-1234"
-                            original-ltp-name: "eth-1-0-3"
-                            vlan-id: 17
-                            remote-mac-address: "01:01:01:01:01:01"
-                            time-stamp-of-data: "2010-11-20T14:00:00+01:00"
-                          - mount-name: "305251234"
-                            own-mac-address: "00:00:00:00:00:00"
-                            egress-ltp-uuid: "305251234+mac-inf-1234"
-                            original-ltp-name: "eth-1-0-3"
-                            vlan-id: 17
-                            remote-mac-address: "FF:01:01:01:01:01"
-                            time-stamp-of-data: "2010-11-20T14:00:00+01:00"
+                        example:
+                          request-id: "121251092-1721120567127"
+                          mac-address-data:
+                            - mount-name: "305251234"
+                              own-mac-address: "00:00:00:00:00:00"
+                              egress-ltp-uuid: "305251234+mac-inf-1234"
+                              original-ltp-name: "eth-1-0-3"
+                              vlan-id: 17
+                              remote-mac-address: "01:01:01:01:01:01"
+                              time-stamp-of-data: "2010-11-20T14:00:00+01:00"
+                            - mount-name: "305251234"
+                              own-mac-address: "00:00:00:00:00:00"
+                              egress-ltp-uuid: "305251234+mac-inf-1234"
+                              original-ltp-name: "eth-1-0-3"
+                              vlan-id: 17
+                              remote-mac-address: "FF:01:01:01:01:01"
+                              time-stamp-of-data: "2010-11-20T14:00:00+01:00"
               responses:
                 "204":
                   description: "MAC table has been received."
