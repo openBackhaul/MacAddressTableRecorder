@@ -16,7 +16,7 @@ const logger = require('../LoggingService.js').getLogger();
  * @returns {Promise<void>}
  */
 module.exports = async function prepareElasticsearch() {
-  console.log("Configuring Elasticsearch...");
+  logger.info("Configuring Elasticsearch...");
   let ping = await elasticsearchService.getElasticsearchClientOperationalStateAsync();
   if (ping === operationalStateEnum.UNAVAILABLE) {
     logger.error(`Elasticsearch unavailable. Skipping Elasticsearch configuration.`);
