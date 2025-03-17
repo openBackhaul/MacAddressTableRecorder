@@ -1,4 +1,5 @@
 const cp = require('./service/individualServices/CyclicProcessService/cyclicProcess');
+const logger = require('./service/LoggingService.js').getLogger();
 
 'use strict';
 
@@ -15,14 +16,14 @@ const { env } = require('process');
 // uncomment if you do not want to validate security e.g. operation-key, basic auth, etc
 //appCommons.openApiValidatorOptions.validateSecurity = false;
 if (process.env.DEBUG && process.env.DEBUG.toLowerCase() === "true") {
-    console.warn("Working in debug mode");
-    console.warn("Checking validation")
+    logger.warn("Working in debug mode");
+    logger.warn("Checking validation")
     appCommons.openApiValidatorOptions.validateSecurity = false;
     // appCommons.openApiValidatorOptions.validateResponses = false;
     // appCommons.openApiValidatorOptions.validateRequests = false;
-    console.warn("Validate Security: " + appCommons.openApiValidatorOptions.validateSecurity);
-    console.warn("Validate Responses: " + appCommons.openApiValidatorOptions.validateResponses);
-    console.warn("Validate Requests: " + appCommons.openApiValidatorOptions.validateRequests);
+    logger.warn("Validate Security: " + appCommons.openApiValidatorOptions.validateSecurity);
+    logger.warn("Validate Responses: " + appCommons.openApiValidatorOptions.validateResponses);
+    logger.warn("Validate Requests: " + appCommons.openApiValidatorOptions.validateRequests);
 }
 
 // swaggerRouter configuration
@@ -39,19 +40,19 @@ appCommons.setupExpressApp(app);
 
 global.databasePath = './database/load.json'
 if (process.env.DEBUG && process.env.DEBUG.toLowerCase() === "true") {
-    console.warn("Working in debug mode");
+    logger.warn("Working in debug mode");
     global.databasePath = './server/database/load.json'
-    console.warn("Load data from: " + global.databasePath)
+    logger.warn("Load data from: " + global.databasePath)
 }
 
 prepareElasticsearch().catch(err => {
-    console.error(`Error preparing Elasticsearch : ${err}`);
+    logger.error(`Error preparing Elasticsearch : ${err}`);
 }).finally(
     () => {
         // Initialize the Swagger middleware
         http.createServer(app).listen(serverPort, function () {
-        console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
-        console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+        logger.info('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
+        logger.info('Swagger-ui is available on http://localhost:%d/docs', serverPort);
         });
         appCommons.performApplicationRegistration();
 

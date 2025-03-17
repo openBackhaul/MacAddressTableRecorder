@@ -25,6 +25,7 @@ const genericRepresentation = require('onf-core-model-ap-bs/basicServices/Generi
 const createHttpError = require("http-errors");
 const axios = require('axios');
 const authKey = require("../application-data/encrypted-odl-key.json");
+const logger = require('../service/LoggingService.js').getLogger();
 
 
 var appCommons = require('onf-core-model-ap/applicationPattern/commons/AppCommons');
@@ -227,7 +228,7 @@ const RequestForDeleteEquipmentIntoElasticSearch = async function (mountName) {
       } else {
         resolve(null);
       }
-      console.log('Remove mountName = ' + mountName);
+      logger.info("Remove mount-name = ", mountName);
     }
     catch (error) {
       reject(error);
@@ -318,7 +319,7 @@ async function executeAfterWait() {
     // Wait 300 seconds
     await waitAsync(30000);
   } catch (error) {
-    console.error('An error occurred during the wait:', error);
+    logger.error('An error occurred during the wait:', error);
   }
 }
 
@@ -336,7 +337,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
 
     // Join the elements with a comma and a space
     let result = outputArray.join(", ");
-    console.log(result);
+    logger.info(result);
   }
 
   const refreshIndex = async () => {
@@ -344,9 +345,9 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
       let client = await elasticsearchService.getClient(false);
       let indexAlias = await getIndexAliasAsync();
       let result = await client.indices.refresh({ index: indexAlias });
-      console.log(`Index ${indexAlias} refreshed successfully`);
+      logger.info(`Index ${indexAlias} refreshed successfully`);
     } catch (error) {
-      console.error(`Error refreshing index ${indexAlias}:`, error);
+      logger.error(`Error refreshing index ${indexAlias}:`, error);
     }
   };
 
@@ -359,10 +360,10 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
       //"mount-name-list" from ES
       try {
         oldConnectedListFromES = await RequestForListOfConnectedEquipmentFromElasticSearch();
-        console.log("mount-name-list (ES), number of elements:" + oldConnectedListFromES['mount-name-list'].length);
+        logger.info("mount-name-list (ES), number of elements:" + oldConnectedListFromES['mount-name-list'].length);
       }
       catch (error) {
-        console.log("mount-name-list is not present (elastic search error)");
+        logger.error("mount-name-list is not present (elastic search error)");
       }
 
       try {
@@ -378,15 +379,15 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         newConnectedListFromMwdi = await EmbeddingCausesRequestForListOfDevicesAtMwdi(user, originator, xCorrelator, traceIndicator, customerJourney);
 
         if ((newConnectedListFromMwdi != null) && (newConnectedListFromMwdi.length == 0)) {
-          console.warning('No Equipment connected. Wait 30 seconds and retry to read...');
+          logger.warn('No Equipment connected. Wait 30 seconds and retry to read...');
           await executeAfterWait();
         }
         else {
-          console.log("mount-name-list (MWDI), number of elements:" + newConnectedListFromMwdi['mount-name-list'].length);
+          logger.info("mount-name-list (MWDI), number of elements:" + newConnectedListFromMwdi['mount-name-list'].length);
         }
       }
       catch (error) {
-        console.error(error + ', wait 30 seconds and retry to read...');
+        logger.error(error + ', wait 30 seconds and retry to read...');
         await executeAfterWait();
         newConnectedListFromMwdi = null;
       }
@@ -396,16 +397,16 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
           //list of equipment that was connected (mac-address data in ES) but now that are not connected
           listJsonDisconnectedEq = await findNotConnectedElements(oldConnectedListFromES, newConnectedListFromMwdi);
           if (listJsonDisconnectedEq != null) {
-            console.log("list of equipments disconnected, number of elements:  -" + listJsonDisconnectedEq['mount-name-list'].length + " => remove mac-address data from ES");
+            logger.info("list of equipments disconnected, number of elements:  -" + listJsonDisconnectedEq['mount-name-list'].length + " => remove mac-address data from ES");
             //printArray(listJsonDisconnectedEq['mount-name-list']);
           }
           else {
-            console.log("list of equipments disconnected, number of elements:" + 0);
+            logger.info("list of equipments disconnected, number of elements:" + 0);
           }
         }
         catch (error) {
           listJsonDisconnectedEq = null;
-          console.log('No Equipment disconnected');
+          logger.info('No Equipment disconnected');
         }
 
         //Write new "mount-name-list" list into ES
@@ -413,14 +414,14 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         if (areEqualArray(oldConnectedListFromES, newConnectedListFromMwdi) == false) {
           try {
             result = await RequestForWriteListConnectedEquipmentIntoElasticSearch(newConnectedListFromMwdi);
-            console.log("Write new mount-name-list into ES, number of elements:" + newConnectedListFromMwdi['mount-name-list'].length);
+            logger.info("Write new mount-name-list into ES, number of elements:" + newConnectedListFromMwdi['mount-name-list'].length);
           }
           catch (error) {
-            console.log('mount-name-list are not updated, no difference between old ES mount-name-list and MWDI mount-name-list currently read');
+            logger.info('mount-name-list are not updated, no difference between old ES mount-name-list and MWDI mount-name-list currently read');
           }
         }
         else {
-          console.log("Write new mount-name-list, number of elements:" + newConnectedListFromMwdi['mount-name-list'].length);
+          logger.info("Write new mount-name-list, number of elements:" + newConnectedListFromMwdi['mount-name-list'].length);
         }
 
         if (listJsonDisconnectedEq != null) {
@@ -434,13 +435,13 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
                   await RequestForDeleteEquipmentIntoElasticSearch(elementToRemove);
                 }
                 catch (error) {
-                  console.error('Error during remove operation of old mac address data into db (' + elementToRemove + ')');
+                  logger.error('Error during remove operation of old mac address data into db (' + elementToRemove + ')');
                 }
               }
             }
           }
           catch (error) {
-            console.error('Error during remove operation of old mac address data into db');
+            logger.error('Error during remove operation of old mac address data into db');
           }
         }
       }
@@ -484,7 +485,7 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
       let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
 
       let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
-      console.log("url = " + finalUrl);
+      logger.info("url = ", finalUrl);
 
       let httpRequestHeader = new RequestHeader(
         user,
@@ -567,7 +568,7 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
       let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
 
       let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
-      console.log("url = " + finalUrl);
+      logger.info("url = ", finalUrl);
 
 
       let httpRequestHeader = new RequestHeader(
@@ -674,7 +675,7 @@ const RequestForListOfNetworkElementInterfacesOnPathCausesReadingFromElasticSear
       transformedArray = filteredObjects.map(obj => transformData(obj));
 
       if (transformedArray != null) {
-        var response = {};
+        let response = {};
         response['application/json'] = {
           'targetMacAddress': transformedArray
         };
@@ -813,7 +814,7 @@ exports.provideListOfNetworkElementInterfacesOnPathInGenericRepresentation = asy
         resolve(fullResponse);
       })
       .catch(error => {
-        console.error(error);
+        logger.error(error);
       });
   });
 }
@@ -906,7 +907,6 @@ exports.provideMacTableOfAllDevices = async function (user, originator, xCorrela
     PromptForProvidingAllMacTablesCausesReadingFromElasticSearch()
       .then(function (response) {
         const orderedArray = response.map(obj => orderData(obj));
-        //console.log("Data from orderedArray:", response);   
         resolve(orderedArray);
       })
       .catch(function (error) {
@@ -957,7 +957,7 @@ const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async f
         };
       });
 
-      var response = {};
+      let response = {};
       response['application/json'] = {
         'mac-address': formattedEntries
       };
@@ -1020,7 +1020,7 @@ exports.decodeAuthorizationCodeAndExtractUserName = function (authorizationCode)
     let userName = base64DecodedString.split(":")[0];
     return userName;
   } catch (error) {
-    console.error(`Could not decode authorization code "${authorizationCode}". Got ${error}.`);
+    logger.error(`Could not decode authorization code "${authorizationCode}". Got ${error}.`);
     return undefined;
   }
 }
@@ -1102,15 +1102,15 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
         throw new Error(" Empty data from " + fullUrl);
       }
     } catch (error) {
-      console.log("***********catch axios try Error '404' for URL:", fullUrl)
-      console.log("*********** response status:", response.status)
-      console.log("*********** response messge:", response.data)
+      logger.error("***********catch axios try Error '404' for URL:", fullUrl)
+      logger.error("*********** response status:", response.status)
+      logger.error("*********** response messge:", response.data)
       throw error;
     }
   } catch (error) {
-      console.log("***********catch main try Error '404' for URL:", fullUrl)
-      console.log("*********** response status:", response.status)
-      console.log("*********** response messge:", response.data)
+    logger.error("***********catch main try Error '404' for URL:", fullUrl)
+    logger.error("*********** response status:", response.status)
+    logger.error("*********** response messge:", response.data)
     throw error;
   }
 }
@@ -1201,7 +1201,6 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
   try {
 
     if (body == "LTP-MNGT") {
-      //console.log("STEP3(" + mountName + ") = LAN-MNGT");
       return "LAN-MNGT";
     }
 
@@ -1324,9 +1323,9 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     if (body && body["mac-address"] && Array.isArray(body["mac-address"]) && body["mac-address"].length > 0 && body["mac-address"][0]["mount-name"]) {
       mountName = body["mac-address"][0]["mount-name"];
     } else {
-      console.error('********************************* Body *******************************************')
-      console.error(JSON.stringify(body))
-      console.error('**********************************************************************************')
+      logger.error('********************************* Body *******************************************')
+      logger.error(JSON.stringify(body))
+      logger.error('**********************************************************************************')
       throw new Error("Writing operation into Elastic Search Failed : body structure is not correct");
     }
 
@@ -1363,7 +1362,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
       });
       if (/^20[0-9]$/.test(response.status.toString()))   //bug @216
       {
-        console.log("Writing (" + mountName + ") data into Elastic Search ");
+        logger.info("Writing (" + mountName + ") data into Elastic Search ");
         return (response.data);
       }
       else {
@@ -1443,7 +1442,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesSendingAnswerToRequestor
   httpRequestHeaderRequestor = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
   let result = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(data);
 
-  console.log('Send data to Requestor:' + requestorUrl);
+  logger.info('Send data to Requestor:' + requestorUrl);
 
   try {
     let response = await axios.post(requestorUrl, data, {
@@ -1616,9 +1615,9 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
             });
 
             if (step2Data.length == 0) {
-              console.warn("Step2Data is empty!");
-              console.warn("Forwarding domain: ", FDomainArray);
-              console.warn("Data from request:", dataFromRequest)
+              logger.warn("Step2Data is empty!");
+              logger.warn("Forwarding domain: ", FDomainArray);
+              logger.warn("Data from request:", dataFromRequest)
             }
             step2DataArray = Array.from(step2Data);
 
