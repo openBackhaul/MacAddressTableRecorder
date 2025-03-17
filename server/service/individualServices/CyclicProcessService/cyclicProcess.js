@@ -62,7 +62,6 @@ function prepareObjectForWindow(deviceListIndex) {
     return windowObject;
   } catch (error) {
     console.error("Error in prepareObjectForWindow (" + error + ")");
-    debugger;
   }
 }
 
@@ -82,7 +81,6 @@ function checkDeviceExistsInSlidingWindow(deviceNodeId) {
     return DEVICE_NOT_PRESENT;
   } catch (error) {
     console.log("Error in checkDeviceExistsInSlidingWindow (" + error + ")");
-    debugger;
   }
 }
 
@@ -103,7 +101,6 @@ function getNextDeviceListIndex() {
     return lastDeviceListIndex;
   } catch (error) {
     console.log("Error in getNextDeviceListIndex (" + error + ")");
-    debugger;
   }
 }
 
@@ -143,7 +140,6 @@ function addNextDeviceListElementInWindow() {
     return elementAdded;
   } catch (error) {
     console.log("Error in addNextDeviceListElementInWindow (" + error + ")")
-    debugger
   }
 }
 
@@ -162,7 +158,6 @@ function discardElementFromDeviceList(nodeId) {
     }
   } catch (error) {
     console.log("Error in discardElementFromDeviceList (" + error + ")");
-    debugger;
   }
 }
 
@@ -267,7 +262,6 @@ function startTtlChecking() {
 
   } catch (error) {
     console.log("Error in startTtlChecking (" + error + ")");
-    debugger;
   }
 }
 
@@ -350,7 +344,6 @@ async function requestMessage(index) {
     })
   } catch (error) {
     console.log("Error in requestMessage (" + error + ")");
-    debugger;
   }
 }
 
