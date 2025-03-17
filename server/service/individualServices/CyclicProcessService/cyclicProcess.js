@@ -10,6 +10,7 @@ const onfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constant
 const onfAttributes = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfAttributes');
 const forwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
 var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
+const logger = require('../../LoggingService.js').getLogger();
 
 const DEVICE_NOT_PRESENT = -1;
 let maximumNumberOfRetries = 1;
@@ -61,7 +62,7 @@ function prepareObjectForWindow(deviceListIndex) {
     };
     return windowObject;
   } catch (error) {
-    console.error("Error in prepareObjectForWindow (" + error + ")");
+    logger.error("Error in prepareObjectForWindow (" + error + ")");
   }
 }
 
@@ -80,7 +81,7 @@ function checkDeviceExistsInSlidingWindow(deviceNodeId) {
     }
     return DEVICE_NOT_PRESENT;
   } catch (error) {
-    console.log("Error in checkDeviceExistsInSlidingWindow (" + error + ")");
+    logger.error("Error in checkDeviceExistsInSlidingWindow (" + error + ")");
   }
 }
 
@@ -100,7 +101,7 @@ function getNextDeviceListIndex() {
     }
     return lastDeviceListIndex;
   } catch (error) {
-    console.log("Error in getNextDeviceListIndex (" + error + ")");
+    logger.error("Error in getNextDeviceListIndex (" + error + ")");
   }
 }
 
@@ -139,7 +140,7 @@ function addNextDeviceListElementInWindow() {
 
     return elementAdded;
   } catch (error) {
-    console.log("Error in addNextDeviceListElementInWindow (" + error + ")")
+    logger.error("Error in addNextDeviceListElementInWindow (" + error + ")")
   }
 }
 
@@ -157,7 +158,7 @@ function discardElementFromDeviceList(nodeId) {
       }
     }
   } catch (error) {
-    console.log("Error in discardElementFromDeviceList (" + error + ")");
+    logger.error("Error in discardElementFromDeviceList (" + error + ")");
   }
 }
 
@@ -188,23 +189,23 @@ function printListDevice(listName, list) {
  */
 function printLog(text, print_log) {
   if (print_log) {
-    console.log(text);
+    logger.info(text);
   }
 }
 
 function printErr(text, print_log) {
   if (print_log) {
-    console.error(text);
+    logger.error(text);
   }
 }
 
-function convertTime(millisecondi) {
-  let secondi = Math.floor(millisecondi / 1000);
-  let ore = Math.floor(secondi / 3600);
-  let minuti = Math.floor((secondi % 3600) / 60);
-  let restantiSecondi = secondi % 60;
+function convertTime(milliseconds) {
+  let seconds = Math.floor(milliseconds / 1000);
+  let hours = Math.floor(seconds / 3600);
+  let minutes = Math.floor((seconds % 3600) / 60);
+  let modSeconds = seconds % 60;
 
-  return `${ore.toString().padStart(2, '0')}:${minuti.toString().padStart(2, '0')}:${restantiSecondi.toString().padStart(2, '0')}`;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${modSeconds.toString().padStart(2, '0')}`;
 }
 
 
@@ -261,7 +262,7 @@ function startTtlChecking() {
     handle = setInterval(upgradeTtl, 1000);
 
   } catch (error) {
-    console.log("Error in startTtlChecking (" + error + ")");
+    logger.error("Error in startTtlChecking (" + error + ")");
   }
 }
 
@@ -343,7 +344,7 @@ async function requestMessage(index) {
       }
     })
   } catch (error) {
-    console.log("Error in requestMessage (" + error + ")");
+    logger.error("Error in requestMessage (" + error + ")");
   }
 }
 
@@ -423,9 +424,7 @@ async function MATRCycle(firstTime, logging_level) {
     const formattedDate = `${day}/${month}/${year} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 
     printLog('*****************************************************************', print_log_level >= 1);
-    printLog('                                                                 ', print_log_level >= 1);
     printLog(' MATR CYCLE START AT:    ' + formattedDate, print_log_level >= 1);
-    printLog('                                                                 ', print_log_level >= 1);
     printLog('*****************************************************************', print_log_level >= 1);
 
     print_log_level = logging_level;
@@ -457,7 +456,7 @@ async function MATRCycle(firstTime, logging_level) {
       startTtlChecking();
     }
     catch (error) {
-      console.error("Error on MATR cycle: " + error);
+      logger.error("Error on MATR cycle: ", error);
     }
 
   }, remainder);
