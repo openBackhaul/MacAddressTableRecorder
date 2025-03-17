@@ -12,7 +12,7 @@ const transports = pino.transport({
     {
       level: 'trace',
       target: 'pino-roll',
-      options: { file: path.join(__dirname, '../logs/NetExplorerProxy'), extension: '.log', mkdir: true,
+      options: { file: path.join(__dirname, '../logs/MacAddressTableRecorder'), extension: '.log', mkdir: true,
         frequency: 'daily', dateFormat: 'yyyy-MM-dd', size: "1m", "limit.count": 15 }
     }
   ]
