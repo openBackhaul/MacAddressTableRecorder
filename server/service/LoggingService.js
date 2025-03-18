@@ -5,7 +5,7 @@ const path = require("path");
 const transports = pino.transport({
   targets: [
     {
-      level: 'info',
+      level: 'debug',
       target: 'pino-pretty',
       options: { colorize: true }
     },
