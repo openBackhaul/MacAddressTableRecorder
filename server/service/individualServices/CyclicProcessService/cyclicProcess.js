@@ -203,15 +203,16 @@ function printErr(text, print_log) {
 }
 
 
-function convertTime(milliseconds) {
-  let seconds = Math.floor(milliseconds / 1000);
-  let hours = Math.floor(seconds / 3600);
-  let minutes = Math.floor((seconds % 3600) / 60);
-  let modSeconds = seconds % 60;
+function convertTime(s) {
+  const ms = s % 1000;
+  s = (s - ms) / 1000;
+  const secs = s % 60;
+  s = (s - secs) / 60;
+  const mins = s % 60;
+  const hrs = (s - mins) / 60;
 
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${modSeconds.toString().padStart(2, '0')}`;
+  return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
-
 
 
 /**
