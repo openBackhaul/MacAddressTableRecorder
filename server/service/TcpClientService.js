@@ -1,11 +1,14 @@
 'use strict';
+
+// ONF Libs
 var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
-const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
 const ForwardingAutomationService = require('onf-core-model-ap/applicationPattern/onfModel/services/ForwardingConstructAutomationServices');
 const tcpClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/TcpClientInterface');
-//const prepareElasticsearch = require('./individualServices/ElasticsearchPreparation');
 const { isTcpClientElasticsearch, elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
 
+// Other Libs
+const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
+//const prepareElasticsearch = require('./individualServices/ElasticsearchPreparation');
 
 /**
  * Returns remote address

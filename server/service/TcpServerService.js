@@ -1,9 +1,11 @@
 'use strict';
+
+// ONF Libs
 var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
-const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
 const ForwardingAutomationService = require('onf-core-model-ap/applicationPattern/onfModel/services/ForwardingConstructAutomationServices');
 const tcpServerInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/TcpServerInterface');
 
+const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
 
 
 /**
