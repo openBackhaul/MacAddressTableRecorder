@@ -1,34 +1,32 @@
 'use strict';
 
-const { getIndexAliasAsync, createResultArray, elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
-const onfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
+// ONF libs
+var appCommons = require('onf-core-model-ap/applicationPattern/commons/AppCommons');  // TODO: To be check
+const { getIndexAliasAsync, elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
 const onfAttributes = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfAttributes');
 const LogicalTerminationPoint = require('onf-core-model-ap/applicationPattern/onfModel/models/LogicalTerminationPoint');
-const LogicalTerminationPointC = require('./custom/LogicalTerminationPointC');
 const tcpClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/TcpClientInterface');
 const ForwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
-const ForwardingConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingConstruct');
 const FcPort = require('onf-core-model-ap/applicationPattern/onfModel/models/FcPort');
 const httpClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/HttpClientInterface');
 const httpServerInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/HttpServerInterface');
 const controlConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ControlConstruct');
 const LayerProtocol = require('onf-core-model-ap/applicationPattern/onfModel/models/LayerProtocol');
-const eventDispatcher = require('onf-core-model-ap/applicationPattern/rest/client/eventDispatcher');
-const responseBuilder = require('onf-core-model-ap/applicationPattern/rest/server/ResponseBuilder');
 const onfAttributeFormatter = require('onf-core-model-ap/applicationPattern/onfModel/utility/OnfAttributeFormatter');
-const operationClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/OperationClientInterface');
 const RequestHeader = require('onf-core-model-ap/applicationPattern/rest/client/RequestHeader');
-const RestRequestBuilder = require('onf-core-model-ap/applicationPattern/rest/client/RequestBuilder');
 var responseCodeEnum = require('onf-core-model-ap/applicationPattern/rest/server/ResponseCode');
-const TcpClient = require('../service/TcpClientService');
 const genericRepresentation = require('onf-core-model-ap-bs/basicServices/GenericRepresentation');
+
+// Other Libs
 const createHttpError = require("http-errors");
 const axios = require('axios');
+
+const LogicalTerminationPointC = require('./custom/LogicalTerminationPointC');
 const authKey = require("../application-data/encrypted-odl-key.json");
 const logger = require('../service/LoggingService.js').getLogger();
 
 
-var appCommons = require('onf-core-model-ap/applicationPattern/commons/AppCommons');
+
 
 async function resolveOperationNameAndOperationKeyFromForwardingName(forwardingName) {
   const forwardingConstruct = await ForwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
@@ -1156,7 +1154,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
 
     let fullUrl = finalUrl.replace("{mount-name}", mountName);
 
-    var data = {
+    let data = {
       "input":
         {}
     };
@@ -1705,8 +1703,3 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
   });
 
 }
-
-
-
-
-
