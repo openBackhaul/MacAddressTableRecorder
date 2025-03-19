@@ -250,7 +250,7 @@ function startTtlChecking() {
       }
       if (slidingWindow.length == 0) {
         clearInterval(handle);
-        handle = 0; // I just do this so I know I've cleared the interval        
+        handle = 0; // I just do this so I know I've cleared the interval
         stop = false;
 
         const now = new Date();
@@ -434,21 +434,21 @@ async function MATRCycle(firstTime, logging_level) {
     print_log_level = logging_level;
 
     //TO FIX  
-    let user = "User Name";
-    let originator = "MacAddressTableResolver";
-    let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
-    let traceIndicator = "1.3.1";
-    let customerJourney = "Unknown value";
+    // let user = "User Name";
+    // let originator = "MacAddressTableResolver";
+    // let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
+    // let traceIndicator = "1.3.1";
+    // let customerJourney = "Unknown value";
 
     // Use a dynamic header
     // TODO: TO be validate
-    // let requestHeader = new RequestHeader("MacAddressTableRecorder", "MacAddressTableRecorder", undefined, "1");
+    let requestHeader = new RequestHeader("MacAddressTableRecorder", "MacAddressTableRecorder", undefined, "1");
 
-    // let user = requestHeader.user;
-    // let originator = requestHeader.originator;
-    // let xCorrelator = requestHeader.xCorrelator;
-    // let traceIndicator = requestHeader.traceIndicator;
-    // let customerJourney = requestHeader.customerJourney;
+    let user = requestHeader.user;
+    let originator = requestHeader.originator;
+    let xCorrelator = requestHeader.xCorrelator;
+    let traceIndicator = requestHeader.traceIndicator;
+    let customerJourney = requestHeader.customerJourney;
 
     try {
       do {
