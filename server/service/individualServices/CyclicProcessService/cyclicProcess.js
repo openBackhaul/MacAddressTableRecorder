@@ -4,6 +4,7 @@
 const profileCollection = require('onf-core-model-ap/applicationPattern/onfModel/models/ProfileCollection');
 const RequestHeader = require("onf-core-model-ap/applicationPattern/rest/client/RequestHeader");
 const forwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
+const axios = require('axios');
 
 // Other Libs
 const { setTimeout } = require('timers');
@@ -38,7 +39,24 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
   };
 
   try {
-    await individualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney);
+    // Create Request header
+    let httpRequestHeader = new RequestHeader(
+      user,
+      originator,
+      xCorrelator,
+      traceIndicator,
+      customerJourney,
+      "operation key not yet provided"// operationKey -- "operation key not yet provided"
+    );
+
+    // To be fixed
+    let finalUrl = "http://localhost:8080/v1/read-current-mac-table-from-device";
+    let response = await axios.post(finalUrl, body, {
+      headers: httpRequestHeader
+    });
+
+    // Old request
+    //await individualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney);
 
     return {
       'ret': { 'code': 200, 'message': 'Correctly Managed' },

@@ -483,7 +483,7 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
       let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
 
       let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
-      logger.info("url = ", finalUrl);
+      logger.info("url = " + finalUrl);
 
       let httpRequestHeader = new RequestHeader(
         user,
@@ -566,8 +566,7 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
       let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
 
       let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + operationName;
-      logger.info("url = ", finalUrl);
-
+      logger.info("url = " + finalUrl);
 
       let httpRequestHeader = new RequestHeader(
         user,
@@ -946,7 +945,7 @@ const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async f
         id: mountName
       });
 
-      var source = res2.body._source['mac-address'];
+      let source = res2.body._source['mac-address'];
 
       const formattedEntries = source.map(entry => {
         return {
@@ -1180,7 +1179,9 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
 
       if (response.data == '') {
         logger.warn("Get empty data from ODL - mountname: " + mountName);
-        throw new Error("Empty data from " + fullUrl);
+        return response.data;
+        // TODO Lorenzo Latta to be check
+        // throw new Error("Empty data from " + fullUrl); // no that should not happen
       }
       else {
         return response.data;
@@ -1516,8 +1517,21 @@ function transformArray(reqId, inputArray) {
   return returnValue;
 }
 
-
 exports.readCurrentMacTableFromDevice = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  return new Promise(async function (resolve, reject) {
+    const mountName = body['mount-name'];
+    let reqId = generateRequestId(mountName);
+    // Result that return API
+    let result = {};
+    result['application/json'] = {
+      "request-id": reqId
+    };
+
+    resolve(result['application/json']);
+  });
+}
+
+exports.readCurrentMacTableFromDeviceCallbacks = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney, reqId) {
   const FDomainArray = [];
   let step2DataArray = [];
   let step3DataArray = [];
@@ -1527,7 +1541,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
   return new Promise(async function (resolve, reject) {
 
-    var result = {};
     const mountName = body['mount-name'];
 
     try {
@@ -1561,6 +1574,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           });
         }
         else {
+          // logger.warn("Data from MWDI is empty");
           throw new Error("Received data are not correct (Missing core-model-1-4:control-construct/forwarding-domain)");
         }
 
@@ -1631,7 +1645,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
               eggressUniqSet.add(obj['egress-ltp']);
             });
 
-            // Convertire il Set in un array
+            // Set converted into array
             eggressUniqArray = [...eggressUniqSet];
           }
           else {
@@ -1683,12 +1697,6 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           throw error;
         }
 
-        let reqId = generateRequestId(mountName);
-        // Result that return API
-        result['application/json'] = {
-          "request-id": reqId
-        };
-
         // Retrieve url requestor from body
         urlRequestor = getRequestorPath(body);
 
@@ -1701,17 +1709,13 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
             throw ("Failed send data to requestor: " + error.message);
           }
         }
-
-        resolve(result['application/json']);
       }
       else {
         throw new Error("Missing mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER");
       }
     }
     catch (error) {
-      let internalServerError = createHttpError.InternalServerError(error);
-      reject(internalServerError);
+      logger.error(error);
     }
   });
-
 }
