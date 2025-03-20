@@ -1094,10 +1094,11 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
       });
 
       if (response.status === 200) {
+        logger.debug("OK - Get data from MWDI -  mountname: " + mountName);
         return (response.data);
       }
       else {
-        throw new Error(" Empty data from " + fullUrl);
+        throw new Error("Empty data from " + fullUrl);
       }
     } catch (error) {
       logger.error("***********catch axios try Error '404' for URL:", fullUrl)
@@ -1178,16 +1179,19 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
       });
 
       if (response.data == '') {
+        logger.warn("Get empty data from ODL - mountname: " + mountName);
         throw new Error("Empty data from " + fullUrl);
       }
       else {
         return response.data;
       }
     } catch (error) {
+      logger.error("KO - Get data from ODL -  mountname: " + mountName, error);
       throw error;
     }
 
   } catch (error) {
+    logger.error("KO - Get data from ODL -  mountname: " + mountName, error);
     throw error;
   }
 }
@@ -1531,6 +1535,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
       //STEP1
       //"/core-model-1-4:network-control-domain=cache/control-construct={mount-name}?fields=forwarding-domain(uuid;layer-protocol-name;mac-fd-1-0:mac-fd-pac(mac-fd-status(mac-address-cur)))",
       try {
+        logger.debug("Calling PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi - mountname: " + mountName);
         const data = await PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(mountName, user, originator, xCorrelator, traceIndicator, customerJourney);
 
         if (
@@ -1560,6 +1565,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
         }
 
       } catch (error) {
+        logger.error("Failing calling PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi - mountname: " + mountName + "", error);
         throw ("(" + mountName + "):" + error.message);
       }
 
@@ -1567,6 +1573,7 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
       //"/rests/operations/network-topology:network-topology/topology=topology-netconf/node={mount-name}/yang-ext:mount/mac-fd-1-0:provide-learned-mac-addresses" 
       if (FDomainArray.length >= 0) {
         try {
+          logger.debug("Calling PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice - mountname: " + mountName);
           const dataFromRequest = await PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(mountName, user, originator, xCorrelator, traceIndicator, customerJourney);
 
           let uuid = 0;
@@ -1632,16 +1639,19 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
           }
         }
         catch (error) {
+          logger.error("Failing calling PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice", error);
           throw (error.message);
         }
 
         //STEP3
         try {
+          logger.debug("Calling PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi - mountname: " + mountName);
           const originalLtpNamePromises = eggressUniqArray.map(egressData => {
             return PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(mountName, egressData, user, originator, xCorrelator, traceIndicator, customerJourney);
           });
           step3DataArray = await Promise.all(originalLtpNamePromises);
         } catch (error) {
+          logger.error("Failing calling PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi - mountname:" + mountName, error);
           throw (error.message);
         }
 
@@ -1665,9 +1675,11 @@ exports.readCurrentMacTableFromDevice = async function (body, user, originator, 
 
         //STEP4
         try {
+          logger.debug("Calling PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch - mountname: "+ mountName);
           const writingResultPromise = await PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(macAddressDataDb, user, originator, xCorrelator, traceIndicator, customerJourney);
         }
         catch (error) {
+          logger.error("Failing calling PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch", error);
           throw error;
         }
 
