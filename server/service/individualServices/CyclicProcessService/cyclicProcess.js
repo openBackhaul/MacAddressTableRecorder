@@ -488,7 +488,7 @@ async function MATRCycle(firstTime, logging_level) {
       startTtlChecking();
     }
     catch (error) {
-      logger.error("Error on MATR cycle: ", error);
+      logger.error(error, "Error on MATR cycle: ");
     }
 
   }, remainder);
