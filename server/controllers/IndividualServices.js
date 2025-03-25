@@ -110,16 +110,11 @@ module.exports.readCurrentMacTableFromDevice = async function readCurrentMacTabl
   let startTime = process.hrtime();
   let responseCode = responseCodeEnum.code.OK;
   let responseBodyToDocument = {};
-
   await IndividualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney)
     .then(async function (responseBody) {
       responseBodyToDocument = responseBody;
       let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
       ResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
-      // Starting request in async mode
-      // Moddifyed by @latta-siae
-      let req_id = responseBody['request-id'];
-      IndividualServices.readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, req_id);
     })
     .catch(async function (responseBody) {
       let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);

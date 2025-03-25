@@ -39,24 +39,8 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
   };
 
   try {
-    // Create Request header
-    let httpRequestHeader = new RequestHeader(
-      user,
-      originator,
-      xCorrelator,
-      traceIndicator,
-      customerJourney,
-      "operation key not yet provided"// operationKey -- "operation key not yet provided"
-    );
-
-    // To be fixed
-    let finalUrl = "http://localhost:8080/v1/read-current-mac-table-from-device";
-    let response = await axios.post(finalUrl, body, {
-      headers: httpRequestHeader
-    });
-
-    // Old request
-    //await individualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney);
+    // Sent request to "read current MacTable from Device"
+    await individualServices.readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney);
 
     return {
       'ret': { 'code': 200, 'message': 'Correctly Managed' },

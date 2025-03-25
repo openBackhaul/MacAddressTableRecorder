@@ -19,7 +19,7 @@ const transports = pino.transport({
 });
 
 // create pino logger instance
-const logger = pino({level: 'trace'}, transports);
+const logger = pino({level: 'info'}, transports);
 
 exports.getLogger = function getLogger() {
   return logger;
