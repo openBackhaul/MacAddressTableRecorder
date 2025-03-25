@@ -991,6 +991,7 @@ const PromptForProvidingSpecificMacTableCausesReadingFromElasticSearch = async f
       }
 
     } catch (error) {
+      logger.error(error);
       reject(error);
     }
   });
