@@ -10,10 +10,10 @@ const transports = pino.transport({
       options: { colorize: true }
     },
     {
-      level: 'info',
+      level: 'warn',
       target: 'pino-roll',
       options: { file: path.join(__dirname, '../logs/MacAddressTableRecorder'), extension: '.log', mkdir: true,
-        frequency: 'daily', dateFormat: 'yyyy-MM-dd', size: "1m", "limit.count": 15 }
+        frequency: 'daily', dateFormat: 'yyyy-MM-dd', size: "1m", "limit.count": 10 }
     }
   ]
 });
