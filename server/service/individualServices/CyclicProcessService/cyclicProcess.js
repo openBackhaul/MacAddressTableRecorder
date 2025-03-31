@@ -40,7 +40,7 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
 
   try {
     // Sent request to "read current MacTable from Device"
-    await individualServices.readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney);
+    await individualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney);
 
     return {
       'ret': { 'code': 200, 'message': 'Correctly Managed' },

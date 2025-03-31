@@ -1133,9 +1133,6 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
       throw error;
     }
   } catch (error) {
-    logger.error(error, "***********catch main try Error '404' for URL: ");
-    // logger.error("*********** response status:" + response.status);
-    // logger.error("*********** response messge:" + response.data);
     throw error;
   }
 }
@@ -1207,19 +1204,16 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
       if (response.data == '') {
         logger.warn("Get empty data from ODL - mountname: " + mountName);
         return response.data;
-        // TODO Lorenzo Latta to be check
-        // throw new Error("Empty data from " + fullUrl); // no that should not happen
       }
       else {
+        logger.info("Get data from ODL - mountname: " + mountName);
         return response.data;
       }
     } catch (error) {
-      logger.error(error, "KO - Get data from ODL -  mountname: " + mountName);
+      logger.error(error, "Failing Get data from ODL -  mountname: " + mountName);
       throw error;
     }
-
   } catch (error) {
-    logger.error(error, "KO - Get data from ODL -  mountname: " + mountName);
     throw error;
   }
 }
@@ -1733,8 +1727,6 @@ const readCurrentMacTableFromDeviceCallbacks = async function (body, user, origi
     }
   });
 }
-
-exports.readCurrentMacTableFromDeviceCallbacks;
 
 exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
