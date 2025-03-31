@@ -1,9 +1,11 @@
 'use strict';
+
+// ONF Libs
 var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
-const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
 const ForwardingAutomationService = require('onf-core-model-ap/applicationPattern/onfModel/services/ForwardingConstructAutomationServices');
 const operationServerInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/OperationServerInterface');
 
+const prepareForwardingAutomation = require('./individualServices/PrepareForwardingAutomation');
 
 /**
  * Returns the configured life cycle state of the operation

@@ -1,15 +1,15 @@
 'use strict';
 
-const { strict } = require('assert');
-const { setTimeout } = require('timers');
-const path = require("path");
-const individualServices = require("./../../IndividualServicesService.js");
-const { elasticsearchService } = require('onf-core-model-ap/applicationPattern/services/ElasticsearchService');
+// ONF Libs
+const profileCollection = require('onf-core-model-ap/applicationPattern/onfModel/models/ProfileCollection');
 const RequestHeader = require("onf-core-model-ap/applicationPattern/rest/client/RequestHeader");
-const onfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
-const onfAttributes = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfAttributes');
 const forwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
-var fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
+const axios = require('axios');
+
+// Other Libs
+const { setTimeout } = require('timers');
+const individualServices = require("./../../IndividualServicesService.js");
+const logger = require('../../LoggingService.js').getLogger();
 
 const DEVICE_NOT_PRESENT = -1;
 let maximumNumberOfRetries = 1;
@@ -25,25 +25,31 @@ let stop = false;
 var handle = 0;
 let loopStartTime = 0;
 
+// String constants
+const NODE_ID = 'node-id';
 
+
+/*
+ * Function that send request to retrieve Mac Table from specific device
+*/
 async function sendRequest(device, user, originator, xCorrelator, traceIndicator, customerJourney) {
 
-  let ret;
-
   const body = {
-    "mount-name": device['node-id']
+    "mount-name": device[NODE_ID]
   };
 
   try {
-    ret = await individualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney);
+    // Sent request to "read current MacTable from Device"
+    await individualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney);
+
     return {
       'ret': { 'code': 200, 'message': 'Correctly Managed' },
-      'node-id': device['node-id']
+      'node-id': device[NODE_ID]
     };
   } catch (error) {
     return {
       'ret': { 'code': 500, 'message': error.message },
-      'node-id': device['node-id']
+      'node-id': device[NODE_ID]
     };
   }
 }
@@ -61,8 +67,7 @@ function prepareObjectForWindow(deviceListIndex) {
     };
     return windowObject;
   } catch (error) {
-    console.error("Error in prepareObjectForWindow (" + error + ")");
-    debugger;
+    logger.error("Error in prepareObjectForWindow (" + error + ")");
   }
 }
 
@@ -75,14 +80,13 @@ function prepareObjectForWindow(deviceListIndex) {
 function checkDeviceExistsInSlidingWindow(deviceNodeId) {
   try {
     for (let i = 0; i < slidingWindow.length; i++) {
-      if (slidingWindow[i]['node-id'] == deviceNodeId) {
+      if (slidingWindow[i][NODE_ID] == deviceNodeId) {
         return i;
       }
     }
     return DEVICE_NOT_PRESENT;
   } catch (error) {
-    console.log("Error in checkDeviceExistsInSlidingWindow (" + error + ")");
-    debugger;
+    logger.error("Error in checkDeviceExistsInSlidingWindow (" + error + ")");
   }
 }
 
@@ -102,8 +106,7 @@ function getNextDeviceListIndex() {
     }
     return lastDeviceListIndex;
   } catch (error) {
-    console.log("Error in getNextDeviceListIndex (" + error + ")");
-    debugger;
+    logger.error("Error in getNextDeviceListIndex (" + error + ")");
   }
 }
 
@@ -142,8 +145,7 @@ function addNextDeviceListElementInWindow() {
 
     return elementAdded;
   } catch (error) {
-    console.log("Error in addNextDeviceListElementInWindow (" + error + ")")
-    debugger
+    logger.error("Error in addNextDeviceListElementInWindow (" + error + ")")
   }
 }
 
@@ -161,8 +163,7 @@ function discardElementFromDeviceList(nodeId) {
       }
     }
   } catch (error) {
-    console.log("Error in discardElementFromDeviceList (" + error + ")");
-    debugger;
+    logger.error("Error in discardElementFromDeviceList (" + error + ")");
   }
 }
 
@@ -172,7 +173,7 @@ function discardElementFromDeviceList(nodeId) {
 function printList(listName, list) {
   let listGraph = listName + ': [';
   for (let i = 0; i < list.length; i++) {
-    listGraph += (i < list.length - 1) ? (list[i]['node-id'] + '|') : list[i]['node-id'];
+    listGraph += (i < list.length - 1) ? (list[i][NODE_ID] + '|') : list[i][NODE_ID];
   }
   listGraph += "] (" + list.length + ")";
   return listGraph;
@@ -193,25 +194,27 @@ function printListDevice(listName, list) {
  */
 function printLog(text, print_log) {
   if (print_log) {
-    console.log(text);
+    logger.info(text);
   }
 }
 
 function printErr(text, print_log) {
   if (print_log) {
-    console.error(text);
+    logger.error(text);
   }
 }
 
-function convertTime(millisecondi) {
-  let secondi = Math.floor(millisecondi / 1000);
-  let ore = Math.floor(secondi / 3600);
-  let minuti = Math.floor((secondi % 3600) / 60);
-  let restantiSecondi = secondi % 60;
 
-  return `${ore.toString().padStart(2, '0')}:${minuti.toString().padStart(2, '0')}:${restantiSecondi.toString().padStart(2, '0')}`;
+function convertTime(s) {
+  const ms = s % 1000;
+  s = (s - ms) / 1000;
+  const secs = s % 60;
+  s = (s - secs) / 60;
+  const mins = s % 60;
+  const hrs = (s - mins) / 60;
+
+  return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
 }
-
 
 
 /**
@@ -227,10 +230,10 @@ function startTtlChecking() {
         slidingWindow[index].ttl -= 1;
         if (slidingWindow[index].ttl == 0) {
           if (slidingWindow[index].retries == 0) {
-            printLog("Element " + slidingWindow[index]['node-id'] + " Timeout/Retries. -> Dropped from Sliding Window", print_log_level >= 2);
+            printLog("Element " + slidingWindow[index][NODE_ID] + " Timeout/Retries. -> Dropped from Sliding Window", print_log_level >= 2);
             slidingWindow.splice(index, 1);
             if (addNextDeviceListElementInWindow()) {
-              printLog('Added element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in window and sent request...', print_log_level >= 2);
+              printLog('Added element ' + slidingWindow[slidingWindow.length - 1][NODE_ID] + ' in window and sent request...', print_log_level >= 2);
               //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
               requestMessage(slidingWindow.length - 1);
             }
@@ -242,14 +245,14 @@ function startTtlChecking() {
           } else {
             slidingWindow[index].ttl = responseTimeout;
             slidingWindow[index].retries -= 1;
-            printLog("Element " + slidingWindow[index]['node-id'] + " Timeout. -> Resend the request...", print_log_level >= 2);
+            printLog("Element " + slidingWindow[index][NODE_ID] + " Timeout. -> Resend the request...", print_log_level >= 2);
             requestMessage(index);
           }
         }
       }
       if (slidingWindow.length == 0) {
         clearInterval(handle);
-        handle = 0; // I just do this so I know I've cleared the interval        
+        handle = 0; // I just do this so I know I've cleared the interval
         stop = false;
 
         const now = new Date();
@@ -266,8 +269,7 @@ function startTtlChecking() {
     handle = setInterval(upgradeTtl, 1000);
 
   } catch (error) {
-    console.log("Error in startTtlChecking (" + error + ")");
-    debugger;
+    logger.error("Error in startTtlChecking (" + error + ")");
   }
 }
 
@@ -296,18 +298,18 @@ async function requestMessage(index) {
     let customerJourney = requestHeader.customerJourney;
 
     sendRequest(slidingWindow[index], user, originator, xCorrelator, traceIndicator, customerJourney).then(retObj => {
-      if (retObj.ret.code != 200) {
+      if (retObj.ret.code != 200) { // Response error
         // Response error management
-        let elementIndex = checkDeviceExistsInSlidingWindow(retObj['node-id']);
+        let elementIndex = checkDeviceExistsInSlidingWindow(retObj[NODE_ID]);
         if (elementIndex == DEVICE_NOT_PRESENT) {
-          printLog('Response from element ' + retObj['node-id'] + ' not more present in Sliding Window. Ignore that.', print_log_level >= 2);
+          printLog('Response from element ' + retObj[NODE_ID] + ' not more present in Sliding Window. Ignore that.', print_log_level >= 2);
         }
         else {
           if (slidingWindow[elementIndex].retries == 0) {
-            printErr(retObj.ret.code + ' - ' + retObj.ret.message + ' from element (II time) ' + retObj['node-id'] + ' --> Dropped from Sliding Window', print_log_level >= 2);
+            printErr(retObj.ret.code + ' - ' + retObj.ret.message + ' from element (II time) ' + retObj[NODE_ID] + ' --> Dropped from Sliding Window', print_log_level >= 2);
             slidingWindow.splice(elementIndex, 1);
             if (addNextDeviceListElementInWindow()) {
-              printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
+              printLog('Add element ' + slidingWindow[slidingWindow.length - 1][NODE_ID] + ' in Sliding Window and send request...', print_log_level >= 2);
               //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
               //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
               requestMessage(slidingWindow.length - 1);
@@ -318,23 +320,22 @@ async function requestMessage(index) {
             }
 
           } else {
-            printErr(retObj.ret.code + ' - ' + retObj.ret.message + ' from element (I time) ' + retObj['node-id'] + ' Resend the request....', print_log_level >= 2);
+            printErr(retObj.ret.code + ' - ' + retObj.ret.message + ' from element (I time) ' + retObj[NODE_ID] + ' Resend the request....', print_log_level >= 2);
             slidingWindow[elementIndex].ttl = responseTimeout;
             slidingWindow[elementIndex].retries -= 1;
             requestMessage(elementIndex);
           }
         }
-      } else {
-        //return OK 
+      } else { // Response is like 2XX - OK
         printLog('****************************************************************************************************', print_log_level >= 2);
-        let elementIndex = checkDeviceExistsInSlidingWindow(retObj['node-id']);
+        let elementIndex = checkDeviceExistsInSlidingWindow(retObj[NODE_ID]);
         if (elementIndex == DEVICE_NOT_PRESENT) {
-          printLog('Response from element ' + retObj['node-id'] + ' not more present in Sliding Window. Ignore that.', print_log_level >= 2);
+          printLog('Response from element ' + retObj[NODE_ID] + ' not more present in Sliding Window. Ignore that.', print_log_level >= 2);
         } else {
-          printLog('Response from element ' + retObj['node-id'] + ' --> Dropped from Sliding Window. Timestamp: ' + Date.now(), print_log_level >= 2);
+          printLog('Response from element ' + retObj[NODE_ID] + ' --> Dropped from Sliding Window. Timestamp: ' + Date.now(), print_log_level >= 2);
           slidingWindow.splice(elementIndex, 1);
           if (addNextDeviceListElementInWindow()) {
-            printLog('Add element ' + slidingWindow[slidingWindow.length - 1]['node-id'] + ' in Sliding Window and send request...', print_log_level >= 2);
+            printLog('Add element ' + slidingWindow[slidingWindow.length - 1][NODE_ID] + ' in Sliding Window and send request...', print_log_level >= 2);
             //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
             //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
             requestMessage(slidingWindow.length - 1);
@@ -349,14 +350,13 @@ async function requestMessage(index) {
       }
     })
   } catch (error) {
-    console.log("Error in requestMessage (" + error + ")");
-    debugger;
+    logger.error("Error in requestMessage (" + error + ")");
   }
 }
 
 
 async function extractProfileConfiguration(uuid) {
-  const profileCollection = require('onf-core-model-ap/applicationPattern/onfModel/models/ProfileCollection');
+  
   let profile = await profileCollection.getProfileAsync(uuid);
   let objectKey = Object.keys(profile)[2];
   profile = profile[objectKey];
@@ -430,19 +430,27 @@ async function MATRCycle(firstTime, logging_level) {
     const formattedDate = `${day}/${month}/${year} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 
     printLog('*****************************************************************', print_log_level >= 1);
-    printLog('                                                                 ', print_log_level >= 1);
     printLog(' MATR CYCLE START AT:    ' + formattedDate, print_log_level >= 1);
-    printLog('                                                                 ', print_log_level >= 1);
     printLog('*****************************************************************', print_log_level >= 1);
 
     print_log_level = logging_level;
 
     //TO FIX  
-    let user = "User Name";
-    let originator = "MacAddressTableResolver";
-    let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
-    let traceIndicator = "1.3.1";
-    let customerJourney = "Unknown value";
+    // let user = "User Name";
+    // let originator = "MacAddressTableResolver";
+    // let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
+    // let traceIndicator = "1.3.1";
+    // let customerJourney = "Unknown value";
+
+    // Use a dynamic header
+    // TODO: TO be validate
+    let requestHeader = new RequestHeader("MacAddressTableRecorder", "MacAddressTableRecorder", undefined, "1");
+
+    let user = requestHeader.user;
+    let originator = requestHeader.originator;
+    let xCorrelator = requestHeader.xCorrelator;
+    let traceIndicator = requestHeader.traceIndicator;
+    let customerJourney = requestHeader.customerJourney;
 
     try {
       do {
@@ -457,14 +465,14 @@ async function MATRCycle(firstTime, logging_level) {
       for (let i = 0; i < slidingWindowSize; i++) {
         addNextDeviceListElementInWindow();
         requestMessage(i);
-        printLog('Element ' + slidingWindow[i]['node-id'] + ' send request...', print_log_level >= 2);
+        printLog('Element ' + slidingWindow[i][NODE_ID] + ' send request...', print_log_level >= 2);
       }
 
       //printLog(printList('Sliding Window - MAIN', slidingWindow), print_log_level >= 1);
       startTtlChecking();
     }
     catch (error) {
-      console.error("Error on MATR cycle: " + error);
+      logger.error(error, "Error on MATR cycle: ");
     }
 
   }, remainder);

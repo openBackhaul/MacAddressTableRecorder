@@ -110,8 +110,7 @@ module.exports.readCurrentMacTableFromDevice = async function readCurrentMacTabl
   let startTime = process.hrtime();
   let responseCode = responseCodeEnum.code.OK;
   let responseBodyToDocument = {};
-
-  await IndividualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney, req.url)
+  await IndividualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney)
     .then(async function (responseBody) {
       responseBodyToDocument = responseBody;
       let responseHeader = await ResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
