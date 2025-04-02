@@ -25163,6 +25163,7 @@ components:
       required:
       - field-name
       - value
+      - datatype
       type: object
       properties:
         field-name:
