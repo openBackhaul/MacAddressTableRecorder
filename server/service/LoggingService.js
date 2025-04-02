@@ -9,12 +9,13 @@ const transports = pino.transport({
       target: 'pino-pretty',
       options: { colorize: true }
     },
-    {
-      level: 'warn',
-      target: 'pino-roll',
-      options: { file: path.join(__dirname, '../logs/MacAddressTableRecorder'), extension: '.log', mkdir: true,
-        frequency: 'daily', dateFormat: 'yyyy-MM-dd', size: "1m", "limit.count": 10 }
-    }
+    // Disabled writing into File
+    // {
+    //   level: 'warn',
+    //   target: 'pino-roll',
+    //   options: { file: path.join(__dirname, '../logs/MacAddressTableRecorder'), extension: '.log', mkdir: true,
+    //     frequency: 'daily', dateFormat: 'yyyy-MM-dd', size: "1m", "limit.count": 10 }
+    // }
   ]
 });
 
