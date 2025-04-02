@@ -78,6 +78,10 @@ paths:
           headers:
             x-correlator:
               description: UUID for the service execution flow that allows to correlate
+                requests and responses. Its value must be identical at the response
+                compared with its corresponding request
+              style: simple
+              explode: false
               schema:
                 type: string
                 example: 550e8400-e29b-11d4-a716-446655440000
@@ -3660,23 +3664,6 @@ paths:
                   application/json:
                     schema:
                       type: array
-                      example:
-                        request-id: 121251092-1721120567127
-                        mac-address-data:
-                        - mount-name: "305251234"
-                          own-mac-address: 00:00:00:00:00:00
-                          egress-ltp-uuid: 305251234+mac-inf-1234
-                          original-ltp-name: eth-1-0-3
-                          vlan-id: 17
-                          remote-mac-address: 01:01:01:01:01:01
-                          time-stamp-of-data: 2010-11-20T14:00:00+01:00
-                        - mount-name: "305251234"
-                          own-mac-address: 00:00:00:00:00:00
-                          egress-ltp-uuid: 305251234+mac-inf-1234
-                          original-ltp-name: eth-1-0-3
-                          vlan-id: 17
-                          remote-mac-address: FF:01:01:01:01:01
-                          time-stamp-of-data: 2010-11-20T14:00:00+01:00
                       items:
                         required:
                         - mac-address-data
@@ -3722,6 +3709,23 @@ paths:
                                   type: string
                                   description: |
                                     'Date and time when the data has been retrieved from the device'
+                        example:
+                          request-id: 121251092-1721120567127
+                          mac-address-data:
+                          - mount-name: "305251234"
+                            own-mac-address: 00:00:00:00:00:00
+                            egress-ltp-uuid: 305251234+mac-inf-1234
+                            original-ltp-name: eth-1-0-3
+                            vlan-id: 17
+                            remote-mac-address: 01:01:01:01:01:01
+                            time-stamp-of-data: 2010-11-20T14:00:00+01:00
+                          - mount-name: "305251234"
+                            own-mac-address: 00:00:00:00:00:00
+                            egress-ltp-uuid: 305251234+mac-inf-1234
+                            original-ltp-name: eth-1-0-3
+                            vlan-id: 17
+                            remote-mac-address: FF:01:01:01:01:01
+                            time-stamp-of-data: 2010-11-20T14:00:00+01:00
               responses:
                 "204":
                   description: MAC table has been received.
@@ -25157,7 +25161,6 @@ components:
           example: 1000
     genericRepresentation_responsevaluelist:
       required:
-      - datatype
       - field-name
       - value
       type: object
@@ -25609,6 +25612,7 @@ components:
                       properties:
                         consequent-operation-reference:
                           type: string
+              additionalProperties: false
               description: action profile
             - required:
               - profile-name
