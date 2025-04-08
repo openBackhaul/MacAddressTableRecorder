@@ -435,15 +435,7 @@ async function MATRCycle(firstTime, logging_level) {
 
     print_log_level = logging_level;
 
-    //TO FIX  
-    // let user = "User Name";
-    // let originator = "MacAddressTableResolver";
-    // let xCorrelator = "550e8400-e29b-11d4-a716-446655440000";
-    // let traceIndicator = "1.3.1";
-    // let customerJourney = "Unknown value";
-
     // Use a dynamic header
-    // TODO: TO be validate
     let requestHeader = new RequestHeader("MacAddressTableRecorder", "MacAddressTableRecorder", undefined, "1");
 
     let user = requestHeader.user;
