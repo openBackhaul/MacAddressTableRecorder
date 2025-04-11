@@ -5967,6 +5967,7 @@ paths:
                                         - "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE"
                                         - "file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE"
                                         - "integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE"
+                                        - "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE"
                                         - "string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE"
                                     action-profile-1-0:action-profile-pac:
                                       type: object
@@ -6021,6 +6022,7 @@ paths:
                                         - "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE"
                                         - "file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE"
                                         - "integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE"
+                                        - "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE"
                                         - "string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE"
                                     response-profile-1-0:response-profile-pac:
                                       type: object
@@ -6082,6 +6084,7 @@ paths:
                                         - "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE"
                                         - "file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE"
                                         - "integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE"
+                                        - "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE"
                                         - "string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE"
                                     file-profile-1-0:file-profile-pac:
                                       type: object
@@ -6133,9 +6136,11 @@ paths:
                                         - "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE"
                                         - "file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE"
                                         - "integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE"
+                                        - "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE"
                                         - "string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE"
                                     integer-profile-1-0:integer-profile-pac:
                                       type: object
+
                                       required:
                                         - integer-profile-capability
                                         - integer-profile-configuration
@@ -6176,6 +6181,7 @@ paths:
                                         - "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE"
                                         - "file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE"
                                         - "integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE"
+                                        - "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE"
                                         - "string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE"
                                     string-profile-1-0:string-profile-pac:
                                       type: object
@@ -7082,6 +7088,7 @@ paths:
                               - "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE"
                               - "file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE"
                               - "integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE"
+                              - "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE"
                               - "string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE"
                           action-profile-1-0:action-profile-pac:
                             type: object
@@ -7136,6 +7143,7 @@ paths:
                               - "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE"
                               - "file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE"
                               - "integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE"
+                              - "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE"
                               - "string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE"
                           response-profile-1-0:response-profile-pac:
                             type: object
@@ -7197,6 +7205,7 @@ paths:
                               - "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE"
                               - "file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE"
                               - "integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE"
+                              - "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE"
                               - "string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE"
                           file-profile-1-0:file-profile-pac:
                             type: object
@@ -7248,6 +7257,7 @@ paths:
                               - "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE"
                               - "file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE"
                               - "integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE"
+                              - "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE"
                               - "string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE"
                           integer-profile-1-0:integer-profile-pac:
                             type: object
@@ -7291,6 +7301,7 @@ paths:
                               - "response-profile-1-0:PROFILE_NAME_TYPE_GENERIC_RESPONSE_PROFILE"
                               - "file-profile-1-0:PROFILE_NAME_TYPE_FILE_PROFILE"
                               - "integer-profile-1-0:PROFILE_NAME_TYPE_INTEGER_PROFILE"
+                              - "integer-profile-1-0:PROFILE_NAME_INTEGER_PROFILE"
                               - "string-profile-1-0:PROFILE_NAME_TYPE_STRING_PROFILE"
                           string-profile-1-0:string-profile-pac:
                             type: object
