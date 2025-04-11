@@ -722,66 +722,53 @@ paths:
         content:
           application/json:
             schema:
-              anyOf:
-                - description: "bare update of elasticsearch"
+              type: object
+              required:
+                - mount-name
+                - requestor-protocol
+                - requestor-address
+                - requestor-port
+                - requestor-receive-operation
+              properties:
+                mount-name:
+                  type: string
+                  description: >
+                    'Mount-name of the device, from which the current MAC table content shall be retrieved'
+                requestor-protocol:
+                  type: string
+                  description: >
+                    'HTTP or HTTPs protocol for sending the response to the requestor'
+                  enum:
+                    - "HTTP"
+                    - "HTTPS"
+                requestor-address:
                   type: object
-                  required:
-                    - mount-name
+                  minProperties: 1
+                  maxProperties: 1
+                  additionalProperties: false
                   properties:
-                    mount-name:
-                      type: string
-                      description: >
-                        'Mount-name of the device, for which the elasticsearch content shall be updated'
-                  example:
-                    mount-name: "305251234"
-                - description: "update of elasticsearch and response to the requestor"
-                  type: object
-                  required:
-                    - mount-name
-                    - requestor-protocol
-                    - requestor-address
-                    - requestor-port
-                    - requestor-receive-operation
-                  properties:
-                    mount-name:
-                      type: string
-                      description: >
-                        'Mount-name of the device, from which the current MAC table content shall be retrieved'
-                    requestor-protocol:
-                      type: string
-                      description: >
-                        'HTTP or HTTPs protocol for sending the response to the requestor'
-                      enum:
-                        - "HTTP"
-                        - "HTTPS"
-                    requestor-address:
+                    ip-address:
                       type: object
                       minProperties: 1
-                      maxProperties: 1
                       additionalProperties: false
                       properties:
-                        ip-address:
-                          type: object
-                          minProperties: 1
-                          additionalProperties: false
-                          properties:
-                            ipv-4-address:
-                              type: string
-                              pattern: '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
-                              description: >
-                                'IP address for sending the response to the requestor'
-                        domain-name:
+                        ipv-4-address:
                           type: string
-                          pattern: '^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$'
+                          pattern: '^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
                           description: >
-                            'Domain name for sending the response to the requestor'
-                    requestor-port:
-                      type: integer
-                      description: >
-                        'TCP port for sending the response to the requestor'
-                    requestor-receive-operation:
+                            'IP address for sending the response to the requestor'
+                    domain-name:
                       type: string
-                      description: "Operation at the requestor for receiving the response"
+                      pattern: '^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$'
+                      description: >
+                        'Domain name for sending the response to the requestor'
+                requestor-port:
+                  type: integer
+                  description: >
+                    'TCP port for sending the response to the requestor'
+                requestor-receive-operation:
+                  type: string
+                  description: "Operation at the requestor for receiving the response"
               example:
                 mount-name: "305251234"
                 requestor-protocol: "HTTP"
