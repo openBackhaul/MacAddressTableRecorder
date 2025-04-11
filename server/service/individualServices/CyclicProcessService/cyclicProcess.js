@@ -40,17 +40,34 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
 
   try {
     // Sent request to "read current MacTable from Device"
-    await individualServices.readCurrentMacTableFromDevice(body, user, originator, xCorrelator, traceIndicator, customerJourney);
+    await individualServices.readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, null);
 
     return {
-      'ret': { 'code': 200, 'message': 'Correctly Managed' },
+      'ret': {
+        'code': 200,
+        'message': 'Correctly Managed'
+      },
       'node-id': device[NODE_ID]
     };
   } catch (error) {
-    return {
-      'ret': { 'code': 500, 'message': error.message },
-      'node-id': device[NODE_ID]
-    };
+    if (error.code == 204) {
+      return {
+        'ret': {
+          'code': 204,
+          'message': error.message
+        },
+        'node-id': device[NODE_ID]
+      };
+    } else {
+      return {
+        'ret': {
+          'code': 500,
+          'message': error.message
+        },
+        'node-id': device[NODE_ID]
+      };
+    }
+
   }
 }
 
@@ -298,7 +315,7 @@ async function requestMessage(index) {
     let customerJourney = requestHeader.customerJourney;
 
     sendRequest(slidingWindow[index], user, originator, xCorrelator, traceIndicator, customerJourney).then(retObj => {
-      if (retObj.ret.code != 200) { // Response error
+      if (retObj.ret.code != 200 || retObj.ret.code != 204) { // Response error
         // Response error management
         let elementIndex = checkDeviceExistsInSlidingWindow(retObj[NODE_ID]);
         if (elementIndex == DEVICE_NOT_PRESENT) {

@@ -1112,25 +1112,20 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
 
     const encodedFields = customEncode(fields);
     const fullUrl = newBaseUrl + 'fields=' + encodedFields;
-    
-    let response;
-    try {
-      response = await axios.get(fullUrl, {
-        headers: httpRequestHeader
-      });
 
-      if (response.status === 200) {
-        logger.debug("OK - Get data from MWDI -  mountname: " + mountName);
-        return (response.data);
-      }
-      else {
-        throw new Error("Empty data from " + fullUrl);
-      }
-    } catch (error) {
-      logger.error(error, "***********catch axios try Error '404' for URL: " + fullUrl);
-      // logger.error("*********** response status: " + response.status);
-      // logger.error("*********** response messge: " + response.data);
-      throw error;
+    let response;
+
+    response = await axios.get(fullUrl, {
+      headers: httpRequestHeader
+    });
+
+    if (response.status === 200) {
+      logger.debug("OK - Get data from MWDI -  mountname: " + mountName);
+      return (response.data);
+    }
+    else {
+      let err = new Error("Empty data from " + fullUrl, 204);
+      throw err;
     }
   } catch (error) {
     throw error;
@@ -1196,22 +1191,18 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
 
     httpRequestHeaderAuth = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeaderAuth);
 
-    try {
-      let response = await axios.post(fullUrl, data, {
-        headers: httpRequestHeaderAuth
-      });
+    let response = await axios.post(fullUrl, data, {
+      headers: httpRequestHeaderAuth
+    });
 
-      if (response.data == '') {
-        logger.warn("Get empty data from ODL - mountname: " + mountName);
-        return response.data;
-      }
-      else {
-        logger.info("Get data from ODL - mountname: " + mountName);
-        return response.data;
-      }
-    } catch (error) {
-      logger.error(error, "Failing Get data from ODL -  mountname: " + mountName);
-      throw error;
+    if (response.data == '') {
+      logger.warn("Get empty data from ODL - mountname: " + mountName);
+      let err = new Error("Empty data from ODL: " + mountName, 204);
+      throw err;
+    }
+    else {
+      logger.info("Get data from ODL - mountname: " + mountName);
+      return response.data;
     }
   } catch (error) {
     throw error;
@@ -1304,12 +1295,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
 
       return (additionaResponse);
     } catch (error) {
-      additionaResponse = {
-        'egress-ltp': body,
-        'original-ltp-name': "undefined"
-      };
-      return additionaResponse;
-      // throw error;
+      throw error;
     }
   } catch (error) {
     throw error;
@@ -1391,7 +1377,9 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
         return (response.data);
       }
       else {
-        throw new Error("Writing operation into Elastic Search Failed (" + mountName + ")");
+        logger.error("Writing operation into Elastic Search Failed (" + mountName + ")");
+        let err = new Error("Writing operation into Elastic Search Failed (" + mountName + ")", 204);
+        throw err;
       }
 
     } catch (error) {
@@ -1539,7 +1527,7 @@ function transformArray(reqId, inputArray) {
   return returnValue;
 }
 
-const readCurrentMacTableFromDeviceCallbacks = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney, reqId) {
+export const readCurrentMacTableFromDeviceCallbacks = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney, reqId) {
   const FDomainArray = [];
   let step2DataArray = [];
   let step3DataArray = [];
@@ -1583,12 +1571,13 @@ const readCurrentMacTableFromDeviceCallbacks = async function (body, user, origi
         }
         else {
           logger.warn("Data from MWDI is empty");
-          throw new Error("Received data are not correct (Missing core-model-1-4:control-construct/forwarding-domain)");
+          let err = new Error("Empty data from " + fullUrl, 204);
+          throw err;
         }
 
       } catch (error) {
         logger.error(error, "Failing calling PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi - mountname: " + mountName);
-        throw ("(" + mountName + "):" + error.message);
+        throw error
       }
 
       //STEP2
@@ -1657,12 +1646,14 @@ const readCurrentMacTableFromDeviceCallbacks = async function (body, user, origi
             eggressUniqArray = [...eggressUniqSet];
           }
           else {
-            throw new Error("Received data are not correct (mac-fd-1-0:output/mac-table-entry-list)");
+            logger.error("Received data are not correct (mac-fd-1-0:output/mac-table-entry-list)");
+            let err = new Error("Empty data from ODL: " + mountName, 204);
+            throw err;
           }
         }
         catch (error) {
           logger.error(error, "Failing calling PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice");
-          throw (error.message);
+          throw (error);
         }
 
         //STEP3
@@ -1674,7 +1665,7 @@ const readCurrentMacTableFromDeviceCallbacks = async function (body, user, origi
           step3DataArray = await Promise.all(originalLtpNamePromises);
         } catch (error) {
           logger.error(error, "Failing calling PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi - mountname:" + mountName);
-          throw (error.message);
+          throw (error);
         }
 
         // Get the current timestamp in milliseconds
