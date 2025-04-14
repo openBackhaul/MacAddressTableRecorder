@@ -1527,7 +1527,7 @@ function transformArray(reqId, inputArray) {
   return returnValue;
 }
 
-export const readCurrentMacTableFromDeviceCallbacks = async function (body, user, originator, xCorrelator, traceIndicator, customerJourney, reqId) {
+export async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, reqId) {
   const FDomainArray = [];
   let step2DataArray = [];
   let step3DataArray = [];
