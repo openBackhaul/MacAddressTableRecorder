@@ -1735,7 +1735,7 @@ async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xC
 exports.readCurrentMacTableFromDeviceInternal = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
     // Start reading data
-    let res = readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, reqId);
+    let res = readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, null);
 
     resolve(res);
   });
