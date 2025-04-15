@@ -1738,7 +1738,7 @@ exports.readCurrentMacTableFromDeviceInternal = function (body, user, originator
     let res = readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, reqId);
 
     resolve(res);
-  }
+  });
 }
 
 exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
