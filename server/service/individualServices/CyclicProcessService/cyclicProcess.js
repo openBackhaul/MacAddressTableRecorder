@@ -50,10 +50,10 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
       'node-id': device[NODE_ID]
     };
   } catch (error) {
-    if (error.code == 204) {
+    if (error.cause == 204) {
       return {
         'ret': {
-          'code': 204,
+          'code': 200,
           'message': error.message
         },
         'node-id': device[NODE_ID]
@@ -315,7 +315,7 @@ async function requestMessage(index) {
     let customerJourney = requestHeader.customerJourney;
 
     sendRequest(slidingWindow[index], user, originator, xCorrelator, traceIndicator, customerJourney).then(retObj => {
-      if (retObj.ret.code != 200 || retObj.ret.code != 204) { // Response error
+      if (retObj.ret.code != 200) { // Response error
         // Response error management
         let elementIndex = checkDeviceExistsInSlidingWindow(retObj[NODE_ID]);
         if (elementIndex == DEVICE_NOT_PRESENT) {

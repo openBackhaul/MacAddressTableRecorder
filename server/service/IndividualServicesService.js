@@ -1716,17 +1716,18 @@ async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xC
             throw ("Failed send data to requestor: " + error.message);
           }
         } else {
-          resolve(200);
+          logger.info("Read current MacTable from mount-name executed." + mountName);
         }
+        resolve("OK");
       }
       else {
         throw new Error("Missing mac-interface-1-0:LAYER_PROTOCOL_NAME_TYPE_MAC_LAYER");
       }
     }
     catch (error) {
-      reject(error)
+      resolve(error);
     }
-    resolve(200);
+
   });
 
 
@@ -1735,9 +1736,13 @@ async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xC
 exports.readCurrentMacTableFromDeviceInternal = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
     // Start reading data
-    let res = readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, null);
-
-    resolve(res);
+    let res = await readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, null);
+    if (res == "OK") {
+      resolve();
+    } else{
+      reject(res);
+    }
+    
   });
 }
 
