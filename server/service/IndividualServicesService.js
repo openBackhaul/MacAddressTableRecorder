@@ -1124,7 +1124,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
       return (response.data);
     }
     else {
-      let err = new Error("Empty data from " + fullUrl, 204);
+      let err = new Error("Empty data from " + fullUrl, { cause: 204 } );
       throw err;
     }
   } catch (error) {
@@ -1197,7 +1197,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
 
     if (response.data == '') {
       logger.warn("Get empty data from ODL - mountname: " + mountName);
-      let err = new Error("Empty data from ODL: " + mountName, 204);
+      let err = new Error("Empty data from ODL: " + mountName, { cause: 204 } );
       throw err;
     }
     else {
@@ -1295,7 +1295,15 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
 
       return (additionaResponse);
     } catch (error) {
-      throw error;
+      if (error.response.status == 400) {
+        additionaResponse = {
+          'egress-ltp': body,
+          'original-ltp-name': "undefined"
+        };
+        return additionaResponse;
+      } else {
+        throw error;
+      }
     }
   } catch (error) {
     throw error;
@@ -1378,7 +1386,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
       }
       else {
         logger.error("Writing operation into Elastic Search Failed (" + mountName + ")");
-        let err = new Error("Writing operation into Elastic Search Failed (" + mountName + ")", 204);
+        let err = new Error("Writing operation into Elastic Search Failed (" + mountName + ")", { cause: 204 } );
         throw err;
       }
 
@@ -1527,7 +1535,7 @@ function transformArray(reqId, inputArray) {
   return returnValue;
 }
 
-export async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, reqId) {
+async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, reqId) {
   const FDomainArray = [];
   let step2DataArray = [];
   let step3DataArray = [];
@@ -1647,13 +1655,13 @@ export async function readCurrentMacTableFromDeviceCallbacks(body, user, origina
           }
           else {
             logger.error("Received data are not correct (mac-fd-1-0:output/mac-table-entry-list)");
-            let err = new Error("Empty data from ODL: " + mountName, 204);
+            let err = new Error("Empty data from ODL: " + mountName, {reason: 204});
             throw err;
           }
         }
         catch (error) {
           logger.error(error, "Failing calling PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice");
-          throw (error);
+          throw error;
         }
 
         //STEP3
@@ -1707,6 +1715,8 @@ export async function readCurrentMacTableFromDeviceCallbacks(body, user, origina
           } catch (error) {
             throw ("Failed send data to requestor: " + error.message);
           }
+        } else {
+          resolve(200);
         }
       }
       else {
@@ -1714,9 +1724,21 @@ export async function readCurrentMacTableFromDeviceCallbacks(body, user, origina
       }
     }
     catch (error) {
-      logger.error(error);
+      reject(error)
     }
+    resolve(200);
   });
+
+
+}
+
+exports.readCurrentMacTableFromDeviceInternal = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+  return new Promise(async function (resolve, reject) {
+    // Start reading data
+    let res = readCurrentMacTableFromDeviceCallbacks(body, user, originator, xCorrelator, traceIndicator, customerJourney, reqId);
+
+    resolve(res);
+  }
 }
 
 exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
