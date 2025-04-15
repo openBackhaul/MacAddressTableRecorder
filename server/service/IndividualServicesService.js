@@ -1579,7 +1579,7 @@ async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xC
         }
         else {
           logger.warn("Data from MWDI is empty");
-          let err = new Error("Empty data from " + fullUrl, 204);
+          let err = new Error("Empty data from " + fullUrl, { cause: 204});
           throw err;
         }
 
@@ -1655,12 +1655,12 @@ async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xC
           }
           else {
             logger.error("Received data are not correct (mac-fd-1-0:output/mac-table-entry-list)");
-            let err = new Error("Empty data from ODL: " + mountName, {reason: 204});
+            let err = new Error("Empty data from ODL: " + mountName, { cause: 204});
             throw err;
           }
         }
         catch (error) {
-          logger.error(error, "Failing calling PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice");
+          logger.error(error, "Failing calling PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice - Mountname: " + mountName);
           throw error;
         }
 

@@ -40,7 +40,7 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
 
   try {
     // Sent request to "read current MacTable from Device"
-    await individualServices.readCurrentMacTableFromDeviceInternal(body, user, originator, xCorrelator, traceIndicator, customerJourney, null);
+    await individualServices.readCurrentMacTableFromDeviceInternal(body, user, originator, xCorrelator, traceIndicator, customerJourney);
 
     return {
       'ret': {
