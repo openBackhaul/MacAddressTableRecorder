@@ -20,7 +20,6 @@ let deviceListSyncPeriod = 3;
 let slidingWindow = [];
 let deviceList = [];
 let lastDeviceListIndex = -1;
-let print_log_level = 2;
 let stop = false;
 var handle = 0;
 let loopStartTime = 0;
@@ -50,7 +49,8 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
       'node-id': device[NODE_ID]
     };
   } catch (error) {
-    if (error.cause == 204) {
+    logger.error("CycleProcess: message - " + error.message);
+    if (error.message.startsWith("Empty data from") || error.message.startsWith("Writing operation into Elastic")) {
       return {
         'ret': {
           'code': 200,
@@ -59,6 +59,7 @@ async function sendRequest(device, user, originator, xCorrelator, traceIndicator
         'node-id': device[NODE_ID]
       };
     } else {
+
       return {
         'ret': {
           'code': 500,
@@ -142,13 +143,13 @@ function addNextDeviceListElementInWindow() {
       counter += 1
       let newDeviceListIndex = getNextDeviceListIndex();
       if (newDeviceListIndex == -1) {
-        printLog('+++++ addNextDeviceListElementInWindow: newDeviceListIndex = -1 +++++', print_log_level >= 3)
+        logger.debug('+++++ addNextDeviceListElementInWindow: newDeviceListIndex = -1 +++++')
         return false
       }
 
       if (stop != true) {
         if (checkDeviceExistsInSlidingWindow(deviceList[newDeviceListIndex]) != DEVICE_NOT_PRESENT) {
-          printLog('+++++ Element ' + deviceList[newDeviceListIndex] + ' (index: ' + newDeviceListIndex + ') already exists in Sliding Window +++++', print_log_level >= 3)
+          logger.debug('+++++ Element ' + deviceList[newDeviceListIndex] + ' (index: ' + newDeviceListIndex + ') already exists in Sliding Window +++++')
         } else {
           slidingWindow.push(prepareObjectForWindow(newDeviceListIndex));
           elementAdded = true;
@@ -206,22 +207,6 @@ function printListDevice(listName, list) {
   return listGraph;
 }
 
-/**
- * Prints a console log message only the print_log flag is enabled
- */
-function printLog(text, print_log) {
-  if (print_log) {
-    logger.info(text);
-  }
-}
-
-function printErr(text, print_log) {
-  if (print_log) {
-    logger.error(text);
-  }
-}
-
-
 function convertTime(s) {
   const ms = s % 1000;
   s = (s - ms) / 1000;
@@ -247,22 +232,22 @@ function startTtlChecking() {
         slidingWindow[index].ttl -= 1;
         if (slidingWindow[index].ttl == 0) {
           if (slidingWindow[index].retries == 0) {
-            printLog("Element " + slidingWindow[index][NODE_ID] + " Timeout/Retries. -> Dropped from Sliding Window", print_log_level >= 2);
+            logger.error("Element " + slidingWindow[index][NODE_ID] + " Timeout/Retries. -> Dropped from Sliding Window");
             slidingWindow.splice(index, 1);
             if (addNextDeviceListElementInWindow()) {
-              printLog('Added element ' + slidingWindow[slidingWindow.length - 1][NODE_ID] + ' in window and sent request...', print_log_level >= 2);
+              logger.info('Added element ' + slidingWindow[slidingWindow.length - 1][NODE_ID] + ' in window and sent request...');
               //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
               requestMessage(slidingWindow.length - 1);
             }
             else {
               //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
-              printLog('Sliding Window IS EMPTY', print_log_level >= 1);
+              logger.warn('Sliding Window IS EMPTY');
             }
 
           } else {
             slidingWindow[index].ttl = responseTimeout;
             slidingWindow[index].retries -= 1;
-            printLog("Element " + slidingWindow[index][NODE_ID] + " Timeout. -> Resend the request...", print_log_level >= 2);
+            logger.warn("Element " + slidingWindow[index][NODE_ID] + " Timeout. -> Resend the request...");
             requestMessage(index);
           }
         }
@@ -277,7 +262,7 @@ function startTtlChecking() {
 
         let timeFormatted = convertTime(timeSpent);
 
-        printLog('MATR CYCLE DURATION:' + timeFormatted, print_log_level >= 1);
+        logger.info('MATR CYCLE DURATION:' + timeFormatted);
 
         MATRCycle(false, 2);
       }
@@ -319,40 +304,40 @@ async function requestMessage(index) {
         // Response error management
         let elementIndex = checkDeviceExistsInSlidingWindow(retObj[NODE_ID]);
         if (elementIndex == DEVICE_NOT_PRESENT) {
-          printLog('Response from element ' + retObj[NODE_ID] + ' not more present in Sliding Window. Ignore that.', print_log_level >= 2);
+          logger.warn('Response NOK from element ' + retObj[NODE_ID] + ' not more present in Sliding Window. Ignore that.');
         }
         else {
           if (slidingWindow[elementIndex].retries == 0) {
-            printErr(retObj.ret.code + ' - ' + retObj.ret.message + ' from element (II time) ' + retObj[NODE_ID] + ' --> Dropped from Sliding Window', print_log_level >= 2);
+            logger.error(retObj.ret.code + ' - ' + retObj.ret.message + ' from element (II time) ' + retObj[NODE_ID] + ' --> Dropped from Sliding Window');
             slidingWindow.splice(elementIndex, 1);
             if (addNextDeviceListElementInWindow()) {
-              printLog('Add element ' + slidingWindow[slidingWindow.length - 1][NODE_ID] + ' in Sliding Window and send request...', print_log_level >= 2);
+              logger.info('Add element ' + slidingWindow[slidingWindow.length - 1][NODE_ID] + ' in Sliding Window and send request...');
               //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
               //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
               requestMessage(slidingWindow.length - 1);
             }
             else {
               //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
-              printLog('Sliding Window IS EMPTY', print_log_level >= 1);
+              logger.warn('Sliding Window IS EMPTY');
             }
 
           } else {
-            printErr(retObj.ret.code + ' - ' + retObj.ret.message + ' from element (I time) ' + retObj[NODE_ID] + ' Resend the request....', print_log_level >= 2);
+            logger.error(retObj.ret.code + ' - ' + retObj.ret.message + ' from element (I time) ' + retObj[NODE_ID] + ' Resend the request....');
             slidingWindow[elementIndex].ttl = responseTimeout;
             slidingWindow[elementIndex].retries -= 1;
             requestMessage(elementIndex);
           }
         }
       } else { // Response is like 2XX - OK
-        printLog('****************************************************************************************************', print_log_level >= 2);
+        logger.info('****************************************************************************************************');
         let elementIndex = checkDeviceExistsInSlidingWindow(retObj[NODE_ID]);
         if (elementIndex == DEVICE_NOT_PRESENT) {
-          printLog('Response from element ' + retObj[NODE_ID] + ' not more present in Sliding Window. Ignore that.', print_log_level >= 2);
+          logger.warn('Response OK from element ' + retObj[NODE_ID] + ' not more present in Sliding Window. Ignore that.');
         } else {
-          printLog('Response from element ' + retObj[NODE_ID] + ' --> Dropped from Sliding Window. Timestamp: ' + Date.now(), print_log_level >= 2);
+          logger.info('Response OK from element ' + retObj[NODE_ID] + ' --> Dropped from Sliding Window. Timestamp: ' + Date.now(),);
           slidingWindow.splice(elementIndex, 1);
           if (addNextDeviceListElementInWindow()) {
-            printLog('Add element ' + slidingWindow[slidingWindow.length - 1][NODE_ID] + ' in Sliding Window and send request...', print_log_level >= 2);
+            logger.info('Add element ' + slidingWindow[slidingWindow.length - 1][NODE_ID] + ' in Sliding Window and send request...');
             //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
             //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
             requestMessage(slidingWindow.length - 1);
@@ -363,7 +348,7 @@ async function requestMessage(index) {
           }
 
         }
-        printLog('****************************************************************************************************', print_log_level >= 2);
+        logger.info('****************************************************************************************************');
       }
     })
   } catch (error) {
@@ -416,16 +401,16 @@ async function MATRCycle(firstTime, logging_level) {
       remainder = nextTimeStart - now.getTime();
 
       const date = new Date(nextTimeStart);
-      printLog('NEXT MATR CYCLE START AT TIME:' + date, print_log_level >= 1);
+      logger.info('NEXT MATR CYCLE START AT TIME:' + date);
 
     }
     else {
       remainder = 0;
-      printLog('NEXT MATR CYCLE START IMMEDIATELY', print_log_level >= 1);
+      logger.info('NEXT MATR CYCLE START IMMEDIATELY');
     }
   }
   catch (error) {
-    printLog('NO Device List Sync Period', print_log_level >= 1);
+    logger.warn('NO Device List Sync Period');
   }
 
 
@@ -446,9 +431,9 @@ async function MATRCycle(firstTime, logging_level) {
 
     const formattedDate = `${day}/${month}/${year} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 
-    printLog('*****************************************************************', print_log_level >= 1);
-    printLog(' MATR CYCLE START AT:    ' + formattedDate, print_log_level >= 1);
-    printLog('*****************************************************************', print_log_level >= 1);
+    logger.info('*****************************************************************');
+    logger.info(' MATR CYCLE START AT:    ' + formattedDate);
+    logger.info('*****************************************************************');
 
     print_log_level = logging_level;
 
@@ -474,7 +459,7 @@ async function MATRCycle(firstTime, logging_level) {
       for (let i = 0; i < slidingWindowSize; i++) {
         addNextDeviceListElementInWindow();
         requestMessage(i);
-        printLog('Element ' + slidingWindow[i][NODE_ID] + ' send request...', print_log_level >= 2);
+        logger.info('Element ' + slidingWindow[i][NODE_ID] + ' send request...');
       }
 
       //printLog(printList('Sliding Window - MAIN', slidingWindow), print_log_level >= 1);
