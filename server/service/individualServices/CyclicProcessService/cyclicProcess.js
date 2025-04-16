@@ -236,11 +236,10 @@ function startTtlChecking() {
             slidingWindow.splice(index, 1);
             if (addNextDeviceListElementInWindow()) {
               logger.info('Added element ' + slidingWindow[slidingWindow.length - 1][NODE_ID] + ' in window and sent request...');
-              //printLog(printList('Sliding Window', slidingWindow), print_log_level >= 1);
               requestMessage(slidingWindow.length - 1);
             }
             else {
-              //printLog(printListDevice('Device List', deviceList), print_log_level >= 2);
+              logger.debug(printListDevice('Device List', deviceList));
               logger.warn('Sliding Window IS EMPTY');
             }
 
@@ -264,7 +263,7 @@ function startTtlChecking() {
 
         logger.info('MATR CYCLE DURATION:' + timeFormatted);
 
-        MATRCycle(false, 2);
+        MATRCycle(false);
       }
     }
 
@@ -374,10 +373,10 @@ async function extractProfileConfiguration(uuid) {
  *             deviceList is present the procedure will starts immediatly
  **/
 module.exports.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr = async function (logging_level) {
-  MATRCycle(true, 2);
+  MATRCycle(true);
 }
 
-async function MATRCycle(firstTime, logging_level) {
+async function MATRCycle(firstTime) {
 
   let deviceListMount = null;
   let remainder = 0;

@@ -40,7 +40,7 @@ module.exports.embedYourself = async function embedYourself(req, res, next, body
   let responseBodyToDocument = {};
   await BasicServices.embedYourself(body, user, xCorrelator, traceIndicator, customerJourney, req.url)
     .then(async function (responseBody) {
-      cp.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr(2);
+      cp.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr();
       responseBodyToDocument = responseBody;
       let responseHeader = await RestResponseHeader.createResponseHeader(xCorrelator, startTime, req.url);
       RestResponseBuilder.buildResponse(res, responseCode, responseBody, responseHeader);
