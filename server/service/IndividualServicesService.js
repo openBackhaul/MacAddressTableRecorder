@@ -1585,7 +1585,7 @@ async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xC
 
       } catch (error) {
         logger.error(error, "Failing calling PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi - mountname: " + mountName);
-        throw error
+        throw error;
       }
 
       //STEP2
