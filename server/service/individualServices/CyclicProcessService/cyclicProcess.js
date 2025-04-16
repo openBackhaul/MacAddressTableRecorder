@@ -434,8 +434,6 @@ async function MATRCycle(firstTime) {
     logger.info(' MATR CYCLE START AT:    ' + formattedDate);
     logger.info('*****************************************************************');
 
-    print_log_level = logging_level;
-
     // Use a dynamic header
     let requestHeader = new RequestHeader("MacAddressTableRecorder", "MacAddressTableRecorder", undefined, "1");
 
