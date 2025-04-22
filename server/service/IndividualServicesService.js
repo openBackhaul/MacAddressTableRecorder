@@ -387,7 +387,7 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
         let MIDWApplicationInfo = await EmbeddingCausesRequestForListOfApplicationsAtRo(user, originator, xCorrelator, traceIndicator, customerJourney);
       }
       catch (error) {
-        //console.log('MIDW application is not registered. Skypping');
+        logger.warn('MIDW application is not registered. Skypping');
       }
 
       try {
@@ -1311,7 +1311,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
 }
 
 
-//STEP4
+//STEP 4
 async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
     let mountName = undefined;
@@ -1342,9 +1342,10 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     if (body && body[MAC_ADDR] && Array.isArray(body[MAC_ADDR]) && body[MAC_ADDR].length > 0 && body[MAC_ADDR][0][MOUNT_NAME]) {
       mountName = body[MAC_ADDR][0][MOUNT_NAME];
     } else {
-      logger.error('********************************* Body *******************************************');
-      logger.error(body);
-      logger.error('**********************************************************************************');
+      logger.error("Error writing body into ELK, body structure is not correct");
+      logger.debug('********************************* Body *******************************************');
+      logger.debug(body);
+      logger.debug('**********************************************************************************');
       throw new Error("Writing operation into Elastic Search Failed : body structure is not correct");
     }
 
