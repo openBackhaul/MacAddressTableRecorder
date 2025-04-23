@@ -56,6 +56,6 @@ prepareElasticsearch().catch(err => {
         });
         appCommons.performApplicationRegistration();
 
-        //cp.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr(2);
+        //cp.embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr();
     }
 );
