@@ -540,11 +540,11 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
           .map(item => ({ port: item.port, ipAddress: item.address['ip-address']['ipv-4-address'] }));
 
         //check if MIDW is present
-        if (result != null)
+        if (result != null) {
           resolve(result);
-        else
+        } else {
           resolve(null);
-
+        }
       } catch (error) {
         reject(error);
       }
@@ -1375,24 +1375,35 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
       additionalHeaders //custom header
     };
 
-
+    let response;
     try {
-      let response = await axios.post(finalUrl, data, {
+      response = await axios.post(finalUrl, data, {
         headers: headersAll
       });
-      if (/^20[0-9]$/.test(response.status.toString()))   //bug @216
-      {
-        logger.info("Writing (" + mountName + ") data into Elastic Search ");
-        return (response.data);
-      }
-      else {
-        logger.error("Writing operation into Elastic Search Failed (" + mountName + ")");
-        let err = new Error("Writing operation into Elastic Search Failed (" + mountName + ")", { cause: 204 } );
-        throw err;
-      }
-
     } catch (error) {
-      throw error;
+      logger.debug(error);
+      // Remove data from logging. To big to print
+      let err = {
+        "message": error.message,
+        "stack": error.stack,
+        "config": {
+          "url": error.config.url,
+          "method": error.config.method
+        }
+      };
+     
+      throw err;
+    }
+
+    if (/^20[0-9]$/.test(response.status.toString()))   //bug @216
+    {
+      logger.info("Writing (" + mountName + ") data into Elastic Search ");
+      return (response.data);
+    }
+    else {
+      logger.error("Writing operation into Elastic Search Failed (" + mountName + ")");
+      let err = new Error("Writing operation into Elastic Search Failed (" + mountName + ")", { cause: 204 } );
+      throw err;
     }
 
   } catch (error) {
