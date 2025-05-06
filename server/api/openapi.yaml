@@ -22643,34 +22643,46 @@ components:
             'Domain name for sending the response to the requestor'
       additionalProperties: false
     v1_readcurrentmactablefromdevice_body:
-      required:
-      - mount-name
-      - requestor-address
-      - requestor-port
-      - requestor-protocol
-      - requestor-receive-operation
-      type: object
-      properties:
-        mount-name:
-          type: string
-          description: |
-            'Mount-name of the device, from which the current MAC table content shall be retrieved'
-        requestor-protocol:
-          type: string
-          description: |
-            'HTTP or HTTPs protocol for sending the response to the requestor'
-          enum:
-          - HTTP
-          - HTTPS
-        requestor-address:
-          $ref: "#/components/schemas/v1readcurrentmactablefromdevice_requestoraddress"
-        requestor-port:
-          type: integer
-          description: |
-            'TCP port for sending the response to the requestor'
-        requestor-receive-operation:
-          type: string
-          description: Operation at the requestor for receiving the response
+      anyOf:
+      - required:
+        - mount-name
+        type: object
+        properties:
+          mount-name:
+            type: string
+            description: |
+              'Mount-name of the device, for which the elasticsearch content shall be updated'
+        description: bare update of elasticsearch
+        example:
+          mount-name: "305251234"
+      - required:
+        - mount-name
+        - requestor-address
+        - requestor-port
+        - requestor-protocol
+        - requestor-receive-operation
+        type: object
+        properties:
+          mount-name:
+            type: string
+            description: |
+              'Mount-name of the device, from which the current MAC table content shall be retrieved'
+          requestor-protocol:
+            type: string
+            description: |
+              'HTTP or HTTPs protocol for sending the response to the requestor'
+            enum:
+            - HTTP
+            - HTTPS
+          requestor-address:
+            $ref: "#/components/schemas/v1readcurrentmactablefromdevice_requestoraddress"
+          requestor-port:
+            type: integer
+            description: |
+              'TCP port for sending the response to the requestor'
+          requestor-receive-operation:
+            type: string
+            description: Operation at the requestor for receiving the response
       example:
         mount-name: "305251234"
         requestor-protocol: HTTP
@@ -22679,6 +22691,7 @@ components:
             ipv-4-address: 1.1.4.1
         requestor-port: 4001
         requestor-receive-operation: /v1/receive-requested-mac-address-table
+        description: update of elasticsearch and response to the requestor
     inline_response_200_2:
       required:
       - request-id
