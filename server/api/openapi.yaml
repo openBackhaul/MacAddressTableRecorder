@@ -22691,7 +22691,7 @@ components:
             ipv-4-address: 1.1.4.1
         requestor-port: 4001
         requestor-receive-operation: /v1/receive-requested-mac-address-table
-        description: update of elasticsearch and response to the requestor
+      description: update of elasticsearch and response to the requestor
     inline_response_200_2:
       required:
       - request-id
