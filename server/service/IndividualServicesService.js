@@ -1758,7 +1758,148 @@ exports.readCurrentMacTableFromDeviceInternal = function (body, user, originator
   });
 }
 
+
+const ipRegEx = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+
 exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+
+  // Need to check the body content
+  let checkLen = Object.keys(body).length;
+  console.log(checkLen);
+  if (Object.keys(body).length == 1) {
+    logger.debug("Validation: only 1 body parameter. OK");
+  } else if (Object.keys(body).length > 1) {
+    let reqAddr = body['requestor-address'];
+    let reqPort = body['requestor-port'];
+    let reqProt = body['requestor-protocol'];
+    let reqOp = body['requestor-receive-operation'];
+
+    // Testing requestor Address
+    if (reqAddr) {
+      reqAddr = reqAddr['ip-address'];
+      if (!reqAddr) {
+        return new Promise(async function (resolve, reject) {
+          let error = new createHttpError(400);
+          error.message = "Request validation: Request body must contain 'ip-address'";
+          reject(error);
+        });
+      }
+      reqAddr = reqAddr['ipv-4-address'];
+      if (!reqAddr) {
+        return new Promise(async function (resolve, reject) {
+          let error = new createHttpError(400);
+          error.message = "Request validation: Request body must contain 'ip-address''ipv-4-address";
+          reject(error);
+        });
+      }
+
+      if (!typeof reqAddr === 'string') {
+        logger.error("Requestor Address parameter must be a String");
+        return new Promise(async function (resolve, reject) {
+          let error = new createHttpError(400);
+          error.message = "Request validation: Request body must contain 'ip-address'";
+          reject(error);
+        });
+      }
+
+      if (ipRegEx.test(reqAddr)) {
+        logger.debug(reqAddr + " is a valid ip address");
+      } else {
+        logger.error("This is not a valid IP")
+        return new Promise(async function (resolve, reject) {
+          let error = new createHttpError(400);
+          error.message = "Request validation: Request body must contain a valid ip-address";
+          reject(error);
+        });
+      }
+
+    } else {
+      return new Promise(async function (resolve, reject) {
+        let error = new createHttpError(400);
+        error.message = "Request validation: Request body must contain 'requestor-address'";
+        reject(error);
+      });
+    }
+
+    // Testing requestor-port
+    if (reqPort) {
+      if (!Number.isInteger(reqPort)) {
+        logger.error("Port parameter must be an integer value");
+        return new Promise(async function (resolve, reject) {
+          let error = new createHttpError(400);
+          error.message = "Request Validation: Requestor port must be a number";
+          reject(error);
+        });
+      } else {
+        if (reqPort < 1) {
+          return new Promise(async function (resolve, reject) {
+            let error = new createHttpError(400);
+            error.message = "Request Validation: Requestor port must be a number > 0";
+            reject(error);
+          });
+        }
+      }
+    } else {
+      logger.error("Requestor port doesn't exists");
+      return new Promise(async function (resolve, reject) {
+        let error = new createHttpError(400);
+        error.message = "Request Validation: Request body must contain 'requestor-port'";
+        reject(error);
+      });
+    }
+
+    // Testing requestor-protocol
+    if (reqProt) {
+      if (!typeof reqProt === 'string') {
+        logger.error("Requestor Protocol parameter must be a String");
+        return new Promise(async function (resolve, reject) {
+          let error = new createHttpError(400);
+          error.message = "Request Validation: Requestor protocol must be a string";
+          reject(error);
+        });
+      }
+
+      if (reqProt.equalsIgnoreCase("HTTP") || reqProt.equalsIgnoreCase("HTTPS")) {
+        logger.debug("Protocol " + reqProt + " is ok");
+      } else {
+        logger.error("Check protocol failed, must be HTTPS or HTTP");
+        return new Promise(async function (resolve, reject) {
+          let error = new createHttpError(400);
+          error.message = "Request Validation: Requestor protocol must be 'HTTP' or 'HTTPS', " + reqProt + " is not allowed";
+          reject(error);
+        });
+      }
+    } else {
+      logger.error("Requestor protocol doesn't exists");
+      return new Promise(async function (resolve, reject) {
+        let error = new createHttpError(400);
+        error.message = "Request Validation: Request body must contain 'requestor-protocol'";
+        reject(error);
+      });
+    }
+
+    // Testing requestor-receive-operation
+    if (reqOp) {
+      if (!typeof reqProt === 'string') {
+        logger.error("Requestor receive operation parameter must be a String");
+        return new Promise(async function (resolve, reject) {
+          let error = new createHttpError(400);
+          error.message = "Request Validation: Requestor receive operation must be a string";
+          reject(error);
+        });
+      }
+    } else {
+      logger.error("Requestor Operation doesn't exists");
+      return new Promise(async function (resolve, reject) {
+        let error = new createHttpError(400);
+        error.message = "Request Validation: Request body must contain 'requestor-receive-operation'";
+        reject(error);
+      });
+    }
+
+    logger.info("Validation of body request is ok!");
+  }
+
   return new Promise(async function (resolve, reject) {
     const mountName = body[MOUNT_NAME];
     let reqId = generateRequestId(mountName);
