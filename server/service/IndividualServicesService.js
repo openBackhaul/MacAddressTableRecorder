@@ -1764,8 +1764,6 @@ const ipRegEx = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[
 exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorrelator, traceIndicator, customerJourney) {
 
   // Need to check the body content
-  let checkLen = Object.keys(body).length;
-  console.log(checkLen);
   if (Object.keys(body).length == 1) {
     logger.debug("Validation: only 1 body parameter. OK");
   } else if (Object.keys(body).length > 1) {
@@ -1802,7 +1800,7 @@ exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorre
         });
       }
 
-      if (ipRegEx.test(reqAddr)) {
+      if (reqAddr.toLowerCase() == "localhost" || ipRegEx.test(reqAddr)) {
         logger.debug(reqAddr + " is a valid ip address");
       } else {
         logger.error("This is not a valid IP")
@@ -1859,7 +1857,7 @@ exports.readCurrentMacTableFromDevice = function (body, user, originator, xCorre
         });
       }
 
-      if (reqProt.equalsIgnoreCase("HTTP") || reqProt.equalsIgnoreCase("HTTPS")) {
+      if (reqProt.toUpperCase() == "HTTP" || reqProt.toUpperCase() =="HTTPS") {
         logger.debug("Protocol " + reqProt + " is ok");
       } else {
         logger.error("Check protocol failed, must be HTTPS or HTTP");
