@@ -1244,14 +1244,11 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
     });
 
     if (response.data == '') {
-      logger.warn("Get empty data from ODL - mountname: " + mountName);
-      let err = new Error("Empty data from ODL: " + mountName, { cause: 204 } );
-      throw err;
-    }
-    else {
+      logger.warn("Get EMPTY data from ODL - mountname: " + mountName);
+    } else {
       logger.info("Get data from ODL - mountname: " + mountName);
-      return response.data;
     }
+    return response.data;
   } catch (error) {
     throw error;
   }
