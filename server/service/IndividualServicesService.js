@@ -1453,36 +1453,41 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     };
 
     let response;
-    try {
-      if (deleteDoc) {
+    if (deleteDoc) {
+      try {
         response = await axios.delete(finalUrl);
-        logger.info(`Deleted ${mountNameDelReq}  data`);
-      } else {
+        logger.info(`ELK: Deleted ${mountNameDelReq} data`);
+      } catch (error) {
+        logger.warn(`Try to delete entry for mount-name: ${mountNameDelReq} but doesn't exist - no actions`);
+        return undefined;
+      }
+    } else { // Add/Update entry in ELK
+      try {
         response = await axios.post(finalUrl, data, {
           headers: headersAll
         });
+      } catch (error) {
+        logger.debug(error);
+        // Remove data from logging. To big to print
+        let err = {
+          "message": error.message,
+          "stack": error.stack,
+          "config": {
+            "url": error.config.url,
+            "method": error.config.method
+          }
+        };
+      
+        throw err;
       }
-    } catch (error) {
-      logger.debug(error);
-      // Remove data from logging. To big to print
-      let err = {
-        "message": error.message,
-        "stack": error.stack,
-        "config": {
-          "url": error.config.url,
-          "method": error.config.method
-        }
-      };
-     
-      throw err;
     }
+    
 
     if (/^20[0-9]$/.test(response.status.toString()))   //bug @216
     {
       logger.info("Writing (" + mountName + ") data into Elastic Search ");
       return (response.data);
-    }
-    else {
+    } else {
       logger.error("Writing operation into Elastic Search Failed (" + mountName + ")");
       let err = new Error("Writing operation into Elastic Search Failed (" + mountName + ")", { cause: 204 } );
       throw err;
