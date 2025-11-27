@@ -39,9 +39,9 @@ var app = expressAppConfig.getApp();
 appCommons.setupExpressApp(app);
 
 global.databasePath = './database/load.json'
-if (process.env.DEBUG && process.env.DEBUG.toLowerCase() === "true") {
+if (process.env.LOCAL && process.env.LOCAL.toLowerCase() === "true") {
     logger.warn("Working in debug mode");
-    global.databasePath = './server/database/load.json'
+    global.databasePath = './server/database/load.json';
     logger.warn("Load data from: " + global.databasePath);
 }
 
