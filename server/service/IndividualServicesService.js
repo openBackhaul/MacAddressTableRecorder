@@ -1244,14 +1244,11 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
     });
 
     if (response.data == '') {
-      logger.warn("Get empty data from ODL - mountname: " + mountName);
-      let err = new Error("Empty data from ODL: " + mountName, { cause: 204 } );
-      throw err;
-    }
-    else {
+      logger.warn("Get EMPTY data from ODL - mountname: " + mountName);
+    } else {
       logger.info("Get data from ODL - mountname: " + mountName);
-      return response.data;
     }
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -1377,7 +1374,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
 //STEP 4
 let applicationNameAndHttpClientELK = "";
 let operationNameAndOperationKeyELK = "";
-async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(body, user, originator, xCorrelator, traceIndicator, customerJourney) {
+async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(body, user, originator, xCorrelator, traceIndicator, customerJourney, mountNameDelReq) {
   try {
     let mountName = undefined;
 
@@ -1416,9 +1413,15 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     let remoteTcpAddress = await tcpClientInterface.getRemoteAddressAsync(ltpTcpUuid);
     let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
 
-
+    let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + "/" + operationKey + "/_doc/";
+    let deleteDoc = false;
     if (body && body[MAC_ADDR] && Array.isArray(body[MAC_ADDR]) && body[MAC_ADDR].length > 0 && body[MAC_ADDR][0][MOUNT_NAME]) {
       mountName = body[MAC_ADDR][0][MOUNT_NAME];
+      finalUrl += mountName;
+    } else if (body && (mountNameDelReq != '' || mountNameDelReq != undefined)) {
+      logger.info(`Try to delete data for mount-name: ${mountNameDelReq}`);
+      finalUrl += mountNameDelReq;
+      deleteDoc = true;
     } else {
       logger.error("Error writing body into ELK, body structure is not correct");
       logger.debug('********************************* Body *******************************************');
@@ -1427,9 +1430,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
       throw new Error("Writing operation into Elastic Search Failed : body structure is not correct");
     }
 
-    let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + "/" + operationKey + "/_doc/" + mountName;
-
-    var data = body;
+    let data = body;
 
     let originator = await httpServerInterface.getApplicationNameAsync();
     let httpRequestHeader = new RequestHeader(
@@ -1442,8 +1443,6 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     );
 
     httpRequestHeader = onfAttributeFormatter.modifyJsonObjectKeysToKebabCase(httpRequestHeader);
-
-
     let additionalHeaders = {
       'Authorization': operationName['api-key'],
     };
@@ -1454,31 +1453,41 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     };
 
     let response;
-    try {
-      response = await axios.post(finalUrl, data, {
-        headers: headersAll
-      });
-    } catch (error) {
-      logger.debug(error);
-      // Remove data from logging. To big to print
-      let err = {
-        "message": error.message,
-        "stack": error.stack,
-        "config": {
-          "url": error.config.url,
-          "method": error.config.method
-        }
-      };
-     
-      throw err;
+    if (deleteDoc) {
+      try {
+        response = await axios.delete(finalUrl);
+        logger.info(`ELK: Deleted ${mountNameDelReq} data`);
+      } catch (error) {
+        logger.warn(`Try to delete entry for mount-name: ${mountNameDelReq} but doesn't exist - no actions`);
+        return undefined;
+      }
+    } else { // Add/Update entry in ELK
+      try {
+        response = await axios.post(finalUrl, data, {
+          headers: headersAll
+        });
+      } catch (error) {
+        logger.debug(error);
+        // Remove data from logging. To big to print
+        let err = {
+          "message": error.message,
+          "stack": error.stack,
+          "config": {
+            "url": error.config.url,
+            "method": error.config.method
+          }
+        };
+      
+        throw err;
+      }
     }
+    
 
     if (/^20[0-9]$/.test(response.status.toString()))   //bug @216
     {
       logger.info("Writing (" + mountName + ") data into Elastic Search ");
       return (response.data);
-    }
-    else {
+    } else {
       logger.error("Writing operation into Elastic Search Failed (" + mountName + ")");
       let err = new Error("Writing operation into Elastic Search Failed (" + mountName + ")", { cause: 204 } );
       throw err;
@@ -1744,9 +1753,7 @@ async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xC
             eggressUniqArray = [...eggressUniqSet];
           }
           else {
-            logger.error("Received data are not correct (mac-fd-1-0:output/mac-table-entry-list)");
-            let err = new Error("Empty data from ODL: " + mountName, { cause: 204});
-            throw err;
+            logger.warn("Received data are not correct (mac-fd-1-0:output/mac-table-entry-list) Data is empty");
           }
         }
         catch (error) {
@@ -1787,7 +1794,7 @@ async function readCurrentMacTableFromDeviceCallbacks(body, user, originator, xC
         //STEP4
         try {
           logger.debug("Calling PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch - mountname: " + mountName);
-          const writingResultPromise = await PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(macAddressDataDb, user, originator, xCorrelator, traceIndicator, customerJourney);
+          const writingResultPromise = await PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(macAddressDataDb, user, originator, xCorrelator, traceIndicator, customerJourney, mountName);
         }
         catch (error) {
           logger.error(error, "Failing calling PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch");

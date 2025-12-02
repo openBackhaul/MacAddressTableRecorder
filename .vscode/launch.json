@@ -18,6 +18,7 @@
             "program": "${workspaceFolder}\\server\\index.js",
             "env": {
                 "DEBUG": "true",
+                "LOCAL": "true"
             }
         }
     ]
