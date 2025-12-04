@@ -1414,14 +1414,12 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     let remoteTcpPort = await tcpClientInterface.getRemotePortAsync(ltpTcpUuid);
 
     let finalUrl = "http://" + remoteTcpAddress["ip-address"]["ipv-4-address"] + ":" + remoteTcpPort + "/" + operationKey + "/_doc/";
-    let deleteDoc = false;
     if (body && body[MAC_ADDR] && Array.isArray(body[MAC_ADDR]) && body[MAC_ADDR].length > 0 && body[MAC_ADDR][0][MOUNT_NAME]) {
       mountName = body[MAC_ADDR][0][MOUNT_NAME];
       finalUrl += mountName;
-    } else if (body && (mountNameDelReq != '' || mountNameDelReq != undefined)) {
-      logger.info(`Try to delete data for mount-name: ${mountNameDelReq}`);
+    } else if (body && body[MAC_ADDR] && Array.isArray(body[MAC_ADDR]) && (mountNameDelReq != '' || mountNameDelReq != undefined)) {
+      logger.warn(`Data for mount-name: ${mountNameDelReq} is empty, Updating ELK`);
       finalUrl += mountNameDelReq;
-      deleteDoc = true;
     } else {
       logger.error("Error writing body into ELK, body structure is not correct");
       logger.debug('********************************* Body *******************************************');
@@ -1453,34 +1451,26 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     };
 
     let response;
-    if (deleteDoc) {
-      try {
-        response = await axios.delete(finalUrl);
-        logger.info(`ELK: Deleted ${mountNameDelReq} data`);
-      } catch (error) {
-        logger.warn(`Try to delete entry for mount-name: ${mountNameDelReq} but doesn't exist - no actions`);
-        return undefined;
-      }
-    } else { // Add/Update entry in ELK
-      try {
-        response = await axios.post(finalUrl, data, {
-          headers: headersAll
-        });
-      } catch (error) {
-        logger.debug(error);
-        // Remove data from logging. To big to print
-        let err = {
-          "message": error.message,
-          "stack": error.stack,
-          "config": {
-            "url": error.config.url,
-            "method": error.config.method
-          }
-        };
-      
-        throw err;
-      }
+    // Add/Update entry in ELK
+    try {
+      response = await axios.post(finalUrl, data, {
+        headers: headersAll
+      });
+    } catch (error) {
+      logger.debug(error);
+      // Remove data from logging. To big to print
+      let err = {
+        "message": error.message,
+        "stack": error.stack,
+        "config": {
+          "url": error.config.url,
+          "method": error.config.method
+        }
+      };
+    
+      throw err;
     }
+
     
 
     if (/^20[0-9]$/.test(response.status.toString()))   //bug @216
