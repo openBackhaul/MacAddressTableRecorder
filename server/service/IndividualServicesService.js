@@ -130,6 +130,8 @@ async function resolveApplicationNameAndHttpClientLtpUuidFromForwardingName(forw
   };
 }
 
+module.exports.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName = resolveApplicationNameAndHttpClientLtpUuidFromForwardingName;
+module.exports.resolveOperationNameAndOperationKeyFromForwardingName = resolveOperationNameAndOperationKeyFromForwardingName;
 
 /**
  * Initiates process of embedding a new release
@@ -1078,26 +1080,24 @@ function customEncode(input) {
 
 
 //STEP 1
-let applicationNameAndHttpClientMwdi1 = "";
-let operationNameAndOperationKeyMwdi1 = "";
 async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(mountName, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
     let applicationNameAndHttpClient = "";
-    if (applicationNameAndHttpClientMwdi1 == "") {
+    if (global.applicationNameAndHttpClientMwdi1 == "") {
       applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
-      applicationNameAndHttpClientMwdi1 = applicationNameAndHttpClient;
+      global.applicationNameAndHttpClientMwdi1 = applicationNameAndHttpClient;
     } else {
-      applicationNameAndHttpClient = applicationNameAndHttpClientMwdi1;
+      applicationNameAndHttpClient = global.applicationNameAndHttpClientMwdi1;
     }
 
     let operationNameAndOperationKey = "";
-    if (operationNameAndOperationKeyMwdi1 == "") {
+    if (global.operationNameAndOperationKeyMwdi1 == "") {
       operationNameAndOperationKey =
         await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
-      operationNameAndOperationKeyMwdi1 = operationNameAndOperationKey;
+      global.operationNameAndOperationKeyMwdi1 = operationNameAndOperationKey;
     } else {
-      operationNameAndOperationKey = operationNameAndOperationKeyMwdi1;
+      operationNameAndOperationKey = global.operationNameAndOperationKeyMwdi1;
     }
 
     let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
@@ -1166,28 +1166,26 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
 }
 
 //STEP 2
-let applicationNameAndHttpClientMwdiODL = "";
-let operationNameAndOperationKeyODL = "";
 async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice(mountName, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
     let auth = authKey['api-key'];  //read from external file
 
     let applicationNameAndHttpClient = "";
-    if (applicationNameAndHttpClientMwdiODL == "") {
+    if (global.applicationNameAndHttpClientMwdiODL == "") {
       applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
-      applicationNameAndHttpClientMwdiODL = applicationNameAndHttpClient;
+      global.applicationNameAndHttpClientMwdiODL = applicationNameAndHttpClient;
     } else {
-      applicationNameAndHttpClient = applicationNameAndHttpClientMwdiODL;
+      applicationNameAndHttpClient = global.applicationNameAndHttpClientMwdiODL;
     }
 
     let operationNameAndOperationKey = "";
-    if (operationNameAndOperationKeyODL == "") {
+    if (global.operationNameAndOperationKeyODL == "") {
       operationNameAndOperationKey =
         await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
-      operationNameAndOperationKeyODL = operationNameAndOperationKey;
+      global.operationNameAndOperationKeyODL = operationNameAndOperationKey;
     } else {
-      operationNameAndOperationKey = operationNameAndOperationKeyODL;
+      operationNameAndOperationKey = global.operationNameAndOperationKeyODL;
     }
 
     let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
@@ -1256,8 +1254,6 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
 
 
 //STEP 3
-let applicationNameAndHttpClientMwdi3 = "";
-let operationNameAndOperationKeyMwdi3 = "";
 async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi(mountName, body, user, originator, xCorrelator, traceIndicator, customerJourney) {
   let additionaResponse = {};
   try {
@@ -1268,21 +1264,21 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
 
     // matr-1-0-0-op-c-is-mwdi-1-0-0-001
     let applicationNameAndHttpClient = "";
-    if (applicationNameAndHttpClientMwdi3 == "") {
+    if (global.applicationNameAndHttpClientMwdi3 == "") {
       applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
-      applicationNameAndHttpClientMwdi3 = applicationNameAndHttpClient;
+      global.applicationNameAndHttpClientMwdi3 = applicationNameAndHttpClient;
     } else {
-      applicationNameAndHttpClient = applicationNameAndHttpClientMwdi3;
+      applicationNameAndHttpClient = global.applicationNameAndHttpClientMwdi3;
     }
 
     let operationNameAndOperationKey = "";
-    if (operationNameAndOperationKeyMwdi3 == "") {
+    if (global.operationNameAndOperationKeyMwdi3 == "") {
       operationNameAndOperationKey =
         await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
-      operationNameAndOperationKeyMwdi3 = operationNameAndOperationKey;
+      global.operationNameAndOperationKeyMwdi3 = operationNameAndOperationKey;
     } else {
-      operationNameAndOperationKey = operationNameAndOperationKeyMwdi3;
+      operationNameAndOperationKey = global.operationNameAndOperationKeyMwdi3;
     }
 
 
@@ -1372,28 +1368,26 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
 
 
 //STEP 4
-let applicationNameAndHttpClientELK = "";
-let operationNameAndOperationKeyELK = "";
 async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch(body, user, originator, xCorrelator, traceIndicator, customerJourney, mountNameDelReq) {
   try {
     let mountName = undefined;
 
     let applicationNameAndHttpClient = "";
-    if (applicationNameAndHttpClientELK == "") {
+    if (global.applicationNameAndHttpClientELK == "") {
       applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
-      applicationNameAndHttpClientELK = applicationNameAndHttpClient;
+      global.applicationNameAndHttpClientELK = applicationNameAndHttpClient;
     } else {
-      applicationNameAndHttpClient = applicationNameAndHttpClientELK;
+      applicationNameAndHttpClient = global.applicationNameAndHttpClientELK;
     }
 
     let operationNameAndOperationKey = "";
-    if (operationNameAndOperationKeyELK == "") {
+    if (global.operationNameAndOperationKeyELK == "") {
       operationNameAndOperationKey =
         await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
-      operationNameAndOperationKeyELK = operationNameAndOperationKey;
+      global.operationNameAndOperationKeyELK = operationNameAndOperationKey;
     } else {
-      operationNameAndOperationKey = operationNameAndOperationKeyELK;
+      operationNameAndOperationKey = global.operationNameAndOperationKeyELK;
     }
 
     let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
@@ -1470,8 +1464,6 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     
       throw err;
     }
-
-    
 
     if (/^20[0-9]$/.test(response.status.toString()))   //bug @216
     {
