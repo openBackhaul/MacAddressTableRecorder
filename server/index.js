@@ -6,6 +6,8 @@ var http = require('http');
 const cp = require('./service/individualServices/CyclicProcessService/cyclicProcess');
 const logger = require('./service/LoggingService.js').getLogger();
 const individualServices = require('./service/IndividualServicesService.js');
+const controlConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ControlConstruct');
+const forwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
 
 //var oas3Tools = require('openbackhaul-oas3-tools');
 var oas3Tools = require('oas3-tools');
@@ -76,5 +78,12 @@ prepareElasticsearch().catch(err => {
     global.applicationNameAndHttpClientELK = await individualServices.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
     global.operationNameAndOperationKeyELK = await individualServices.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
 
+    global.applicationNameAndHttpClient4Ro = await individualServices.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
+    global.operationNameAndOperationKey4Ro = await individualServices.resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
+
+    global.applicationNameAndHttpClient4MWDI = await individualServices.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
+    global.operationNameAndOperationKey4MWDI = await individualServices.resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
+
+    global.forwardingConstruct = await forwardingDomain.getForwardingConstructForTheForwardingNameAsync("EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr");
     global.LTPtcpClient = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
 })();

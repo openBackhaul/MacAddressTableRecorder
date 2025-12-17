@@ -471,26 +471,24 @@ exports.updateCurrentConnectedEquipment = async function (user, originator, xCor
   });
 }
 
-let applicationNameAndHttpClient4Ro = "";
-let operationNameAndOperationKey4Ro = ""
 const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
     try {
 
       let applicationNameAndHttpClient = "";
-      if (applicationNameAndHttpClient4Ro == "") {
+      if (applicationNameAndHttpClient4Ro == undefined) {
         applicationNameAndHttpClient = await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
-        applicationNameAndHttpClient4Ro = applicationNameAndHttpClient;
+        global.applicationNameAndHttpClient4Ro = applicationNameAndHttpClient;
       } else {
-        applicationNameAndHttpClient = applicationNameAndHttpClient4Ro;
+        applicationNameAndHttpClient = global.applicationNameAndHttpClient4Ro;
       }
 
       let operationNameAndOperationKey = "";
-      if (operationNameAndOperationKey4Ro == "") {
+      if (operationNameAndOperationKey4Ro == undefined) {
         operationNameAndOperationKey = await resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
-        operationNameAndOperationKey4Ro = operationNameAndOperationKey;
+        global.operationNameAndOperationKey4Ro = operationNameAndOperationKey;
       } else {
-        operationNameAndOperationKey = operationNameAndOperationKey4Ro;
+        operationNameAndOperationKey = global.operationNameAndOperationKey4Ro;
       }
 
       let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
@@ -498,7 +496,15 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
       let operationName = operationNameAndOperationKey.operationName;
       let operationKey = operationNameAndOperationKey.operationKey;
 
-      let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+      // let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+      let logicalTerminationPointListTCP = "";
+      if (global.logicalTerminationPointListTCP == undefined) {
+        logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+        global.logicalTerminationPointListTCP = logicalTerminationPointListTCP;
+      } else {
+        logicalTerminationPointListTCP = global.logicalTerminationPointListTCP;
+      }
+
       let ltpTcpUuid;
       for (const ltp of logicalTerminationPointListTCP) {
         const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
@@ -572,7 +578,7 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
   return new Promise(async function (resolve, reject) {
     try {
       let applicationNameAndHttpClient = "";
-      if (applicationNameAndHttpClient4MWDI == "") {
+      if (applicationNameAndHttpClient4MWDI == undefined) {
         applicationNameAndHttpClient = await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
         applicationNameAndHttpClient4MWDI = applicationNameAndHttpClient;
       } else {
@@ -580,7 +586,7 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
       }
 
       let operationNameAndOperationKey = "";
-      if (operationNameAndOperationKey4MWDI == "") {
+      if (operationNameAndOperationKey4MWDI == undefined) {
         operationNameAndOperationKey = await resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
         operationNameAndOperationKey4MWDI = operationNameAndOperationKey;
       } else {
@@ -592,7 +598,15 @@ const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, origi
       let operationName = operationNameAndOperationKey.operationName;
       let operationKey = operationNameAndOperationKey.operationKey;
 
-      let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+      // let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+      let logicalTerminationPointListTCP = "";
+      if (global.logicalTerminationPointListTCP == undefined) {
+        logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+        global.logicalTerminationPointListTCP = logicalTerminationPointListTCP;
+      } else {
+        logicalTerminationPointListTCP = global.logicalTerminationPointListTCP;
+      }
+
       let ltpTcpUuid;
       for (const ltp of logicalTerminationPointListTCP) {
         const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
@@ -1083,7 +1097,7 @@ function customEncode(input) {
 async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi(mountName, user, originator, xCorrelator, traceIndicator, customerJourney) {
   try {
     let applicationNameAndHttpClient = "";
-    if (global.applicationNameAndHttpClientMwdi1 == "") {
+    if (global.applicationNameAndHttpClientMwdi1 == undefined) {
       applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
       global.applicationNameAndHttpClientMwdi1 = applicationNameAndHttpClient;
@@ -1092,7 +1106,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
     }
 
     let operationNameAndOperationKey = "";
-    if (global.operationNameAndOperationKeyMwdi1 == "") {
+    if (global.operationNameAndOperationKeyMwdi1 == undefined) {
       operationNameAndOperationKey =
         await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
       global.operationNameAndOperationKeyMwdi1 = operationNameAndOperationKey;
@@ -1105,7 +1119,15 @@ async function PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearched
     let operationName = operationNameAndOperationKey.operationName;
     let operationKey = operationNameAndOperationKey.operationKey;
 
-    let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    // let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    let logicalTerminationPointListTCP = "";
+    if (global.logicalTerminationPointListTCP == undefined) {
+      logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+      global.logicalTerminationPointListTCP = logicalTerminationPointListTCP;
+    } else {
+      logicalTerminationPointListTCP = global.logicalTerminationPointListTCP;
+    }
+
     let ltpTcpUuid;
     for (const ltp of logicalTerminationPointListTCP) {
       const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
@@ -1171,7 +1193,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
     let auth = authKey['api-key'];  //read from external file
 
     let applicationNameAndHttpClient = "";
-    if (global.applicationNameAndHttpClientMwdiODL == "") {
+    if (global.applicationNameAndHttpClientMwdiODL == undefined) {
       applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
       global.applicationNameAndHttpClientMwdiODL = applicationNameAndHttpClient;
@@ -1180,7 +1202,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
     }
 
     let operationNameAndOperationKey = "";
-    if (global.operationNameAndOperationKeyODL == "") {
+    if (global.operationNameAndOperationKeyODL == undefined) {
       operationNameAndOperationKey =
         await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
       global.operationNameAndOperationKeyODL = operationNameAndOperationKey;
@@ -1193,7 +1215,15 @@ async function PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFr
     let operationName = operationNameAndOperationKey.operationName;
     let operationKey = operationNameAndOperationKey.operationKey;
 
-    let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    // let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    let logicalTerminationPointListTCP = "";
+    if (global.logicalTerminationPointListTCP == undefined) {
+      logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+      global.logicalTerminationPointListTCP = logicalTerminationPointListTCP;
+    } else {
+      logicalTerminationPointListTCP = global.logicalTerminationPointListTCP;
+    }
+
     let ltpTcpUuid;
     for (const ltp of logicalTerminationPointListTCP) {
       const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
@@ -1264,7 +1294,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
 
     // matr-1-0-0-op-c-is-mwdi-1-0-0-001
     let applicationNameAndHttpClient = "";
-    if (global.applicationNameAndHttpClientMwdi3 == "") {
+    if (global.applicationNameAndHttpClientMwdi3 == undefined) {
       applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
       global.applicationNameAndHttpClientMwdi3 = applicationNameAndHttpClient;
@@ -1273,7 +1303,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
     }
 
     let operationNameAndOperationKey = "";
-    if (global.operationNameAndOperationKeyMwdi3 == "") {
+    if (global.operationNameAndOperationKeyMwdi3 == undefined) {
       operationNameAndOperationKey =
         await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
       global.operationNameAndOperationKeyMwdi3 = operationNameAndOperationKey;
@@ -1287,7 +1317,15 @@ async function PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIn
     let operationName = operationNameAndOperationKey.operationName;
     let operationKey = operationNameAndOperationKey.operationKey;
 
-    let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    // let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    let logicalTerminationPointListTCP = "";
+    if (global.logicalTerminationPointListTCP == undefined) {
+      logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+      global.logicalTerminationPointListTCP = logicalTerminationPointListTCP;
+    } else {
+      logicalTerminationPointListTCP = global.logicalTerminationPointListTCP;
+    }
+
     let ltpTcpUuid;
     for (const ltp of logicalTerminationPointListTCP) {
       const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
@@ -1373,7 +1411,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     let mountName = undefined;
 
     let applicationNameAndHttpClient = "";
-    if (global.applicationNameAndHttpClientELK == "") {
+    if (global.applicationNameAndHttpClientELK == undefined) {
       applicationNameAndHttpClient =
         await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
       global.applicationNameAndHttpClientELK = applicationNameAndHttpClient;
@@ -1382,7 +1420,7 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     }
 
     let operationNameAndOperationKey = "";
-    if (global.operationNameAndOperationKeyELK == "") {
+    if (global.operationNameAndOperationKeyELK == undefined) {
       operationNameAndOperationKey =
         await resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
       global.operationNameAndOperationKeyELK = operationNameAndOperationKey;
@@ -1395,7 +1433,14 @@ async function PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch
     let operationName = operationNameAndOperationKey.operationName;
     let operationKey = operationNameAndOperationKey.operationKey;
 
-    let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    // let logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    let logicalTerminationPointListTCP = "";
+    if (global.logicalTerminationPointListTCP == undefined) {
+      logicalTerminationPointListTCP = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+      global.logicalTerminationPointListTCP = logicalTerminationPointListTCP;
+    } else {
+      logicalTerminationPointListTCP = global.logicalTerminationPointListTCP;
+    }
     let ltpTcpUuid;
     for (const ltp of logicalTerminationPointListTCP) {
       const clientLtp = ltp[onfAttributes.LOGICAL_TERMINATION_POINT.CLIENT_LTP];
