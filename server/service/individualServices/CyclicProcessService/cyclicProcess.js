@@ -384,9 +384,17 @@ async function MATRCycle(firstTime) {
   let remainder = 0;
 
   const forwardingName = "EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr";
-  const forwardingConstruct = await forwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
+  let forwardingConstruct = "";
+  if (global.forwardingConstruct == undefined) {
+    forwardingConstruct = await forwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
+    global.forwardingConstruct = forwardingConstruct;
+  } else {
+    forwardingConstruct = global.forwardingConstruct;
+  }
+
   let coreModelPrefix = forwardingConstruct.name[0].value.split(':')[0];
   let prefix = forwardingConstruct.uuid.split('op')[0];
+  
   slidingWindowSizeDb = await extractProfileConfiguration(prefix + "integer-p-000");
   responseTimeout = await extractProfileConfiguration(prefix + "integer-p-001");
   maximumNumberOfRetries = await extractProfileConfiguration(prefix + "integer-p-002");
