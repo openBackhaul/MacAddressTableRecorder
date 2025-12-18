@@ -5,9 +5,7 @@ var http = require('http');
 
 const cp = require('./service/individualServices/CyclicProcessService/cyclicProcess');
 const logger = require('./service/LoggingService.js').getLogger();
-const individualServices = require('./service/IndividualServicesService.js');
-const controlConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ControlConstruct');
-const forwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
+const individualServicesUtils = require('./service/individualServices/IndividualServicesUtility.js');
 
 //var oas3Tools = require('openbackhaul-oas3-tools');
 var oas3Tools = require('oas3-tools');
@@ -63,27 +61,36 @@ prepareElasticsearch().catch(err => {
     }
 );
 
-
+// Caching values
 (async () => {
     // Adding
-    global.applicationNameAndHttpClientMwdi1 = await individualServices.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
-    global.operationNameAndOperationKeyMwdi1 = await individualServices.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
+    global.applicationNameAndHttpClientMwdi1 = await individualServicesUtils.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
+    global.operationNameAndOperationKeyMwdi1 = await individualServicesUtils.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
 
-    global.operationNameAndOperationKeyODL = await individualServices.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
-    global.operationNameAndOperationKeyODL=  await individualServices.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
+    global.operationNameAndOperationKeyODL = await individualServicesUtils.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
+    global.operationNameAndOperationKeyODL=  await individualServicesUtils.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
 
-    global.applicationNameAndHttpClientMwdi3 = await individualServices.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
-    global.operationNameAndOperationKeyMwdi3 = await individualServices.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
+    global.applicationNameAndHttpClientMwdi3 = await individualServicesUtils.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
+    global.operationNameAndOperationKeyMwdi3 = await individualServicesUtils.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
 
-    global.applicationNameAndHttpClientELK = await individualServices.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
-    global.operationNameAndOperationKeyELK = await individualServices.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
+    global.applicationNameAndHttpClientELK = await individualServicesUtils.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
+    global.operationNameAndOperationKeyELK = await individualServicesUtils.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesWritingIntoElasticSearch');
 
-    global.applicationNameAndHttpClient4Ro = await individualServices.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
-    global.operationNameAndOperationKey4Ro = await individualServices.resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
+    global.applicationNameAndHttpClient4Ro = await individualServicesUtils.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
+    global.operationNameAndOperationKey4Ro = await individualServicesUtils.resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfApplicationsAtRo');
 
-    global.applicationNameAndHttpClient4MWDI = await individualServices.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
-    global.operationNameAndOperationKey4MWDI = await individualServices.resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
+    global.applicationNameAndHttpClient4MWDI = await individualServicesUtils.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
+    global.operationNameAndOperationKey4MWDI = await individualServicesUtils.resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
 
-    global.forwardingConstruct = await forwardingDomain.getForwardingConstructForTheForwardingNameAsync("EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr");
-    global.LTPtcpClient = await controlConstruct.getLogicalTerminationPointListAsync(LayerProtocol.layerProtocolNameEnum.TCP_CLIENT);
+    let embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr = await individualServicesUtils.getForwardingConstructForTheForwardingNameAsync(
+        "EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr");
+    let prefix = embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr.uuid.split('op')[0];
+    global.prefix = prefix;
+    global.LTPtcpClient = await individualServicesUtils.getLTPtcpClient();
+
+    // For Cyclic process
+    global.slidingWindowSizeDb = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-000");
+    global.responseTimeout = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-001");
+    global.maximumNumberOfRetries = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-002");
+    global.deviceListSyncPeriod = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-003");
 })();
