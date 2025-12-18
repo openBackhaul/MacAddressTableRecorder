@@ -1,14 +1,13 @@
 'use strict';
 
 // ONF Libs
-const profileCollection = require('onf-core-model-ap/applicationPattern/onfModel/models/ProfileCollection');
 const RequestHeader = require("onf-core-model-ap/applicationPattern/rest/client/RequestHeader");
-const forwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
 const axios = require('axios');
 
 // Other Libs
 const { setTimeout } = require('timers');
 const individualServices = require("./../../IndividualServicesService.js");
+const individualServicesUtils = require("./../IndividualServicesUtility.js");
 const logger = require('../../LoggingService.js').getLogger();
 
 const DEVICE_NOT_PRESENT = -1;
@@ -357,15 +356,6 @@ async function requestMessage(index) {
   }
 }
 
-
-async function extractProfileConfiguration(uuid) {
-  
-  let profile = await profileCollection.getProfileAsync(uuid);
-  let objectKey = Object.keys(profile)[2];
-  profile = profile[objectKey];
-  return profile["integer-profile-configuration"]["integer-value"];
-}
-
 /**
  * Entry point function
  * 
@@ -383,25 +373,30 @@ async function MATRCycle(firstTime) {
   let deviceListMount = null;
   let remainder = 0;
 
-  const forwardingName = "EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr";
-  let forwardingConstruct = "";
-  if (global.forwardingConstruct == undefined) {
-    forwardingConstruct = await forwardingDomain.getForwardingConstructForTheForwardingNameAsync(forwardingName);
-    global.forwardingConstruct = forwardingConstruct;
+  let prefix = "";
+  if (global.prefix == undefined) {
+    let forwardingConstruct = individualServicesUtils.getForwardingConstructForTheForwardingNameAsync(
+      "EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr");
+    let coreModelPrefix = forwardingConstruct.name[0].value.split(':')[0];
+    prefix = forwardingConstruct.uuid.split('op')[0];
+    global.prefix = prefix;
   } else {
-    forwardingConstruct = global.forwardingConstruct;
+    prefix = global.prefix;
   }
 
-  let coreModelPrefix = forwardingConstruct.name[0].value.split(':')[0];
-  let prefix = forwardingConstruct.uuid.split('op')[0];
+  slidingWindowSizeDb = global.slidingWindowSizeDb == undefined ?
+    await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-000") : global.slidingWindowSizeDb;
   
-  slidingWindowSizeDb = await extractProfileConfiguration(prefix + "integer-p-000");
-  responseTimeout = await extractProfileConfiguration(prefix + "integer-p-001");
-  maximumNumberOfRetries = await extractProfileConfiguration(prefix + "integer-p-002");
+  responseTimeout = global.responseTimeout == undefined ?
+    await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-001") : global.responseTimeout;
+
+  maximumNumberOfRetries = global.maximumNumberOfRetries == undefined ?
+    await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-002") : global.maximumNumberOfRetries;
+
+  deviceListSyncPeriod = global.deviceListSyncPeriod == undefined ?
+    await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-003") : global.deviceListSyncPeriod;
 
   try {
-    //deviceListSyncPeriod = await extractProfileConfiguration(prefix + "integer-p-003");
-
     if (firstTime === false) {
       const now = new Date();
       const periodicSynchTime = deviceListSyncPeriod * 60 * 1000;
