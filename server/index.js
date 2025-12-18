@@ -67,7 +67,7 @@ prepareElasticsearch().catch(err => {
     global.applicationNameAndHttpClientMwdi1 = await individualServicesUtils.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
     global.operationNameAndOperationKeyMwdi1 = await individualServicesUtils.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesUuidOfMacFdBeingSearchedAndManagementMacAddressBeingReadFromMwdi');
 
-    global.operationNameAndOperationKeyODL = await individualServicesUtils.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
+    global.applicationNameAndHttpClientMwdiODL = await individualServicesUtils.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
     global.operationNameAndOperationKeyODL=  await individualServicesUtils.resolveOperationNameAndOperationKeyFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesMacTableBeingRetrievedFromDevice');
 
     global.applicationNameAndHttpClientMwdi3 = await individualServicesUtils.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('PromptForUpdatingMacTableFromDeviceCausesLtpUuidBeingTranslatedIntoLtpNameBasedOnMwdi');
@@ -93,4 +93,5 @@ prepareElasticsearch().catch(err => {
     global.responseTimeout = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-001");
     global.maximumNumberOfRetries = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-002");
     global.deviceListSyncPeriod = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-003");
+    logger.info("Data read from load.json and cached!");
 })();
