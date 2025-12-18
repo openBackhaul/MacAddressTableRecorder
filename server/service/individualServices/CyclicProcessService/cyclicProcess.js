@@ -2,7 +2,6 @@
 
 // ONF Libs
 const RequestHeader = require("onf-core-model-ap/applicationPattern/rest/client/RequestHeader");
-const axios = require('axios');
 
 // Other Libs
 const { setTimeout } = require('timers');
