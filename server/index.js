@@ -86,7 +86,7 @@ prepareElasticsearch().catch(err => {
         "EmbeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr");
     let prefix = embeddingCausesCyclicRequestsForUpdatingMacTableFromDeviceAtMatr.uuid.split('op')[0];
     global.prefix = prefix;
-    global.LTPtcpClient = await individualServicesUtils.getLTPtcpClient();
+    global.logicalTerminationPointListTCP = await individualServicesUtils.getLTPtcpClient();
 
     // For Cyclic process
     global.slidingWindowSizeDb = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-000");
