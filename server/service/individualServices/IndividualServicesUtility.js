@@ -8,28 +8,19 @@ const ProfileCollection = require('onf-core-model-ap/applicationPattern/onfModel
 const ForwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
 const FcPort = require('onf-core-model-ap/applicationPattern/onfModel/models/FcPort');
 const ControlConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ControlConstruct');
-// const ForwardingConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingConstruct');
-// const OperationClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/OperationClientInterface');
 
 const OnfAttributes = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfAttributes');
 const OnfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
 const FileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
-
-const LogicalTerminationPointC = require('./../custom/LogicalTerminationPointC');
-
 const httpClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/HttpClientInterface');
-// const httpServerInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/HttpServerInterface');
-
-// const IndividualServiceUtility = require('./IndividualServicesUtility');
-
 
 const createHttpError = require('http-errors');
-
 const fileSystem = require('fs');
 const AsyncLock = require('async-lock');
 const lock = new AsyncLock();
 
 const logger = require('../LoggingService.js').getLogger();
+const LogicalTerminationPointC = require('./../custom/LogicalTerminationPointC');
 
 /**
  * This function fetches the integer value from the integer profile based on the expected integer name.
@@ -56,7 +47,7 @@ exports.getIntegerProfileInstanceValue = async function(expectedIntegerName) {
 
     return integerValue;
   } catch (error) {
-    console.log(`getIntegerProfileInstanceValue is not success with ${error}`);
+    logger.error(`getIntegerProfileInstanceValue is not success with ${error}`);
     return new createHttpError.InternalServerError();
   }
 }
@@ -90,7 +81,7 @@ exports.getStringProfileInstanceValue = async function (expectedStringName) {
     return stringValue;
 
   } catch (error) {
-    console.log(`getStringProfileInstanceValue is not success with ${error}`);
+    logger.error(`getStringProfileInstanceValue is not success with ${error}`);
     return new createHttpError.InternalServerError(`${error}`);
   }
 }
@@ -202,7 +193,7 @@ exports.resetCompleteFile = async function (coreModelJsonObject) {
       fileSystem.writeFileSync(global.databasePath, JSON.stringify(coreModelJsonObject));
       return true;
     } catch (error) {
-      console.log('write failed:', error)
+      logger.error('write failed:', error)
       return false;
     }
   }
