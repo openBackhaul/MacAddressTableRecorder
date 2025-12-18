@@ -572,25 +572,23 @@ const EmbeddingCausesRequestForListOfApplicationsAtRo = async function (user, or
 }
 
 
-let applicationNameAndHttpClient4MWDI = "";
-let operationNameAndOperationKey4MWDI = "";
 const EmbeddingCausesRequestForListOfDevicesAtMwdi = async function (user, originator, xCorrelator, traceIndicator, customerJourney) {
   return new Promise(async function (resolve, reject) {
     try {
       let applicationNameAndHttpClient = "";
-      if (applicationNameAndHttpClient4MWDI == undefined) {
+      if (global.applicationNameAndHttpClient4MWDI == undefined) {
         applicationNameAndHttpClient = await resolveApplicationNameAndHttpClientLtpUuidFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
-        applicationNameAndHttpClient4MWDI = applicationNameAndHttpClient;
+        global.applicationNameAndHttpClient4MWDI = applicationNameAndHttpClient;
       } else {
-        applicationNameAndHttpClient = applicationNameAndHttpClient4MWDI;
+        applicationNameAndHttpClient = global.applicationNameAndHttpClient4MWDI;
       }
 
       let operationNameAndOperationKey = "";
-      if (operationNameAndOperationKey4MWDI == undefined) {
+      if (global.operationNameAndOperationKey4MWDI == undefined) {
         operationNameAndOperationKey = await resolveOperationNameAndOperationKeyFromForwardingName('EmbeddingCausesRequestForListOfDevicesAtMwdi');
-        operationNameAndOperationKey4MWDI = operationNameAndOperationKey;
+        global.operationNameAndOperationKey4MWDI = operationNameAndOperationKey;
       } else {
-        operationNameAndOperationKey = operationNameAndOperationKey4MWDI;
+        operationNameAndOperationKey = global.operationNameAndOperationKey4MWDI;
       }
 
       let httpClientLtpUuid = applicationNameAndHttpClient.httpClientLtpUuid;
