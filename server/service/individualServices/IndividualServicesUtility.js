@@ -1,18 +1,19 @@
 'use strict';
 
-const onfAttributes = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfAttributes');
-const fileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
-const onfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
+
 
 const LayerProtocol = require('onf-core-model-ap/applicationPattern/onfModel/models/LayerProtocol');
 const LogicalTerminationPoint = require('onf-core-model-ap/applicationPattern/onfModel/models/LogicalTerminationPoint');
 const ProfileCollection = require('onf-core-model-ap/applicationPattern/onfModel/models/ProfileCollection');
-// const OperationClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/OperationClientInterface');
 const ForwardingDomain = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingDomain');
-const ForwardingConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingConstruct');
 const FcPort = require('onf-core-model-ap/applicationPattern/onfModel/models/FcPort');
-
 const ControlConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ControlConstruct');
+// const ForwardingConstruct = require('onf-core-model-ap/applicationPattern/onfModel/models/ForwardingConstruct');
+// const OperationClientInterface = require('onf-core-model-ap/applicationPattern/onfModel/models/layerProtocols/OperationClientInterface');
+
+const OnfAttributes = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfAttributes');
+const OnfPaths = require('onf-core-model-ap/applicationPattern/onfModel/constants/OnfPaths');
+const FileOperation = require('onf-core-model-ap/applicationPattern/databaseDriver/JSONDriver');
 
 const LogicalTerminationPointC = require('./../custom/LogicalTerminationPointC');
 
@@ -43,12 +44,12 @@ exports.getIntegerProfileInstanceValue = async function(expectedIntegerName) {
 
     for (let i = 0; i < integerProfileInstanceList.length; i++) {
       let integerProfileInstance = integerProfileInstanceList[i];
-      let integerProfilePac = integerProfileInstance[onfAttributes.INTEGER_PROFILE.PAC];
-      let integerProfileCapability = integerProfilePac[onfAttributes.INTEGER_PROFILE.CAPABILITY];
-      let integerName = integerProfileCapability[onfAttributes.INTEGER_PROFILE.INTEGER_NAME];
+      let integerProfilePac = integerProfileInstance[OnfAttributes.INTEGER_PROFILE.PAC];
+      let integerProfileCapability = integerProfilePac[OnfAttributes.INTEGER_PROFILE.CAPABILITY];
+      let integerName = integerProfileCapability[OnfAttributes.INTEGER_PROFILE.INTEGER_NAME];
       if (integerName == expectedIntegerName) {
-        let integerProfileConfiguration = integerProfilePac[onfAttributes.INTEGER_PROFILE.CONFIGURATION];
-        integerValue = integerProfileConfiguration[onfAttributes.INTEGER_PROFILE.INTEGER_VALUE];
+        let integerProfileConfiguration = integerProfilePac[OnfAttributes.INTEGER_PROFILE.CONFIGURATION];
+        integerValue = integerProfileConfiguration[OnfAttributes.INTEGER_PROFILE.INTEGER_VALUE];
         break;
       }
     }
@@ -77,12 +78,12 @@ exports.getStringProfileInstanceValue = async function (expectedStringName) {
 
     for (let i = 0; i < stringProfileInstanceList.length; i++) {
       let stringProfileInstance = stringProfileInstanceList[i];
-      let stringProfilePac = stringProfileInstance[onfAttributes.STRING_PROFILE.PAC];
-      let stringProfileCapability = stringProfilePac[onfAttributes.STRING_PROFILE.CAPABILITY];
-      let stringName = stringProfileCapability[onfAttributes.STRING_PROFILE.STRING_NAME];
+      let stringProfilePac = stringProfileInstance[OnfAttributes.STRING_PROFILE.PAC];
+      let stringProfileCapability = stringProfilePac[OnfAttributes.STRING_PROFILE.CAPABILITY];
+      let stringName = stringProfileCapability[OnfAttributes.STRING_PROFILE.STRING_NAME];
       if (stringName == expectedStringName) {
-        let stringProfileConfiguration = stringProfilePac[onfAttributes.STRING_PROFILE.CONFIGURATION];
-        stringValue = stringProfileConfiguration[onfAttributes.STRING_PROFILE.STRING_VALUE];
+        let stringProfileConfiguration = stringProfilePac[OnfAttributes.STRING_PROFILE.CONFIGURATION];
+        stringValue = stringProfileConfiguration[OnfAttributes.STRING_PROFILE.STRING_VALUE];
         break;
       }
     }
@@ -180,8 +181,8 @@ exports.extractProfileConfiguration = async function (uuid) {
  * @returns {Boolean} return true if the value is updated, otherwise returns false
  **/
 exports.resetCompleteFile = async function (coreModelJsonObject) { 
-  let controlConstructPath = onfPaths.CONTROL_CONSTRUCT;
-  let resultDel = await fileOperation.deletefromDatabaseAsync(controlConstructPath);
+  let controlConstructPath = OnfPaths.CONTROL_CONSTRUCT;
+  let resultDel = await FileOperation.deletefromDatabaseAsync(controlConstructPath);
   if (!resultDel) {
     return resultDel;
   }
@@ -219,11 +220,11 @@ exports.resolveOperationNameAndOperationKeyFromForwardingName = async function (
   }
 
   let fcPortOutputDirectionLogicalTerminationPointList = [];
-  const fcPortList = forwardingConstruct[onfAttributes.FORWARDING_CONSTRUCT.FC_PORT];
+  const fcPortList = forwardingConstruct[OnfAttributes.FORWARDING_CONSTRUCT.FC_PORT];
   for (const fcPort of fcPortList) {
-    const portDirection = fcPort[onfAttributes.FC_PORT.PORT_DIRECTION];
+    const portDirection = fcPort[OnfAttributes.FC_PORT.PORT_DIRECTION];
     if (FcPort.portDirectionEnum.OUTPUT === portDirection) {
-      fcPortOutputDirectionLogicalTerminationPointList.push(fcPort[onfAttributes.FC_PORT.LOGICAL_TERMINATION_POINT]);
+      fcPortOutputDirectionLogicalTerminationPointList.push(fcPort[OnfAttributes.FC_PORT.LOGICAL_TERMINATION_POINT]);
     }
   }
 
@@ -239,18 +240,18 @@ exports.resolveOperationNameAndOperationKeyFromForwardingName = async function (
   let operationName;
   let operationKey;
   for (const layer of logicalTerminationPointLayer) {
-    let layerProtocolName = layer[onfAttributes.LAYER_PROTOCOL.LAYER_PROTOCOL_NAME];
+    let layerProtocolName = layer[OnfAttributes.LAYER_PROTOCOL.LAYER_PROTOCOL_NAME];
     if (LayerProtocol.layerProtocolNameEnum.OPERATION_CLIENT === layerProtocolName) {
-      clientPac = layer[onfAttributes.LAYER_PROTOCOL.OPERATION_CLIENT_INTERFACE_PAC];
-      pacConfiguration = clientPac[onfAttributes.OPERATION_CLIENT.CONFIGURATION];
-      operationName = pacConfiguration[onfAttributes.OPERATION_CLIENT.OPERATION_NAME];
-      operationKey = pacConfiguration[onfAttributes.OPERATION_CLIENT.OPERATION_KEY];
+      clientPac = layer[OnfAttributes.LAYER_PROTOCOL.OPERATION_CLIENT_INTERFACE_PAC];
+      pacConfiguration = clientPac[OnfAttributes.OPERATION_CLIENT.CONFIGURATION];
+      operationName = pacConfiguration[OnfAttributes.OPERATION_CLIENT.OPERATION_NAME];
+      operationKey = pacConfiguration[OnfAttributes.OPERATION_CLIENT.OPERATION_KEY];
     }
     else if (LayerProtocol.layerProtocolNameEnum.ES_CLIENT == layerProtocolName) {
-      clientPac = layer[onfAttributes.LAYER_PROTOCOL.ES_CLIENT_INTERFACE_PAC];
-      pacConfiguration = clientPac[onfAttributes.ES_CLIENT.CONFIGURATION];
-      operationName = pacConfiguration[onfAttributes.ES_CLIENT.AUTH];
-      operationKey = pacConfiguration[onfAttributes.ES_CLIENT.INDEX_ALIAS];
+      clientPac = layer[OnfAttributes.LAYER_PROTOCOL.ES_CLIENT_INTERFACE_PAC];
+      pacConfiguration = clientPac[OnfAttributes.ES_CLIENT.CONFIGURATION];
+      operationName = pacConfiguration[OnfAttributes.ES_CLIENT.AUTH];
+      operationKey = pacConfiguration[OnfAttributes.ES_CLIENT.INDEX_ALIAS];
     }
   }
 
@@ -270,11 +271,11 @@ exports.resolveApplicationNameAndHttpClientLtpUuidFromForwardingName = async fun
   }
 
   let fcPortOutputDirectionLogicalTerminationPointList = [];
-  const fcPortList = forwardingConstruct[onfAttributes.FORWARDING_CONSTRUCT.FC_PORT];
+  const fcPortList = forwardingConstruct[OnfAttributes.FORWARDING_CONSTRUCT.FC_PORT];
   for (const fcPort of fcPortList) {
-    const portDirection = fcPort[onfAttributes.FC_PORT.PORT_DIRECTION];
+    const portDirection = fcPort[OnfAttributes.FC_PORT.PORT_DIRECTION];
     if (FcPort.portDirectionEnum.OUTPUT === portDirection) {
-      fcPortOutputDirectionLogicalTerminationPointList.push(fcPort[onfAttributes.FC_PORT.LOGICAL_TERMINATION_POINT]);
+      fcPortOutputDirectionLogicalTerminationPointList.push(fcPort[OnfAttributes.FC_PORT.LOGICAL_TERMINATION_POINT]);
     }
   }
 
