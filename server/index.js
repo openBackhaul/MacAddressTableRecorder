@@ -92,6 +92,7 @@ prepareElasticsearch().catch(err => {
     global.slidingWindowSizeDb = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-000");
     global.responseTimeout = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-001");
     global.maximumNumberOfRetries = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-002");
-    global.deviceListSyncPeriod = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-003");
+    // To be implemented in 1.2.0 Release
+    // global.deviceListSyncPeriod = await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-003");
     logger.info("Data read from load.json and cached!");
 })();
