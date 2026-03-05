@@ -14,7 +14,7 @@ let maximumNumberOfRetries = 1;
 let responseTimeout = 600;
 let slidingWindowSizeDb = 500;
 let slidingWindowSize = 3;
-let deviceListSyncPeriod = 3;
+let deviceListSyncPeriod = 0; // Setup 0 millisecond of delay. To be implemneted properly in 1.2.0 version
 let slidingWindow = [];
 let deviceList = [];
 let lastDeviceListIndex = -1;
@@ -392,20 +392,20 @@ async function MATRCycle(firstTime) {
   maximumNumberOfRetries = global.maximumNumberOfRetries == undefined ?
     await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-002") : global.maximumNumberOfRetries;
 
-  deviceListSyncPeriod = global.deviceListSyncPeriod == undefined ?
-    await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-003") : global.deviceListSyncPeriod;
+  // To be implemented in 1.2.0 Release
+  // deviceListSyncPeriod = global.deviceListSyncPeriod == undefined ?
+  //   await individualServicesUtils.extractProfileConfiguration(prefix + "integer-p-003") : global.deviceListSyncPeriod;
 
   try {
     if (firstTime === false) {
       const now = new Date();
       const periodicSynchTime = deviceListSyncPeriod * 60 * 1000;
 
-      let nextTimeStart = now.getTime() - now.getTime() % periodicSynchTime + periodicSynchTime;
-      remainder = nextTimeStart - now.getTime();
+      let nextTimeStart = now.getTime() + periodicSynchTime;
+      remainder = 0; //nextTimeStart - now.getTime();
 
       const date = new Date(nextTimeStart);
       logger.info('NEXT MATR CYCLE START AT TIME:' + date);
-
     }
     else {
       remainder = 0;
